@@ -1,0 +1,49 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: |
+   HOME="$(readlink -f ~)"; export HOME
+   
+   sudo apt-get update;
+   
+   sudo apt-get install gcc
+   sudo apt-get install libz-dev
+   
+   if [ ! -f ~/dlang/install.sh ]; then
+       curl https://dlang.org/install.sh | bash -s
+   fi
+   
+   ~/dlang/install.sh install dmd
+   ~/dlang/install.sh install ldc
+  displayName: 'Install dlang tools'
+
+- script: |
+   if [ ! -f ~/dlang/trial/trial-v0.7.2/trial ]; then
+       sudo wget -O trial.zip https://gitlab.com/szabobogdan3/trial/-/archive/v0.7.2/trial-v0.7.2.zip
+       unzip trial.zip -d ~/dlang/trial
+   
+       HOME="$(readlink -f ~)"; export HOME
+       source $(~/dlang/install.sh dmd -a)
+   
+       cd ~/dlang/trial/trial-v0.7.2
+       dub upgrade
+       dub build :runner --arch=x86_64
+   fi
+  displayName: 'Install test runner'
+
+- script: |
+   HOME="$(readlink -f ~)"; export HOME
+   source $(~/dlang/install.sh dmd -a)
+   
+   dub upgrade
+   ~/dlang/trial/trial-v0.7.2/trial --arch=x86_64
+  displayName: 'Run unit tests'
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
+  inputs:
+    testResultsFiles: '.trial/xunit/*.xml'
