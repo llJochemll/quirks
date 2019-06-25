@@ -1,0 +1,13 @@
+{
+  "authors": [
+    "lljochemll"
+  ],
+  "copyright": "Copyright © 2019, lljochemll",
+  "dependencies": {
+    "fluent-asserts": "0.12.3"
+  },
+  "description": "Metaprogramming library for the D language",
+  "license": "MIT",
+  "name": "quirks",
+  "targetType": "library"
+}
