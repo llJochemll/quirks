@@ -2,9 +2,16 @@
   "authors": [
     "lljochemll"
   ],
+  "configurations": [
+    {
+      "name": "unittest",
+      "dependencies": {
+        "fluent-asserts": "0.12.3"
+      }
+    }
+  ],
   "copyright": "Copyright © 2019, lljochemll",
   "dependencies": {
-    "fluent-asserts": "0.12.3"
   },
   "description": "Metaprogramming library for the D language",
   "license": "MIT",
