@@ -1,0 +1,12 @@
+{
+	"reporters": [
+		"spec",
+		"result",
+		"xunit"
+    ],
+    "artifactsLocation" : ".trial",
+	"testDiscovery": [
+		"trial.discovery.unit.UnitTestDiscovery"
+	],
+	"maxThreads": 0
+}

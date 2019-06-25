@@ -9,7 +9,8 @@ import std.string;
 * Params: 
 *   code = code to be mixed in
 */
-static string interpolateMixin(string code) {
+@safe
+pure static string interpolateMixin(string code) {
 	string interpolatedCode = "";
 
 	auto insideInterpolation = false;

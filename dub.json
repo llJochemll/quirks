@@ -16,5 +16,7 @@
   "description": "Metaprogramming library for the D language",
   "license": "MIT",
   "name": "quirks",
-  "targetType": "library"
+  "targetType": "library",
+
+  "-ddoxFilterArgs": ["--min-protection=Protected"]
 }

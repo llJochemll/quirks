@@ -17,6 +17,7 @@ alias getParameterTypes = Parameters;
 alias getReturnType = ReturnType;
 
 private {
+    @safe
     struct Parameter(T, alias defaultValueFunction = { return; }) {
         alias type = T;
 
@@ -32,6 +33,7 @@ private {
         }
     }
 
+    @safe
     template GetParameters(alias func) if (isCallable!func) {
         alias GetParameters = NextParameter!(func, 0);
     } unittest {
@@ -54,6 +56,7 @@ private {
         (is(parameters[1].type == string)).should.equal(true);
     }
 
+    @safe
     template NextParameter(alias func, ulong i, DoneParameters...) {
         alias defaultValues = getParameterDefaultValues!func;
         alias names = getParameterNames!func;
