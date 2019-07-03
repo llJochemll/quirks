@@ -48,7 +48,6 @@ struct Foo {
 static assert(hasMember!(S, "id"));
 static assert(hasMember!(S, "name"));
 static assert(!hasMember!(S, "doesNotExist"));
-static assert(hasMember!(S, (member => member == "id")));
 
 static assert(!hasMethod!(S, "id"));
 static assert(hasMethod!(S, "name"));
