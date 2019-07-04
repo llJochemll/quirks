@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Module quirks.aggregate</title>
+		<link rel="stylesheet" type="text/css" href="../styles/ddox.css"/>
+		<link rel="stylesheet" href="../prettify/prettify.css" type="text/css"/>
+		<script type="text/javascript" src="../scripts/jquery.js">/**/</script><script type="text/javascript" src="../scripts/ddox.js">/**/</script>
+	</head>
+	<body onload="setupDdox();">
+		<nav id="main-nav">
+			<noscript>
+				<p style="color: red">The search functionality needs JavaScript enabled</p>
+			</noscript>
+			<div id="symbolSearchPane" style="display: none">
+				<form action="#" method="GET">
+					<input id="symbolSearch" type="text" name="q" placeholder="Search for symbols" autocomplete="off" onchange="performSymbolSearch(40);" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
+				</form>
+				<ul id="symbolSearchResults" class="symbolList" style="display: none"></ul><script type="application/javascript" src="../symbols.js"></script><script type="application/javascript">var symbolSearchRootDir = "../";
+$('#symbolSearchPane').show();</script>
+			</div>
+			<ul class="tree-view">
+				<li class="tree-view ">
+					<div class="package ">
+						<a href="../quirks.html">quirks</a>
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module selected">
+						<a href="../quirks/aggregate.html">aggregate</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../quirks/functional.html">functional</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../quirks/tuple.html">tuple</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../quirks/type.html">type</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../quirks/utility.html">utility</a>
+					</div>
+				</li>
+			</ul>
+				</li>
+			</ul>
+		</nav>
+		<div id="main-contents">
+			<h1>Module quirks.aggregate</h1><p></p>
+			<section></section>
+			<section>
+				<h2>Functions</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th><th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="getField" class="public" href="../quirks/aggregate/getField.html">getField</a><span class="decoration">()</span>
+							</code>
+						</td>
+						<td>Returns an struct containing the name and type of the field
+</td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="getMemberNames" class="public" href="../quirks/aggregate/getMemberNames.html">getMemberNames</a><span class="decoration">()</span>
+							</code>
+						</td>
+						<td>Returns the same as _traits(allMembers, aggregate), excluding this and all default fields inherited from Object
+</td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="getMemberNames" class="public" href="../quirks/aggregate/getMemberNames.html">getMemberNames</a><span class="decoration">()</span>
+							</code>
+						</td>
+						<td>Returns the same as _traits(allMembers, aggregate), filtered with the provided predicate
+</td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="hasField" class="public" href="../quirks/aggregate/hasField.html">hasField</a><span class="decoration">()</span>
+							</code>
+						</td>
+						<td>Returns true if a field can be found on aggregate with the given fieldName, false otherwise.
+</td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="hasField" class="public" href="../quirks/aggregate/hasField.html">hasField</a><span class="decoration">()</span>
+							</code>
+						</td>
+						<td>Returns true if a field can be found on aggregate filtered with the given predicate, false otherwise.
+</td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="hasMember" class="public" href="../quirks/aggregate/hasMember.html">hasMember</a><span class="decoration">()</span>
+							</code>
+						</td>
+						<td>Returns true if a member can be found on aggregate with the given memberName, false otherwise.
+</td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="hasMethod" class="public" href="../quirks/aggregate/hasMethod.html">hasMethod</a><span class="decoration">()</span>
+							</code>
+						</td>
+						<td>Returns true if a method can be found on aggregate with the given methodName, false otherwise.
+</td>
+					</tr>
+				</table>
+			</section>
+			<section>
+				<h2>Templates</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th><th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="getFields" class="public" href="../quirks/aggregate/getFields.html">getFields</a>
+							</code>
+						</td>
+						<td>Returns a tuple of structs containing the name and type of the fields of the given aggregate
+</td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="getMethods" class="public" href="../quirks/aggregate/getMethods.html">getMethods</a>
+							</code>
+						</td>
+						<td></td>
+					</tr>
+				</table>
+			</section>
+			<section>
+				<h2>Aliases</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th><th>Type</th><th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<a id="getFields" class="public" href="../quirks/aggregate/getFields.html">
+								<code>getFields</code>
+							</a>
+						</td>
+						<td>
+							<code class="prettyprint lang-d"><span class="pln">filterTuple</span>!(predicate,getFields!aggregate)</code>
+						</td>
+						<td>Returns a tuple of structs containing the name and type of the fields of the given aggregate, filtered with the given predicate
+</td>
+					</tr>
+				</table>
+			</section>
+			<footer>
+				<table class="license-info">
+					<tr>
+						<th>Authors</th>
+						<td>
+							
+						</td>
+					</tr>
+					<tr>
+						<th>Copyright</th>
+						<td>
+							
+						</td>
+					</tr>
+					<tr>
+						<th>License</th>
+						<td>
+							
+						</td>
+					</tr>
+				</table>
+				<p class="faint">Generated using the DDOX documentation generator</p>
+			</footer>
+		</div>
+	</body>
+</html>

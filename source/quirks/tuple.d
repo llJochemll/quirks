@@ -1,6 +1,7 @@
 module quirks.tuple;
 
 import quirks.utility : interpolateMixin;
+import std.conv;
 import std.meta;
 
 @safe
