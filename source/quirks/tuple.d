@@ -5,12 +5,15 @@ import std.conv;
 import std.meta;
 
 @safe
-template filterTuple(T...) if (T.length > 1) {
+template FilterTuple(T...) if (T.length > 0) {
     auto getElementsMixinList() {
         string[] elements;
 
         static foreach (i, element; T) {
             static if (i > 0 && T[0](element)) {
+                static if (i > 0) {
+                    //pragma(msg, typeof(element));
+                }
                 elements ~= "T[" ~ i.to!long.to!string ~ "]";
             }
         }
@@ -19,6 +22,6 @@ template filterTuple(T...) if (T.length > 1) {
     }
 
     mixin(interpolateMixin(q{
-        alias filterTuple = AliasSeq!(${getElementsMixinList.join(",")});
+        alias FilterTuple = AliasSeq!(${getElementsMixinList.join(",")});
     }));
 }

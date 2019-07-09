@@ -1,35 +1,400 @@
 module quirks.aggregate;
 
-import quirks.functional : getReturnType;
-import quirks.tuple : filterTuple;
-import quirks.type : getType, isAggregate, isExpression;
+import quirks.functional: Parameters;
+import quirks.tuple : FilterTuple;
+import quirks.type : TypeOf, isAggregate, isExpression;
 import quirks.utility;
 import std.algorithm;
 import std.array;
-import std.functional : forward, unaryFun;
+import std.functional : unaryFun;
 import std.meta;
 import std.traits;
 import std.typecons;
 
-/**
-* Returns an struct containing the name and type of the field
-*/
 @safe
-pure auto getField(alias aggregate, string fieldName)() if (isAggregate!aggregate) {
-    static assert(hasField!(aggregate, fieldName));
+private template Class(alias aggregate) if (is(TypeOf!aggregate == class)) {
+    alias Class = ClassMeta!aggregate();
+}
 
-    return AggregateField!(__traits(getMember, getType!aggregate, fieldName))();
+@safe
+private template Interface(alias aggregate) if (is(TypeOf!aggregate == interface)) {
+}
+
+@safe
+private template Struct(alias aggregate) if (is(TypeOf!aggregate == struct)) {
+    alias Class = StructMeta!aggregate();
+}
+
+/++
++ Returns a tuple of structs containing the name and type of the fields of the given aggregate
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ alias fields = Fields!S; // is equal to a tuple of 3 structs containing the name and type of the field
++ 
++ static foreach (field; fields) {
++     pragma(msg, field.type.stringof);
++     pragma(msg, field.name);
++ }
++ ---
++/
+@safe
+template Fields(alias aggregate) if (isAggregate!aggregate) {
+    private auto fieldsMixinList() {
+        string[] members;
+
+        static foreach (memberName; MemberNames!aggregate) {
+            static if (!isCallable!(TypeOf!(__traits(getMember, aggregate, memberName)))) {
+                members ~= `getField!(aggregate, "` ~ memberName ~ `")`;
+            }
+        }
+
+        return members;
+    }
+
+    mixin(interpolateMixin(q{
+        alias Fields = AliasSeq!(${fieldsMixinList.join(",")});
+    }));
 } unittest {
     import fluent.asserts;
 
     struct S {
         long id;
-        string name;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update(bool force) { }
     }
 
     class C {
         long id;
-        string name;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update(bool force) { }
+    }
+
+    S s;
+    auto c = new C;
+
+    Fields!(S).length.should.equal(2);
+    Fields!(s).length.should.equal(2);
+
+    Fields!(C).length.should.equal(2);
+    Fields!(c).length.should.equal(2);
+}
+
+/++
++ Returns a tuple of structs containing the name and type of the fields of the given aggregate, filtered with the given predicate
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ alias fields = Fields!(S, field => isNumeric!(field.type)); // is equal to a tuple of 2 structs containing the name and type of the field
++ 
++ static foreach (field; fields) {
++     pragma(msg, field.type.stringof);
++     pragma(msg, field.name);
++ }
++ ---
++/
+@safe
+template Fields(alias aggregate, alias predicate) if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
+    alias Fields = FilterTuple!(predicate, Fields!aggregate);
+} unittest {
+    import fluent.asserts;
+
+    struct S {
+        long id;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update(bool force) { }
+    }
+
+    class C {
+        long id;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update(bool force) { }
+    }
+
+    S s;
+    auto c = new C;
+
+    Fields!(S, field => is(field.type == long)).length.should.equal(1);
+    Fields!(s, field => is(field.type == long)).length.should.equal(1);
+    Fields!(S, field => is(field.type == string)).length.should.equal(0);
+    Fields!(s, field => is(field.type == string)).length.should.equal(0);
+    Fields!(S, field => isNumeric!(field.type)).length.should.equal(2);
+    Fields!(s, field => isNumeric!(field.type)).length.should.equal(2);
+    Fields!(S, field => isArray!(field.type)).length.should.equal(0);
+    Fields!(s, field => isArray!(field.type)).length.should.equal(0);
+    Fields!(S, field => field.name == "id").length.should.equal(1);
+    Fields!(s, field => field.name == "id").length.should.equal(1);
+    Fields!(S, field => field.name == "name").length.should.equal(0);
+    Fields!(s, field => field.name == "name").length.should.equal(0);
+    Fields!(S, field => field.name == "doesNotExist").length.should.equal(0);
+    Fields!(s, field => field.name == "doesNotExist").length.should.equal(0);
+
+    Fields!(C, field => is(field.type == long)).length.should.equal(1);
+    Fields!(c, field => is(field.type == long)).length.should.equal(1);
+    Fields!(C, field => is(field.type == string)).length.should.equal(0);
+    Fields!(c, field => is(field.type == string)).length.should.equal(0);
+    Fields!(C, field => isNumeric!(field.type)).length.should.equal(2);
+    Fields!(c, field => isNumeric!(field.type)).length.should.equal(2);
+    Fields!(C, field => isArray!(field.type)).length.should.equal(0);
+    Fields!(c, field => isArray!(field.type)).length.should.equal(0);
+    Fields!(C, field => field.name == "id").length.should.equal(1);
+    Fields!(c, field => field.name == "id").length.should.equal(1);
+    Fields!(C, field => field.name == "name").length.should.equal(0);
+    Fields!(c, field => field.name == "name").length.should.equal(0);
+    Fields!(C, field => field.name == "doesNotExist").length.should.equal(0);
+    Fields!(c, field => field.name == "doesNotExist").length.should.equal(0);
+}
+
+@safe
+template Methods(alias aggregate) if (isAggregate!aggregate) {
+    auto getMethodsMixinList() {
+        string[] methods;
+        
+        static foreach (member; MemberNames!aggregate) {
+            static foreach (method; MemberFunctionsTuple!(TypeOf!aggregate, member)) {
+                methods ~= `AggregateMethod!method()`;
+            }
+        }
+        
+
+        return methods;
+    }
+
+    mixin(interpolateMixin(q{
+        alias Methods = AliasSeq!(${getMethodsMixinList.join(",")});
+    }));
+}
+
+@safe
+template Methods(alias aggregate, alias predicate) if (isAggregate!aggregate  && is(typeof(unaryFun!predicate))) {
+    alias Methods = FilterTuple!(predicate, Methods!aggregate);
+} unittest {
+    import fluent.asserts;
+
+    struct S {
+        long id;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update(bool force) { }
+    }
+
+    class C {
+        long id;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update(bool force) { }
+    }
+
+    S s;
+    auto c = new C;
+
+    /*Methods!(S, method => is(method.type == string)).length.should.equal(1);
+    Methods!(s, method => is(method.type == string)).length.should.equal(1);
+    Methods!(S, method => is(method.type == long)).length.should.equal(0);
+    Methods!(s, method => is(method.type == long)).length.should.equal(0);
+    Methods!(S, method => isNumeric!(method.type)).length.should.equal(0);
+    Methods!(s, method => isNumeric!(method.type)).length.should.equal(0);
+    Methods!(S, method => isSomeString!(method.type)).length.should.equal(1);
+    Methods!(s, method => isSomeString!(method.type)).length.should.equal(1);
+    Methods!(S, method => method.name == "id").length.should.equal(0);
+    Methods!(s, method => method.name == "id").length.should.equal(0);
+    Methods!(S, method => method.name == "name").length.should.equal(1);
+    Methods!(s, method => method.name == "name").length.should.equal(1);
+    Methods!(S, method => method.name == "doesNotExist").length.should.equal(0);
+    Methods!(s, method => method.name == "doesNotExist").length.should.equal(0);*/
+
+    Methods!(C, method => is(method.type == string)).length.should.equal(1);
+    Methods!(c, method => is(method.type == string)).length.should.equal(1);
+    Methods!(C, method => is(method.type == long)).length.should.equal(0);
+    Methods!(c, method => is(method.type == long)).length.should.equal(0);
+    Methods!(C, method => isNumeric!(method.type)).length.should.equal(0);
+    Methods!(c, method => isNumeric!(method.type)).length.should.equal(0);
+    Methods!(C, method => isSomeString!(method.type)).length.should.equal(1);
+    Methods!(c, method => isSomeString!(method.type)).length.should.equal(1);
+    Methods!(C, method => method.name == "id").length.should.equal(0);
+    Methods!(c, method => method.name == "id").length.should.equal(0);
+    Methods!(C, method => method.name == "name").length.should.equal(1);
+    Methods!(c, method => method.name == "name").length.should.equal(1);
+    Methods!(C, method => method.name == "doesNotExist").length.should.equal(0);
+    Methods!(c, method => method.name == "doesNotExist").length.should.equal(0);
+}
+
+/++
++ Returns the same as __traits(allMembers, aggregate), excluding this and all default fields inherited from Object
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ MemberNames!(S); // is equal to ("id", "age", "name")
++ ---
++/
+@safe
+template MemberNames(alias aggregate) if (isAggregate!aggregate) {
+    alias MemberNames = FilterTuple!(name => ![__traits(allMembers, Object)].canFind(name) && name != "this", __traits(allMembers, TypeOf!aggregate));
+} unittest {
+    import fluent.asserts;
+
+    struct S {
+        long id;
+        string name() {
+            return "name";
+        }
+    }
+
+    class C {
+        long id;
+        string name() {
+            return "name";
+        }
+    }
+
+    S s;
+    auto c = new C;
+
+    MemberNames!S.length.should.equal(2);
+    MemberNames!s.length.should.equal(2);
+
+    MemberNames!C.length.should.equal(2);
+    MemberNames!c.length.should.equal(2);
+}
+
+/++
++ Returns the same as __traits(allMembers, aggregate), excluding this and all default fields inherited from Object, filtered with the provided predicate
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ MemberNames!(S, name => name == "id"); // is equal to ("id")
++ MemberNames!(S, name => name.length < 4); // is equal to ("id", "age")
++ MemberNames!(S, name => false); // ris equal to ()
++ ---
++/
+@safe
+template MemberNames(alias aggregate, alias predicate) if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
+    alias MemberNames = FilterTuple!(predicate, MemberNames!aggregate);
+} unittest {
+    import fluent.asserts;
+
+    struct S {
+        long id;
+        string name() {
+            return "name";
+        }
+    }
+
+    class C {
+        long id;
+        string name() {
+            return "name";
+        }
+    }
+
+    S s;
+    auto c = new C;
+
+    MemberNames!(S, name => name == "id").length.should.equal(1);
+    MemberNames!(s, name => name == "id").length.should.equal(1);
+    MemberNames!(S, name => name == "name").length.should.equal(1);
+    MemberNames!(s, name => name == "name").length.should.equal(1);
+    MemberNames!(S, name => name == "doesNotExist").length.should.equal(0);
+    MemberNames!(s, name => name == "doesNotExist").length.should.equal(0);
+
+    MemberNames!(C, name => name == "id").length.should.equal(1);
+    MemberNames!(c, name => name == "id").length.should.equal(1);
+    MemberNames!(C, name => name == "name").length.should.equal(1);
+    MemberNames!(c, name => name == "name").length.should.equal(1);
+    MemberNames!(C, name => name == "doesNotExist").length.should.equal(0);
+    MemberNames!(c, name => name == "doesNotExist").length.should.equal(0);
+}
+
+/++
++ Returns an struct containing the name and type of the field
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ auto field = getField!(S, "id"); // is equal to a tuple of 3 structs containing the name and type of the field
++ 
++ writeln("Field ", field.name, " has a type of: ", field.type.stringof);
++ ---
++/
+@safe
+pure auto getField(alias aggregate, string fieldName)() if (isAggregate!aggregate) {
+    static assert(hasField!(aggregate, fieldName));
+
+    return AggregateField!(__traits(getMember, TypeOf!aggregate, fieldName))();
+} unittest {
+    import fluent.asserts;
+
+    struct S {
+        long id;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update(bool force) { }
+    }
+
+    class C {
+        long id;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update(bool force) { }
     }
 
     S s;
@@ -39,228 +404,61 @@ pure auto getField(alias aggregate, string fieldName)() if (isAggregate!aggregat
     is(getField!(S, "id").type == long).should.equal(true);
     getField!(s, "id").name.should.equal("id");
     is(getField!(s, "id").type == long).should.equal(true);
-    getField!(S, "name").name.should.equal("name");
-    is(getField!(S, "name").type == string).should.equal(true);
-    getField!(s, "name").name.should.equal("name");
-    is(getField!(s, "name").type == string).should.equal(true);
+    getField!(S, "age").name.should.equal("age");
+    is(getField!(S, "age").type == int).should.equal(true);
+    getField!(s, "age").name.should.equal("age");
+    is(getField!(s, "age").type == int).should.equal(true);
 
     getField!(C, "id").name.should.equal("id");
     is(getField!(C, "id").type == long).should.equal(true);
     getField!(c, "id").name.should.equal("id");
     is(getField!(c, "id").type == long).should.equal(true);
-    getField!(C, "name").name.should.equal("name");
-    is(getField!(C, "name").type == string).should.equal(true);
-    getField!(c, "name").name.should.equal("name");
-    is(getField!(c, "name").type == string).should.equal(true);
+    getField!(C, "age").name.should.equal("age");
+    is(getField!(C, "age").type == int).should.equal(true);
+    getField!(c, "age").name.should.equal("age");
+    is(getField!(c, "age").type == int).should.equal(true);
 }
 
-/**
-* Returns a tuple of structs containing the name and type of the fields of the given aggregate
-*/
-@safe
-template getFields(alias aggregate) if (isAggregate!aggregate) {
-    auto getFieldsMixinList() {
-        string[] members;
-
-        static foreach (memberName; getMemberNames!aggregate) {
-            static if (!isCallable!(getType!(__traits(getMember, aggregate, memberName)))) {
-                members ~= `getField!(aggregate, "` ~ memberName ~ `")`;
-            }
-        }
-
-        return members;
-    }
-
-    mixin(interpolateMixin(q{
-        alias getFields = AliasSeq!(${getFieldsMixinList.join(",")});
-    }));
-} unittest {
-    import fluent.asserts;
-
-    struct S {
-        long id;
-        string name() {
-            return "name";
-        }
-    }
-
-    class C {
-        long id;
-        string name() {
-            return "name";
-        }
-    }
-
-    S s;
-    auto c = new C;
-
-    getFields!(S).length.should.equal(1);
-    getFields!(s).length.should.equal(1);
-
-    getFields!(C).length.should.equal(1);
-    getFields!(c).length.should.equal(1);
-}
-
-/**
-* Returns a tuple of structs containing the name and type of the fields of the given aggregate, filtered with the given predicate
-*/
-@safe
-template getFields(alias aggregate, alias predicate) if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
-    alias getFields = filterTuple!(predicate, getFields!aggregate);
-} unittest {
-    import fluent.asserts;
-
-    struct S {
-        long id;
-        int age;
-        string name() {
-            return "name";
-        }
-    }
-
-    class C {
-        long id;
-        int age;
-        string name() {
-            return "name";
-        }
-    }
-
-    S s;
-    auto c = new C;
-
-    getFields!(S, field => is(field.type == long)).length.should.equal(1);
-    getFields!(s, field => is(field.type == long)).length.should.equal(1);
-    getFields!(S, field => is(field.type == string)).length.should.equal(0);
-    getFields!(s, field => is(field.type == string)).length.should.equal(0);
-    getFields!(S, field => isNumeric!(field.type)).length.should.equal(2);
-    getFields!(s, field => isNumeric!(field.type)).length.should.equal(2);
-    getFields!(S, field => isArray!(field.type)).length.should.equal(0);
-    getFields!(s, field => isArray!(field.type)).length.should.equal(0);
-    getFields!(S, field => field.name == "id").length.should.equal(1);
-    getFields!(s, field => field.name == "id").length.should.equal(1);
-    getFields!(S, field => field.name == "name").length.should.equal(0);
-    getFields!(s, field => field.name == "name").length.should.equal(0);
-    getFields!(S, field => field.name == "doesNotExist").length.should.equal(0);
-    getFields!(s, field => field.name == "doesNotExist").length.should.equal(0);
-}
-
-@safe
-template getMethods(alias aggregate, Nullable!string name) if (isAggregate!aggregate) {
-    auto getMethodsMixinList() {
-        string[] methods;
-
-        static foreach (memberName; getMemberNames!aggregate) {
-            static if (isCallable!(typeof(getMember!(aggregate, memberName)))) {
-                static if (name.isNull || memberName == name) {
-                    methods ~= `getMember!(aggregate, "` ~ memberName ~ `")`;
-                }
-            }
-        }
-
-        return methods;
-    }
-
-    mixin(interpolateMixin(q{
-        alias getMethods = AliasSeq!(${getMethodsMixinList.join(",")});
-    }));
-}
-
-/**
-* Returns the same as __traits(allMembers, aggregate), excluding this and all default fields inherited from Object
-*/
-@safe
-pure auto getMemberNames(alias aggregate)() if (isAggregate!aggregate) {
-    return [__traits(allMembers, getType!aggregate)].filter!(name => ![__traits(allMembers, Object)].canFind(name) && name != "this").array;
-} unittest {
-    import fluent.asserts;
-
-    struct S {
-        long id;
-        string name() {
-            return "name";
-        }
-    }
-
-    class C {
-        long id;
-        string name() {
-            return "name";
-        }
-    }
-
-    S s;
-    auto c = new C;
-
-    getMemberNames!S.length.should.equal(2);
-    getMemberNames!s.length.should.equal(2);
-
-    getMemberNames!C.length.should.equal(2);
-    getMemberNames!c.length.should.equal(2);
-}
-
-/**
-* Returns the same as __traits(allMembers, aggregate), filtered with the provided predicate
-*/
-@safe
-pure auto getMemberNames(alias aggregate, alias predicate)() if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
-    return getMemberNames!aggregate.filter!predicate.array;
-} unittest {
-    import fluent.asserts;
-
-    struct S {
-        long id;
-        string name() {
-            return "name";
-        }
-    }
-
-    class C {
-        long id;
-        string name() {
-            return "name";
-        }
-    }
-
-    S s;
-    auto c = new C;
-
-    getMemberNames!(S, name => name == "id").length.should.equal(1);
-    getMemberNames!(s, name => name == "id").length.should.equal(1);
-    getMemberNames!(S, name => name == "name").length.should.equal(1);
-    getMemberNames!(s, name => name == "name").length.should.equal(1);
-    getMemberNames!(S, name => name == "doesNotExist").length.should.equal(0);
-    getMemberNames!(s, name => name == "doesNotExist").length.should.equal(0);
-
-    getMemberNames!(C, name => name == "id").length.should.equal(1);
-    getMemberNames!(c, name => name == "id").length.should.equal(1);
-    getMemberNames!(C, name => name == "name").length.should.equal(1);
-    getMemberNames!(c, name => name == "name").length.should.equal(1);
-    getMemberNames!(C, name => name == "doesNotExist").length.should.equal(0);
-    getMemberNames!(c, name => name == "doesNotExist").length.should.equal(0);
-}
-
-/**
-* Returns true if a member can be found on aggregate with the given memberName, false otherwise.
-*/
+/++
++ Returns true if a member can be found on aggregate with the given memberName, false otherwise.
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ hasMember!(S, "id"); // returns true
++ hasMember!(S, "name"); // returns true
++ hasMember!(S, "doesNotExist"); // returns false
++ ---
++/
 @safe 
-pure bool hasMember(alias aggregate, string memberName)() if (isAggregate!aggregate) {
-    return getMemberNames!aggregate.canFind(memberName);
+pure auto hasMember(alias aggregate, string memberName)() if (isAggregate!aggregate) {
+    return [MemberNames!aggregate].canFind(memberName);
 } unittest {
     import fluent.asserts;
 
     struct S {
         long id;
+        int age;
         string name() {
             return "name";
         }
+        void update(bool force) { }
     }
 
     class C {
         long id;
+        int age;
         string name() {
             return "name";
         }
+        void update(bool force) { }
     }
 
     S s;
@@ -281,29 +479,47 @@ pure bool hasMember(alias aggregate, string memberName)() if (isAggregate!aggreg
     hasMember!(c, "doesNotExist").should.equal(false);
 }
 
-/**
-* Returns true if a field can be found on aggregate with the given fieldName, false otherwise.
-*/
+/++
++ Returns true if a field can be found on aggregate with the given fieldName, false otherwise.
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ hasField!(S, field => "id"); // returns true
++ hasField!(S, field => "name"); // returns false
++ ---
++/
 @safe
 pure auto hasField(alias aggregate, string fieldName)() if (isAggregate!aggregate) {
-    return getMemberNames!aggregate.canFind(fieldName) && __traits(compiles, __traits(getMember, aggregate, fieldName).stringof);
+    return [MemberNames!aggregate].canFind(fieldName) && __traits(compiles, __traits(getMember, aggregate, fieldName).stringof);
 } unittest {
     import fluent.asserts;
 
     struct S {
         long id;
+        int age;
         string name() {
             return "name";
         }
+        void update(bool force) { }
     }
 
     class C {
         long id;
+        int age;
         string name() {
             return "name";
         }
+        void update(bool force) { }
     }
-    
+
     S s;
     auto c = new C;
 
@@ -322,12 +538,26 @@ pure auto hasField(alias aggregate, string fieldName)() if (isAggregate!aggregat
     hasField!(c, "doesNotExist").should.equal(false);
 }
 
-/**
-* Returns true if a field can be found on aggregate filtered with the given predicate, false otherwise.
-*/
+/++
++ Returns true if a field can be found on aggregate filtered with the given predicate, false otherwise.
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ hasField!(S, field => isNumeric!(field.type)); // returns true
++ hasField!(S, field => is(field.type == string)); // returns false
++ ---
++/
 @safe
 pure auto hasField(alias aggregate, alias predicate)() if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
-    return filterTuple!(predicate, getFields!aggregate).length > 0;
+    return FilterTuple!(predicate, Fields!aggregate).length > 0;
 } unittest {
     import fluent.asserts;
 
@@ -337,6 +567,7 @@ pure auto hasField(alias aggregate, alias predicate)() if (isAggregate!aggregate
         string name() {
             return "name";
         }
+        void update(bool force) { }
     }
 
     class C {
@@ -345,6 +576,7 @@ pure auto hasField(alias aggregate, alias predicate)() if (isAggregate!aggregate
         string name() {
             return "name";
         }
+        void update(bool force) { }
     }
 
     S s;
@@ -366,52 +598,52 @@ pure auto hasField(alias aggregate, alias predicate)() if (isAggregate!aggregate
     hasField!(s, field => field.name == "doesNotExist").should.equal(false);
 }
 
-/**
-* Returns true if a method can be found on aggregate with the given methodName, false otherwise.
-*/
-@safe 
-pure bool hasMethod(alias aggregate, string methodName)() if (isAggregate!aggregate) {
-    return hasMember!(aggregate, methodName) && !hasField!(aggregate, methodName);
-} unittest {
-    import fluent.asserts;
+@safe
+pure auto hasMethod(alias aggregate, string fieldName)() if (isAggregate!aggregate) {
+}
 
-    struct S {
-        long id;
-        string name() {
-            return "name";
-        }
-    }
-
-    class C {
-        long id;
-        string name() {
-            return "name";
-        }
-    }
-
-    S s;
-    auto c = new C;
-
-    hasMethod!(S, "id").should.equal(false);
-    hasMethod!(s, "id").should.equal(false);
-    hasMethod!(S, "name").should.equal(true);
-    hasMethod!(s, "name").should.equal(true);
-    hasMethod!(S, "doesNotExist").should.equal(false);
-    hasMethod!(s, "doesNotExist").should.equal(false);
-
-    hasMethod!(C, "id").should.equal(false);
-    hasMethod!(c, "id").should.equal(false);
-    hasMethod!(C, "name").should.equal(true);
-    hasMethod!(c, "name").should.equal(true);
-    hasMethod!(C, "doesNotExist").should.equal(false);
-    hasMethod!(c, "doesNotExist").should.equal(false);
+@safe
+pure auto hasMethod(alias aggregate, alias predicate)() if (isAggregate!aggregate) {
 }
 
 private {  
     @safe
     struct AggregateField(alias field) {
-        alias type = getType!field;
+        alias attributes = __traits(getAttributes, field);
+        alias type = TypeOf!field;
 
         string name = field.stringof;
+    }
+
+    @safe
+    struct AggregateMethod(alias method) {
+        string name = method.stringof;
+        alias parameters = Parameters!method;
+        alias type = ReturnType!method;
+    }
+
+    @safe
+    struct AggregateMeta(alias thing) if (is(TypeOf!thing == struct) || is(TypeOf!thing == class) || is(TypeOf!thing == interface)) {
+        alias attributes = __traits(getAttributes, thing);
+        alias name = thing.stringof;
+        alias type = TypeOf!thing;
+    }
+
+    @safe
+    struct ClassMeta(alias thing) if (is(TypeOf!thing == class)) {
+        alias fields = Fields!thing;
+        alias isAbstract = isAbstractClass!(TypeOf!thing);
+        alias isFinal = isFinalClass!(TypeOf!thing);
+        alias aggregateMeta this;
+
+        AggregateMeta!thing aggregateMeta;
+    }
+
+    @safe
+    struct StructMeta(alias thing) if (is(TypeOf!thing == struct)) {
+        alias fields = Fields!thing;
+        alias aggregateMeta this;
+
+        AggregateMeta!thing aggregateMeta;
     }
 }

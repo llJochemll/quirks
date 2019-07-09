@@ -1,20 +1,42 @@
 module quirks.functional;
 
+import std.functional : unaryFun;
 import std.meta;
 import std.traits;
 
-/**
-* Get, as a tuple, a list of all parameters with their type, name and default value
-*/
-alias getParameters = GetParameters;
 /// Alias for ParameterDefaults
-alias getParameterDefaultValues = ParameterDefaults;
+alias ParameterDefaultValues = ParameterDefaults;
 /// Alias for ParameterIdentifierTuple
-alias getParameterNames = ParameterIdentifierTuple;
+alias ParameterNames = ParameterIdentifierTuple;
 /// Alias for Parameters
-alias getParameterTypes = Parameters;
-/// Alias for ReturnType
-alias getReturnType = ReturnType;
+alias ParameterTypes = std.traits.Parameters;
+
+/++
++ Get, as a tuple, a list of all parameters with their type, name and default value
++/
+@safe
+template Parameters(alias func) if (isCallable!func) {
+    alias Parameters = NextParameter!(func, 0);
+} unittest {
+    import fluent.asserts;
+
+    void temp(int age, string name = "john");
+
+    auto parameters = Parameters!temp;
+
+    int foo(int num, string name = "hello", int[] = [1,2,3], lazy int x = 0);
+    static assert(is(ParameterDefaults!foo[0] == void));
+
+    (is(typeof(parameters[0].defaultValue()) == void)).should.equal(true);
+    parameters[1].defaultValue().should.equal("john");
+
+    parameters[0].name.should.equal("age");
+    parameters[1].name.should.equal("name");
+
+    (is(parameters[0].type == int)).should.equal(true);
+    (is(parameters[1].type == string)).should.equal(true);
+}
+
 
 private {
     @safe
@@ -34,33 +56,10 @@ private {
     }
 
     @safe
-    template GetParameters(alias func) if (isCallable!func) {
-        alias GetParameters = NextParameter!(func, 0);
-    } unittest {
-        import fluent.asserts;
-
-        void temp(int age, string name = "john");
-
-        auto parameters = getParameters!temp;
-
-        int foo(int num, string name = "hello", int[] = [1,2,3], lazy int x = 0);
-        static assert(is(ParameterDefaults!foo[0] == void));
-
-        (is(typeof(parameters[0].defaultValue()) == void)).should.equal(true);
-        parameters[1].defaultValue().should.equal("john");
-
-        parameters[0].name.should.equal("age");
-        parameters[1].name.should.equal("name");
-
-        (is(parameters[0].type == int)).should.equal(true);
-        (is(parameters[1].type == string)).should.equal(true);
-    }
-
-    @safe
     template NextParameter(alias func, ulong i, DoneParameters...) {
-        alias defaultValues = getParameterDefaultValues!func;
-        alias names = getParameterNames!func;
-        alias types = getParameterTypes!func;
+        alias defaultValues = ParameterDefaultValues!func;
+        alias names = ParameterNames!func;
+        alias types = ParameterTypes!func;
 
         static if (i >= names.length) {
             alias NextParameter = DoneParameters;

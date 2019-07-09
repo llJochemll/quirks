@@ -6,11 +6,11 @@ import std.typecons;
 alias isExpression = isExpressions;
 
 @safe
-template getType(alias something) {
+template TypeOf(alias something) {
     static if (isType!something) {
-        alias getType = something;
+        alias TypeOf = something;
     } else {
-        alias getType = typeof(something);
+        alias TypeOf = typeof(something);
     }
 }  unittest {
     import fluent.asserts;
@@ -18,19 +18,19 @@ template getType(alias something) {
     struct S { }
     class C { }
 
-    is(getType!int == int).should.equal(true);
-    is(getType!0 == int).should.equal(true);
-    is(getType!string == string).should.equal(true);
-    is(getType!"text" == string).should.equal(true);
-    is(getType!S == S).should.equal(true);
-    is(getType!(S()) == S).should.equal(true);
-    is(getType!C == C).should.equal(true);
+    is(TypeOf!int == int).should.equal(true);
+    is(TypeOf!0 == int).should.equal(true);
+    is(TypeOf!string == string).should.equal(true);
+    is(TypeOf!"text" == string).should.equal(true);
+    is(TypeOf!S == S).should.equal(true);
+    is(TypeOf!(S()) == S).should.equal(true);
+    is(TypeOf!C == C).should.equal(true);
     auto c = new C;
-    is(getType!c == C).should.equal(true);
+    is(TypeOf!c == C).should.equal(true);
 }
 
 bool isAggregate(alias aggregate)() {
-    return isAggregateType!(getType!aggregate);
+    return isAggregateType!(TypeOf!aggregate);
 } unittest {
     import fluent.asserts;
 

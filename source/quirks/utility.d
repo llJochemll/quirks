@@ -3,12 +3,12 @@ module quirks.utility;
 import std.algorithm;
 import std.string;
 
-/**
-* Takes code in the form of a string and interpolates variables defined in the form of ${variableName}.
-* Usefull in combination with the q{} string literal, to keep syntax highlighting for mixed in code and avoid string concatenations, which keeps the code readable
-* Params: 
-*   code = code to be mixed in
-*/
+/++
++ Takes code in the form of a string and interpolates variables defined in the form of ${variableName}.
++ Usefull in combination with the q{} string literal, to keep syntax highlighting for mixed in code and avoid string concatenations, which keeps the code readable
++ Params: 
++   code = code to be mixed in
++/
 @safe
 pure static string interpolateMixin(string code) {
 	string interpolatedCode = "";
