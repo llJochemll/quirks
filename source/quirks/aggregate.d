@@ -177,16 +177,17 @@ template Fields(alias aggregate, alias predicate) if (isAggregate!aggregate && i
 template Methods(alias aggregate) if (isAggregate!aggregate) {
     auto getMethodsMixinList() {
         string[] methods;
-        
-        static foreach (member; MemberNames!aggregate) {
-            static foreach (method; MemberFunctionsTuple!(TypeOf!aggregate, member)) {
-                methods ~= `AggregateMethod!method()`;
+
+        static foreach (memberName; MemberNames!aggregate) {
+            static if (!hasField!(aggregate, memberName)) {
+                methods ~= `AggregateMethod!(aggregate, "` ~ memberName ~ `")()`;
             }
         }
-        
 
         return methods;
     }
+
+    pragma(msg, getMethodsMixinList.join(","));
 
     mixin(interpolateMixin(q{
         alias Methods = AliasSeq!(${getMethodsMixinList.join(",")});
@@ -220,7 +221,7 @@ template Methods(alias aggregate, alias predicate) if (isAggregate!aggregate  &&
     S s;
     auto c = new C;
 
-    /*Methods!(S, method => is(method.type == string)).length.should.equal(1);
+    Methods!(S, method => is(method.type == string)).length.should.equal(1);
     Methods!(s, method => is(method.type == string)).length.should.equal(1);
     Methods!(S, method => is(method.type == long)).length.should.equal(0);
     Methods!(s, method => is(method.type == long)).length.should.equal(0);
@@ -233,7 +234,7 @@ template Methods(alias aggregate, alias predicate) if (isAggregate!aggregate  &&
     Methods!(S, method => method.name == "name").length.should.equal(1);
     Methods!(s, method => method.name == "name").length.should.equal(1);
     Methods!(S, method => method.name == "doesNotExist").length.should.equal(0);
-    Methods!(s, method => method.name == "doesNotExist").length.should.equal(0);*/
+    Methods!(s, method => method.name == "doesNotExist").length.should.equal(0);
 
     Methods!(C, method => is(method.type == string)).length.should.equal(1);
     Methods!(c, method => is(method.type == string)).length.should.equal(1);
@@ -616,10 +617,15 @@ private {
     }
 
     @safe
-    struct AggregateMethod(alias method) {
-        string name = method.stringof;
-        alias parameters = Parameters!method;
-        alias type = ReturnType!method;
+    struct AggregateMethod(alias aggregate, string methodName) {
+        string name = methodName;
+
+        static if (is(aggregate == struct)) {
+            alias parameters = Parameters!(__traits(getMember, TypeOf!aggregate(), methodName));
+            alias type = ReturnType!(__traits(getMember, TypeOf!aggregate(), methodName));
+        } else {
+
+        }
     }
 
     @safe
