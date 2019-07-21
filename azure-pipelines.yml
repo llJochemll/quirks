@@ -43,6 +43,15 @@ steps:
     ~/dlang/trial/trial-v0.7.2/trial --arch=x86_64
   displayName: 'Run unit tests'
 
+- script: |
+    HOME="$(readlink -f ~)"; export HOME
+    source $(~/dlang/install.sh dmd -a)
+    
+    dub upgrade
+    dub test -b unittest-cov
+    bash <(curl -s https://codecov.io/bash)
+  displayName: 'Generate code coverage'
+
 - task: PublishTestResults@2
   displayName: 'Publish Test Results'
   inputs:
