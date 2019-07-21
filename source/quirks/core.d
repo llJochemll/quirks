@@ -2,7 +2,7 @@ module quirks.core;
 
 static import std.traits;
 import quirks.aggregate : Fields, Methods;
-import quirks.functional : Delegate, Function, Parameters;
+import quirks.functional : Parameters, FunctionAttributes;
 import quirks.type : TypeOf, isAggregate;
 import quirks.utility : interpolateMixin;
 import std.meta;
@@ -12,7 +12,9 @@ import std.meta;
 +/
 template Quirks(alias thing) {
     alias quirks = AliasSeq!(
+        "attributes", q{__traits(getAttributes, thing)},
         "fields", q{Fields!thing},
+        "functionAttributes", q{FunctionAttributes!thing},
         "isNested", q{std.traits.isNested!thing},
         "methods", q{Methods!thing},
         "parameters", q{Parameters!thing},
@@ -35,24 +37,4 @@ template Quirks(alias thing) {
     }
 
     alias Quirks = QuirksStruct!(thing, __traits(identifier, thing));
-} unittest {
-    import fluent.asserts;
-
-    import quirks.aggregate;
-
-    class C {
-        long id;
-        int age;
-        string name() {
-            return "name";
-        }
-        void update(bool force) { }
-
-        C child;
-    }
-
-    void func(int age);
-
-    alias info = Quirks!(C);
-    pragma(msg, info.methods[0].name);
 }
