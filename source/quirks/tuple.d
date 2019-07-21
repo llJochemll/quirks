@@ -11,9 +11,6 @@ template FilterTuple(T...) if (T.length > 0) {
 
         static foreach (i, element; T) {
             static if (i > 0 && T[0](element)) {
-                static if (i > 0) {
-                    //pragma(msg, typeof(element));
-                }
                 elements ~= "T[" ~ i.to!long.to!string ~ "]";
             }
         }

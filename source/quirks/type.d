@@ -6,11 +6,11 @@ import std.typecons;
 alias isExpression = isExpressions;
 
 @safe
-template TypeOf(alias something) {
-    static if (isType!something) {
-        alias TypeOf = something;
+template TypeOf(alias thing) {
+    static if (isType!thing) {
+        alias TypeOf = thing;
     } else {
-        alias TypeOf = typeof(something);
+        alias TypeOf = typeof(thing);
     }
 }  unittest {
     import fluent.asserts;

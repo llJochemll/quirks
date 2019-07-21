@@ -58,7 +58,7 @@ pure static string interpolateMixin(string code) {
 		}
 	}
 
-	return `import std.algorithm;import std.string;mixin("` ~ interpolatedCode ~ `".format(` ~ interpolatedFragments.join(",") ~ `));`;
+	return `import std.string : join; static import std.string;mixin(std.string.format("` ~ interpolatedCode ~ `", ` ~ interpolatedFragments.join(",") ~ `));`;
 } unittest {
 	import fluent.asserts;
 

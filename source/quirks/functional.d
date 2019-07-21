@@ -37,6 +37,35 @@ template Parameters(alias func) if (isCallable!func) {
     (is(parameters[1].type == string)).should.equal(true);
 }
 
+package {
+    @safe
+    struct Callable(alias thing) if (isCallable!thing) {
+        alias parameters = Parameters!thing;
+    }
+
+    @safe 
+    struct Delegate(alias thing) {
+        alias callable this;
+
+        Callable!thing callable;
+    }
+    
+    @safe 
+    struct Function(alias thing) {
+        alias callable this;
+
+        Callable!thing callable;
+        string name = thing.stringof;
+    }
+
+    @safe 
+    struct FunctionPointer(alias thing) {
+        alias callable this;
+
+        Callable!thing callable;
+        string name = thing.stringof;
+    }
+}
 
 private {
     @safe

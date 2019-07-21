@@ -2,10 +2,10 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Template filterTuple</title>
-		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
-		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
-		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
+		<title>Module quirks.core</title>
+		<link rel="stylesheet" type="text/css" href="../styles/ddox.css"/>
+		<link rel="stylesheet" href="../prettify/prettify.css" type="text/css"/>
+		<script type="text/javascript" src="../scripts/jquery.js">/**/</script><script type="text/javascript" src="../scripts/ddox.js">/**/</script>
 	</head>
 	<body onload="setupDdox();">
 		<nav id="main-nav">
@@ -16,38 +16,43 @@
 				<form action="#" method="GET">
 					<input id="symbolSearch" type="text" name="q" placeholder="Search for symbols" autocomplete="off" onchange="performSymbolSearch(40);" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
 				</form>
-				<ul id="symbolSearchResults" class="symbolList" style="display: none"></ul><script type="application/javascript" src="../../symbols.js"></script><script type="application/javascript">var symbolSearchRootDir = "../../";
+				<ul id="symbolSearchResults" class="symbolList" style="display: none"></ul><script type="application/javascript" src="../symbols.js"></script><script type="application/javascript">var symbolSearchRootDir = "../";
 $('#symbolSearchPane').show();</script>
 			</div>
 			<ul class="tree-view">
 				<li class="tree-view ">
 					<div class="package ">
-						<a href="../../quirks.html">quirks</a>
+						<a href="../quirks.html">quirks</a>
 					</div>
 			<ul class="tree-view">
 				<li>
 					<div class="module ">
-						<a href="../../quirks/aggregate.html">aggregate</a>
-					</div>
-				</li>
-				<li>
-					<div class="module ">
-						<a href="../../quirks/functional.html">functional</a>
+						<a href="../quirks/aggregate.html">aggregate</a>
 					</div>
 				</li>
 				<li>
 					<div class="module selected">
-						<a href="../../quirks/tuple.html">tuple</a>
+						<a href="../quirks/core.html">core</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../quirks/type.html">type</a>
+						<a href="../quirks/functional.html">functional</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../quirks/utility.html">utility</a>
+						<a href="../quirks/tuple.html">tuple</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../quirks/type.html">type</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../quirks/utility.html">utility</a>
 					</div>
 				</li>
 			</ul>
@@ -55,31 +60,28 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Template filterTuple</h1><p></p>
-			<div class="prototype">
-				<code class="lang-d">
-					<div class="single-prototype">
-			<span class="kwd">template</span> <span class="pln">filterTuple</span>(T...)
-			;
-					</div>
-				</code>
-			</div>
-			
-			<section><h2>Contained Functions</h2>
+			<h1>Module quirks.core</h1><p></p>
+			<section></section>
+			<section>
+				<h2>Aliases</h2>
 				<table>
 					<col class="caption"/>
 					<tr>
-						<th>Name</th><th>Description</th>
+						<th>Name</th><th>Type</th><th>Description</th>
 					</tr>
 					<tr>
 						<td>
-							<a href="../../quirks/tuple/filterTuple.getElementsMixinList.html">getElementsMixinList</a>
+							<a id="Quirks" class="public" href="../quirks/core/Quirks.html">
+								<code>Quirks</code>
+							</a>
+						</td>
+						<td>
+							<code class="prettyprint lang-d"><a href="../quirks/core/Quirks.QuirksStruct.html"><span class="typ">Quirks<wbr/></span><span class="pun">.<wbr/></span><span class="typ">QuirksStruct</span></a>!(thing,__traits(identifier,thing))</code>
 						</td>
 						<td></td>
 					</tr>
 				</table>
 			</section>
-			
 			<footer>
 				<table class="license-info">
 					<tr>

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>getFields - multiple declarations</title>
+		<title>Function FilterTuple.getElementsMixinList</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -26,8 +26,13 @@ $('#symbolSearchPane').show();</script>
 					</div>
 			<ul class="tree-view">
 				<li>
-					<div class="module selected">
+					<div class="module ">
 						<a href="../../quirks/aggregate.html">aggregate</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../quirks/core.html">core</a>
 					</div>
 				</li>
 				<li>
@@ -36,7 +41,7 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</li>
 				<li>
-					<div class="module ">
+					<div class="module selected">
 						<a href="../../quirks/tuple.html">tuple</a>
 					</div>
 				</li>
@@ -55,52 +60,11 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>getFields - multiple declarations</h1>
-			<nav class="page-nav">
-				<ul>
-					<li>
-						<a href="#0">
-							Template <code>getFields</code>
-						</a>
-					</li>
-					<li>
-						<a href="#1">
-							Alias <code>getFields</code>
-						</a>
-					</li>
-				</ul>
-			</nav><h2 id="0">Template getFields</h2><p>Returns a tuple of structs containing the name and type of the fields of the given aggregate
-</p>
+			<h1>Function FilterTuple.getElementsMixinList</h1><p></p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">template</span> <span class="pln">getFields</span>(alias aggregate)
-			;
-					</div>
-				</code>
-			</div>
-			
-			<section><h3>Contained Functions</h3>
-				<table>
-					<col class="caption"/>
-					<tr>
-						<th>Name</th><th>Description</th>
-					</tr>
-					<tr>
-						<td>
-							<a href="../../quirks/aggregate/getFields.getFieldsMixinList.html">getFieldsMixinList</a>
-						</td>
-						<td></td>
-					</tr>
-				</table>
-			</section>
-			<h2 id="1">Alias getFields</h2><p>Returns a tuple of structs containing the name and type of the fields of the given aggregate, filtered with the given predicate
-</p>
-			<div class="prototype">
-				<code class="lang-d">
-					<div class="single-prototype">
-			<span class="kwd">alias</span> <span class="pln">getFields</span>(alias aggregate, alias predicate)
-			 <span class="pun">=</span> <span class="pln">filterTuple</span>!(predicate,getFields!aggregate)<span class="pun">;</span>
+			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">getElementsMixinList</span><span class="pun">(</span><span class="pun">)</span><span class="pun">;</span>
 					</div>
 				</code>
 			</div>

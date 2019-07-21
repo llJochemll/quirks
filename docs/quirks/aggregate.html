@@ -76,24 +76,6 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="getMemberNames" class="public" href="../quirks/aggregate/getMemberNames.html">getMemberNames</a><span class="decoration">()</span>
-							</code>
-						</td>
-						<td>Returns the same as _traits(allMembers, aggregate), excluding this and all default fields inherited from Object
-</td>
-					</tr>
-					<tr>
-						<td>
-							<code>
-								<a id="getMemberNames" class="public" href="../quirks/aggregate/getMemberNames.html">getMemberNames</a><span class="decoration">()</span>
-							</code>
-						</td>
-						<td>Returns the same as _traits(allMembers, aggregate), filtered with the provided predicate
-</td>
-					</tr>
-					<tr>
-						<td>
-							<code>
 								<a id="hasField" class="public" href="../quirks/aggregate/hasField.html">hasField</a><span class="decoration">()</span>
 							</code>
 						</td>
@@ -124,6 +106,22 @@ $('#symbolSearchPane').show();</script>
 								<a id="hasMethod" class="public" href="../quirks/aggregate/hasMethod.html">hasMethod</a><span class="decoration">()</span>
 							</code>
 						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="hasMethod" class="public" href="../quirks/aggregate/hasMethod.html">hasMethod</a><span class="decoration">()</span>
+							</code>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="hasMethod" class="public" href="../quirks/aggregate/hasMethod.html">hasMethod</a><span class="decoration">()</span>
+							</code>
+						</td>
 						<td>Returns true if a method can be found on aggregate with the given methodName, false otherwise.
 </td>
 					</tr>
@@ -139,7 +137,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="getFields" class="public" href="../quirks/aggregate/getFields.html">getFields</a>
+								<a id="Fields" class="public" href="../quirks/aggregate/Fields.html">Fields</a>
 							</code>
 						</td>
 						<td>Returns a tuple of structs containing the name and type of the fields of the given aggregate
@@ -148,7 +146,23 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="getMethods" class="public" href="../quirks/aggregate/getMethods.html">getMethods</a>
+								<a id="Interface" class="public" href="../quirks/aggregate/Interface.html">Interface</a>
+							</code>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="Methods" class="public" href="../quirks/aggregate/Methods.html">Methods</a>
+							</code>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="Struct" class="public" href="../quirks/aggregate/Struct.html">Struct</a>
 							</code>
 						</td>
 						<td></td>
@@ -164,14 +178,49 @@ $('#symbolSearchPane').show();</script>
 					</tr>
 					<tr>
 						<td>
-							<a id="getFields" class="public" href="../quirks/aggregate/getFields.html">
-								<code>getFields</code>
+							<a id="Class" class="public" href="../quirks/aggregate/Class.html">
+								<code>Class</code>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><span class="pln">filterTuple</span>!(predicate,getFields!aggregate)</code>
+							<code class="prettyprint lang-d"><span class="typ">ClassMeta</span>!aggregate <span class="kwd">function</span><span class="pun">(</span><span class="pun">)</span></code>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<a id="Fields" class="public" href="../quirks/aggregate/Fields.html">
+								<code>Fields</code>
+							</a>
+						</td>
+						<td>
+							<code class="prettyprint lang-d"><span class="typ">FilterTuple</span>!(predicate,Fields!aggregate)</code>
 						</td>
 						<td>Returns a tuple of structs containing the name and type of the fields of the given aggregate, filtered with the given predicate
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a id="MemberNames" class="public" href="../quirks/aggregate/MemberNames.html">
+								<code>MemberNames</code>
+							</a>
+						</td>
+						<td>
+							<code class="prettyprint lang-d"><span class="typ">FilterTuple</span>!((name)=>![__traits(allMembers,Object)].canFind(name)&&(name!="this"),__traits(allMembers,TypeOf!aggregate))</code>
+						</td>
+						<td>Returns the same as _traits(allMembers, aggregate), excluding this and all default fields inherited from Object
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a id="MemberNames" class="public" href="../quirks/aggregate/MemberNames.html">
+								<code>MemberNames</code>
+							</a>
+						</td>
+						<td>
+							<code class="prettyprint lang-d"><span class="typ">FilterTuple</span>!(predicate,MemberNames!aggregate)</code>
+						</td>
+						<td>Returns the same as _traits(allMembers, aggregate), excluding this and all default fields inherited from Object, filtered with the provided predicate
 </td>
 					</tr>
 				</table>

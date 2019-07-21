@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Alias getType</title>
+		<title>Alias Parameters</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -31,7 +31,7 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</li>
 				<li>
-					<div class="module ">
+					<div class="module selected">
 						<a href="../../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -41,7 +41,7 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</li>
 				<li>
-					<div class="module selected">
+					<div class="module ">
 						<a href="../../quirks/type.html">type</a>
 					</div>
 				</li>
@@ -55,12 +55,13 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Alias getType</h1><p></p>
+			<h1>Alias Parameters</h1><p>Get, as a tuple, a list of all parameters with their type, name and default value
+</p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">alias</span> <span class="pln">getType</span>(alias something)
-			 <span class="pun">=</span> <span class="pln">something</span><span class="pun">;</span>
+			<span class="kwd">alias</span> <span class="pln">Parameters</span>(alias func)
+			 <span class="pun">=</span> <span class="typ">NextParameter</span>!(func,0)<span class="pun">;</span>
 					</div>
 				</code>
 			</div>

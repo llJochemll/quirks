@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>hasField - multiple declarations</title>
+		<title>Fields - multiple declarations</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -55,33 +55,46 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>hasField - multiple declarations</h1>
+			<h1>Fields - multiple declarations</h1>
 			<nav class="page-nav">
 				<ul>
 					<li>
 						<a href="#0">
-							Function <code>hasField</code>
+							Template <code>Fields</code>
 						</a>
 					</li>
 					<li>
 						<a href="#1">
-							Function <code>hasField</code>
+							Alias <code>Fields</code>
 						</a>
 					</li>
 				</ul>
-			</nav><h2 id="0">Function hasField</h2><p>Returns true if a field can be found on aggregate with the given fieldName, false otherwise.
+			</nav><h2 id="0">Template Fields</h2><p>Returns a tuple of structs containing the name and type of the fields of the given aggregate
 </p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">hasField</span>(alias aggregate, <span class="typ">string</span> fieldName)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure @safe</span>
-			<br/>
-			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isAggregate</span><span class="pun">!</span><span class="pln">aggregate</span><span class="pun">);</span>
+			<span class="kwd">template</span> <span class="pln">Fields</span>(alias aggregate)
+			;
 					</div>
 				</code>
 			</div>
 			<section></section>
 
+			<section><h3>Contained Functions</h3>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th><th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../quirks/aggregate/Fields.FieldsMixinList.html">FieldsMixinList</a>
+						</td>
+						<td></td>
+					</tr>
+				</table>
+			</section>
 			<section><h3>Example</h3>
 <pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">S </span><span class="pun">{
     </span><span class="typ">long </span><span class="pln">id</span><span class="pun">;
@@ -91,17 +104,20 @@ $('#symbolSearchPane').show();</script>
     }
 }
 
-</span><span class="pln">hasField</span><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">field </span><span class="pun">=&gt; </span><span class="str">"id"</span><span class="pun">); </span><span class="com">// returns true
-</span><span class="pln">hasField</span><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">field </span><span class="pun">=&gt; </span><span class="str">"name"</span><span class="pun">); </span><span class="com">// returns false</span></code></pre>
+</span><span class="kwd">alias </span><span class="pln">fields </span><span class="pun">= </span><span class="typ">Fields</span><span class="pun">!</span><span class="pln">S</span><span class="pun">; </span><span class="com">// is equal to a tuple of 3 structs containing the name and type of the field
+
+</span><span class="kwd">static foreach </span><span class="pun">(</span><span class="pln">field</span><span class="pun">; </span><span class="pln">fields</span><span class="pun">) {
+    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type<wbr/></span><span class="pun">.</span><span class="pln">stringof</span><span class="pun">);
+    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">name</span><span class="pun">);
+}</span></code></pre>
 </section>
-<h2 id="1">Function hasField</h2><p>Returns true if a field can be found on aggregate filtered with the given predicate, false otherwise.
+<h2 id="1">Alias Fields</h2><p>Returns a tuple of structs containing the name and type of the fields of the given aggregate, filtered with the given predicate
 </p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">hasField</span>(alias aggregate, alias predicate)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure @safe</span>
-			<br/>
-			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isAggregate</span><span class="pun">!</span><span class="pln">aggregate </span><span class="pun">&amp;&amp; </span><span class="kwd">is</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">unaryFun</span><span class="pun">!</span><span class="pln">predicate</span><span class="pun">))</span><span class="pun">);</span>
+			<span class="kwd">alias</span> <span class="pln">Fields</span>(alias aggregate, alias predicate)
+			 <span class="pun">=</span> <span class="typ">FilterTuple</span>!(predicate,Fields!aggregate)<span class="pun">;</span>
 					</div>
 				</code>
 			</div>
@@ -116,8 +132,12 @@ $('#symbolSearchPane').show();</script>
     }
 }
 
-<a href="../../quirks/aggregate/hasField.html"></span><span class="pln">hasField</span></a><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">field </span><span class="pun">=&gt; </span><span class="pln">isNumeric</span><span class="pun">!(</span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type</span><span class="pun">)); </span><span class="com">// returns true
-<a href="../../quirks/aggregate/hasField.html"></span><span class="pln">hasField</span></a><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">field </span><span class="pun">=&gt; </span><span class="kwd">is</span><span class="pun">(</span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type </span><span class="pun">== </span><span class="typ">string</span><span class="pun">)); </span><span class="com">// returns false</span></code></pre>
+</span><span class="kwd">alias </span><span class="pln">fields </span><span class="pun">= <a href="../../quirks/aggregate/Fields.html"></span><span class="typ">Fields</span></a><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">field </span><span class="pun">=&gt; </span><span class="pln">isNumeric</span><span class="pun">!(</span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type</span><span class="pun">)); </span><span class="com">// is equal to a tuple of 2 structs containing the name and type of the field
+
+</span><span class="kwd">static foreach </span><span class="pun">(</span><span class="pln">field</span><span class="pun">; </span><span class="pln">fields</span><span class="pun">) {
+    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type<wbr/></span><span class="pun">.</span><span class="pln">stringof</span><span class="pun">);
+    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">name</span><span class="pun">);
+}</span></code></pre>
 </section>
 
 			<footer>

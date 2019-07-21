@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>getMemberNames - multiple declarations</title>
+		<title>Template Methods</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -55,44 +55,30 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>getMemberNames - multiple declarations</h1>
-			<nav class="page-nav">
-				<ul>
-					<li>
-						<a href="#0">
-							Function <code>getMemberNames</code>
-						</a>
-					</li>
-					<li>
-						<a href="#1">
-							Function <code>getMemberNames</code>
-						</a>
-					</li>
-				</ul>
-			</nav><h2 id="0">Function getMemberNames</h2><p>Returns the same as _traits(allMembers, aggregate), excluding this and all default fields inherited from Object
-</p>
+			<h1>Template Methods</h1><p></p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">getMemberNames</span>(alias aggregate)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure @safe</span>
-			<br/>
-			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isAggregate</span><span class="pun">!</span><span class="pln">aggregate</span><span class="pun">);</span>
+			<span class="kwd">template</span> <span class="pln">Methods</span>(alias aggregate, <span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">typecons<wbr/></span><span class="pun">.</span><span class="typ">Nullable</span>!(string) name)
+			;
 					</div>
 				</code>
 			</div>
 			
-			<h2 id="1">Function getMemberNames</h2><p>Returns the same as _traits(allMembers, aggregate), filtered with the provided predicate
-</p>
-			<div class="prototype">
-				<code class="lang-d">
-					<div class="single-prototype">
-			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">getMemberNames</span>(alias aggregate, alias predicate)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure @safe</span>
-			<br/>
-			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isAggregate</span><span class="pun">!</span><span class="pln">aggregate </span><span class="pun">&amp;&amp; </span><span class="kwd">is</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">unaryFun</span><span class="pun">!</span><span class="pln">predicate</span><span class="pun">))</span><span class="pun">);</span>
-					</div>
-				</code>
-			</div>
-			
+			<section><h2>Contained Functions</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th><th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../quirks/aggregate/Methods.getMethodsMixinList.html">getMethodsMixinList</a>
+						</td>
+						<td></td>
+					</tr>
+				</table>
+			</section>
 			
 			<footer>
 				<table class="license-info">
