@@ -32,6 +32,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../quirks/core.html">core</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -63,15 +68,6 @@ $('#symbolSearchPane').show();</script>
 					<col class="caption"/>
 					<tr>
 						<th>Name</th><th>Description</th>
-					</tr>
-					<tr>
-						<td>
-							<code>
-								<a id="getField" class="public" href="../quirks/aggregate/getField.html">getField</a><span class="decoration">()</span>
-							</code>
-						</td>
-						<td>Returns an struct containing the name and type of the field
-</td>
 					</tr>
 					<tr>
 						<td>
@@ -116,15 +112,6 @@ $('#symbolSearchPane').show();</script>
 						</td>
 						<td></td>
 					</tr>
-					<tr>
-						<td>
-							<code>
-								<a id="hasMethod" class="public" href="../quirks/aggregate/hasMethod.html">hasMethod</a><span class="decoration">()</span>
-							</code>
-						</td>
-						<td>Returns true if a method can be found on aggregate with the given methodName, false otherwise.
-</td>
-					</tr>
 				</table>
 			</section>
 			<section>
@@ -146,23 +133,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="Interface" class="public" href="../quirks/aggregate/Interface.html">Interface</a>
-							</code>
-						</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>
-							<code>
 								<a id="Methods" class="public" href="../quirks/aggregate/Methods.html">Methods</a>
-							</code>
-						</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>
-							<code>
-								<a id="Struct" class="public" href="../quirks/aggregate/Struct.html">Struct</a>
 							</code>
 						</td>
 						<td></td>
@@ -175,17 +146,6 @@ $('#symbolSearchPane').show();</script>
 					<col class="caption"/>
 					<tr>
 						<th>Name</th><th>Type</th><th>Description</th>
-					</tr>
-					<tr>
-						<td>
-							<a id="Class" class="public" href="../quirks/aggregate/Class.html">
-								<code>Class</code>
-							</a>
-						</td>
-						<td>
-							<code class="prettyprint lang-d"><span class="typ">ClassMeta</span>!aggregate <span class="kwd">function</span><span class="pun">(</span><span class="pun">)</span></code>
-						</td>
-						<td></td>
 					</tr>
 					<tr>
 						<td>
@@ -222,6 +182,17 @@ $('#symbolSearchPane').show();</script>
 						</td>
 						<td>Returns the same as _traits(allMembers, aggregate), excluding this and all default fields inherited from Object, filtered with the provided predicate
 </td>
+					</tr>
+					<tr>
+						<td>
+							<a id="Methods" class="public" href="../quirks/aggregate/Methods.html">
+								<code>Methods</code>
+							</a>
+						</td>
+						<td>
+							<code class="prettyprint lang-d"><span class="typ">FilterTuple</span>!(predicate,Methods!aggregate)</code>
+						</td>
+						<td></td>
 					</tr>
 				</table>
 			</section>

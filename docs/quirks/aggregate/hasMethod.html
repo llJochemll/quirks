@@ -32,6 +32,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../../quirks/core.html">core</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -68,17 +73,12 @@ $('#symbolSearchPane').show();</script>
 							Function <code>hasMethod</code>
 						</a>
 					</li>
-					<li>
-						<a href="#2">
-							Function <code>hasMethod</code>
-						</a>
-					</li>
 				</ul>
 			</nav><h2 id="0">Function hasMethod</h2><p></p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">hasMethod</span>(alias aggregate, <span class="typ">string</span> fieldName)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure @safe</span>
+			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">hasMethod</span>(alias aggregate, <span class="typ">string</span> methodName)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure @safe</span>
 			<br/>
 			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isAggregate</span><span class="pun">!</span><span class="pln">aggregate</span><span class="pun">);</span>
 					</div>
@@ -96,23 +96,7 @@ $('#symbolSearchPane').show();</script>
 				</code>
 			</div>
 			
-			<h2 id="2">Function hasMethod</h2><p>Returns true if a method can be found on aggregate with the given methodName, false otherwise.
-</p>
-			<div class="prototype">
-				<code class="lang-d">
-					<div class="single-prototype">
-			<span class="typ">bool</span> <span class="pln">hasMethod</span>(alias aggregate, <span class="typ">string</span> methodName)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure @safe</span>
-			<br/>
-			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isAggregate</span><span class="pun">!</span><span class="pln">aggregate</span><span class="pun">);</span>
-					</div>
-				</code>
-			</div>
-			<section></section>
-
-			<section><h3>Example</h3>
-<pre class="code"><code class="lang-d"></code></pre>
-</section>
-
+			
 			<footer>
 				<table class="license-info">
 					<tr>

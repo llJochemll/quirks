@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Template Methods</title>
+		<title>Methods - multiple declarations</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -32,6 +32,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../../quirks/core.html">core</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -55,17 +60,31 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Template Methods</h1><p></p>
+			<h1>Methods - multiple declarations</h1>
+			<nav class="page-nav">
+				<ul>
+					<li>
+						<a href="#0">
+							Template <code>Methods</code>
+						</a>
+					</li>
+					<li>
+						<a href="#1">
+							Alias <code>Methods</code>
+						</a>
+					</li>
+				</ul>
+			</nav><h2 id="0">Template Methods</h2><p></p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">template</span> <span class="pln">Methods</span>(alias aggregate, <span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">typecons<wbr/></span><span class="pun">.</span><span class="typ">Nullable</span>!(string) name)
+			<span class="kwd">template</span> <span class="pln">Methods</span>(alias aggregate)
 			;
 					</div>
 				</code>
 			</div>
 			
-			<section><h2>Contained Functions</h2>
+			<section><h3>Contained Functions</h3>
 				<table>
 					<col class="caption"/>
 					<tr>
@@ -79,6 +98,16 @@ $('#symbolSearchPane').show();</script>
 					</tr>
 				</table>
 			</section>
+			<h2 id="1">Alias Methods</h2><p></p>
+			<div class="prototype">
+				<code class="lang-d">
+					<div class="single-prototype">
+			<span class="kwd">alias</span> <span class="pln">Methods</span>(alias aggregate, alias predicate)
+			 <span class="pun">=</span> <span class="typ">FilterTuple</span>!(predicate,Methods!aggregate)<span class="pun">;</span>
+					</div>
+				</code>
+			</div>
+			
 			
 			<footer>
 				<table class="license-info">
