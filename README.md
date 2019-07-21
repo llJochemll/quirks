@@ -28,9 +28,9 @@ struct User {
 
 alias quirks = Quirks!User;
 
-writeln(info.methods.length); // 1
-writeln(info.fields.length); // 2
-writeln(info.methods[0].name); // talk
+writeln(quirks.methods.length); // 1
+writeln(quirks.fields.length); // 2
+writeln(quirks.methods[0].name); // talk
 ```
 
 ### interpolateMixin
