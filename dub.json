@@ -17,6 +17,8 @@
   "license": "MIT",
   "name": "quirks",
   "targetType": "library",
-
-  "-ddoxFilterArgs": ["--min-protection=Protected"]
+  "toolchainRequirements": {
+    "frontend": ">=2.087"
+  },
+  "-ddoxFilterArgs": [ "--min-protection=Protected" ]
 }
