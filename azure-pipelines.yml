@@ -49,8 +49,10 @@ steps:
     
     dub upgrade
     dub test -b unittest-cov
-    bash <(curl -s https://codecov.io/bash)
+    bash <(curl -s https://codecov.io/bash) -t $env:CODECOV_TOKEN
   displayName: 'Generate code coverage'
+  env:
+    CODECOV_TOKEN: $(CODECOV_TOKEN)
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results'
