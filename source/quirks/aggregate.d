@@ -357,8 +357,8 @@ template MemberNames(alias aggregate, alias predicate) if (isAggregate!aggregate
 + hasMember!(S, "doesNotExist"); // returns false
 + ---
 +/
-@safe 
-pure auto hasMember(alias aggregate, string memberName)() if (isAggregate!aggregate) {
+@safe
+pure nothrow auto hasMember(alias aggregate, string memberName)() if (isAggregate!aggregate) {
     return [MemberNames!aggregate].canFind(memberName);
 } unittest {
     import fluent.asserts;
@@ -417,8 +417,8 @@ pure auto hasMember(alias aggregate, string memberName)() if (isAggregate!aggreg
 + ---
 +/
 @safe
-pure auto hasField(alias aggregate, string fieldName)() if (isAggregate!aggregate) {
-    return [MemberNames!aggregate].canFind(fieldName) && __traits(compiles, __traits(getMember, aggregate, fieldName).stringof);
+pure nothrow auto hasField(alias aggregate, string fieldName)() if (isAggregate!aggregate) {
+    return hasField!(aggregate, field => field.name == fieldName);
 } unittest {
     import fluent.asserts;
 
@@ -476,7 +476,7 @@ pure auto hasField(alias aggregate, string fieldName)() if (isAggregate!aggregat
 + ---
 +/
 @safe
-pure auto hasField(alias aggregate, alias predicate)() if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
+pure nothrow auto hasField(alias aggregate, alias predicate)() if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
     return FilterTuple!(predicate, Fields!aggregate).length > 0;
 } unittest {
     import fluent.asserts;
@@ -534,7 +534,7 @@ pure auto hasField(alias aggregate, alias predicate)() if (isAggregate!aggregate
 }
 
 @safe
-pure auto hasMethod(alias aggregate, string methodName)() if (isAggregate!aggregate) {
+pure nothrow auto hasMethod(alias aggregate, string methodName)() if (isAggregate!aggregate) {
     return Methods!(aggregate, method => method.name == methodName).length > 0;
 } unittest {
     import fluent.asserts;
@@ -576,10 +576,10 @@ pure auto hasMethod(alias aggregate, string methodName)() if (isAggregate!aggreg
 }
 
 @safe
-pure auto hasMethod(alias aggregate, alias predicate)() if (isAggregate!aggregate) {
+pure nothrow auto hasMethod(alias aggregate, alias predicate)() if (isAggregate!aggregate) {
     return Methods!(aggregate, predicate).length > 0;
 } unittest {
-        import fluent.asserts;
+    import fluent.asserts;
 
     struct S {
         long id;

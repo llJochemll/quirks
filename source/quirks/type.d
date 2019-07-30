@@ -29,7 +29,8 @@ template TypeOf(alias thing) {
     is(TypeOf!c == C).should.equal(true);
 }
 
-bool isAggregate(alias aggregate)() {
+@safe
+pure nothrow auto isAggregate(alias aggregate)() {
     return isAggregateType!(TypeOf!aggregate);
 } unittest {
     import fluent.asserts;
