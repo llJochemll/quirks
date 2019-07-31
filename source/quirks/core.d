@@ -45,6 +45,16 @@ template Quirks(alias thing, alias specializedQuirks) if (is(TypeOf!specializedQ
         alias name = nameParam;
 
         @safe
+        template getUDAs(alias uda) {
+            alias getUDAs = std.traits.getUDAs!(thing, uda);
+        }
+
+        @safe
+        pure nothrow static auto getUDA(alias uda)() if (getUDAs!uda.length > 0) {
+            return getUDAs!uda[0];
+        }
+
+        @safe
         pure nothrow static auto hasUDA(alias uda)() {
             return std.traits.hasUDA!(thing, uda);
         }
