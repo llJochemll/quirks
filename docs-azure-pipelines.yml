@@ -12,19 +12,22 @@ steps:
   persistCredentials: true
 
 - script: |
-    git config user.email "dev.azure.com"
-    git config user.name "Azure Pipelines"
-    git checkout master
-  displayName: 'Switch to master branch'
-
-- script: |
     rm -rf /docs
     rm docs.json
     dub upgrade
     dub build -b ddox
+    cp -R ./docs /temp/docs
   displayName: 'Build documentation'
 
 - script: |
+    git config user.email "dev.azure.com"
+    git config user.name "Azure Pipelines"
+    git checkout gh-pages
+  displayName: 'Switch to gh-pages branch'
+
+- script: |
+    rm -rf .
+    cp -R /temp/docs .
     git add -A
     git commit -m "[skip ci] Update docs"
     git push
