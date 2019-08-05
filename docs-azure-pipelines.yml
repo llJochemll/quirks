@@ -8,8 +8,8 @@ container: dlang2/dmd-ubuntu:latest
 
 steps:
 - script: |
-    apt-get install hub
-    apt-get install git
+    sudo apt-get install hub
+    sudo apt-get install git
   displayName: 'Install hub'
 
 - script: |
