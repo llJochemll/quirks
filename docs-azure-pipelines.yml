@@ -16,7 +16,7 @@ steps:
     rm docs.json
     dub upgrade
     dub build -b ddox
-    cp -R ./docs ~/temp/docs
+    cp -R ./docs /tmp/docs
   displayName: 'Build documentation'
 
 - script: |
@@ -27,7 +27,7 @@ steps:
 
 - script: |
     rm -rf .
-    cp -R ~/temp/docs .
+    cp -R /tmp/docs .
     git add -A
     git commit -m "[skip ci] Update docs"
     git push
