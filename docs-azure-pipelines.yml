@@ -12,7 +12,7 @@ steps:
   persistCredentials: true
 
 - script: |
-    git checkout -b master
+    git checkout master
   displayName: 'Switch to docs branch'
 
 - script: |
