@@ -15,7 +15,7 @@ steps:
     git config user.email "dev.azure.com"
     git config user.name "Azure Pipelines"
     git checkout master
-  displayName: 'Switch to docs branch'
+  displayName: 'Switch to master branch'
 
 - script: |
     rm -rf /docs
@@ -25,6 +25,7 @@ steps:
   displayName: 'Build documentation'
 
 - script: |
+    git add -A
     git commit -m "[skip ci] Update docs"
     git push
   displayName: 'Push documentation'
