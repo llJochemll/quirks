@@ -4,7 +4,7 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-container: dlang2/dmd-ubuntu:latest
+container: lljochemll/quirks:latest
 
 steps:
 - script: |

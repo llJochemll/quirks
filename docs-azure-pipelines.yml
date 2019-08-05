@@ -4,17 +4,11 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-container: dlang2/dmd-ubuntu:latest
+container: lljochemll/quirks:latest
 
 steps:
 - script: |
-    docker inspect -f '{{.Name}}' $HOSTNAME
-    docker exec -it $HOSTNAME "apt-get install hub"
-    docker exec -it $HOSTNAME "apt-get install git"
-  displayName: 'Install hub'
-
-- script: |
-    git checkout -b docs
+    git checkout -b master
   displayName: 'Switch to docs branch'
 
 - script: |
@@ -25,5 +19,4 @@ steps:
 - script: |
     git commit -m "[skip ci] Update docs"
     git push
-    hub pull-request --base OWNER:master -m "Update docs"
-  displayName: 'Create pull request'
+  displayName: 'Push documentation'
