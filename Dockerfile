@@ -10,3 +10,4 @@ RUN apt-get -y --fix-missing install libevent-dev
 RUN apt-get -y --fix-missing install libssl-dev
 RUN apt-get -y --fix-missing install curl
 RUN apt-get -y --fix-missing install xz-utils
+RUN apt-get -y --fix-missing install rsync
