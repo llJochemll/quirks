@@ -12,6 +12,8 @@ steps:
   persistCredentials: true
 
 - script: |
+    git config user.email "dev.azure.com"
+    git config user.name "Azure Pipelines"
     git checkout master
   displayName: 'Switch to docs branch'
 
