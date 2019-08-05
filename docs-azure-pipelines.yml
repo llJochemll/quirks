@@ -7,10 +7,10 @@ pool:
 container: dlang2/dmd-ubuntu:latest
 
 steps:
-- bash: |
-    su root
-    apt-get install hub
-    apt-get install git
+- script: |
+    docker inspect -f '{{.Name}}' $HOSTNAME
+    docker exec -it $HOSTNAME "apt-get install hub"
+    docker exec -it $HOSTNAME "apt-get install git"
   displayName: 'Install hub'
 
 - script: |
