@@ -12,6 +12,8 @@ steps:
   displayName: 'Switch to docs branch'
 
 - script: |
+    rm -rf /docs
+    rm docs.json
     dub upgrade
     dub build -b ddox
   displayName: 'Build documentation'
