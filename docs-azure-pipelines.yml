@@ -8,6 +8,11 @@ container: dlang2/dmd-ubuntu:latest
 
 steps:
 - script: |
+    apt-get install hub
+    apt-get install git
+  displayName: 'Install hub'
+
+- script: |
     git checkout -b docs
   displayName: 'Switch to docs branch'
 
@@ -17,7 +22,6 @@ steps:
   displayName: 'Build documentation'
 
 - script: |
-    apt-get install hub
     git commit -m "[skip ci] Update docs"
     git push
     hub pull-request --base OWNER:master -m "Update docs"
