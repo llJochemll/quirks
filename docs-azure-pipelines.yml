@@ -7,6 +7,10 @@ pool:
 container: lljochemll/quirks:latest
 
 steps:
+- checkout: self
+  clean: true
+  persistCredentials: true
+
 - script: |
     git checkout -b master
   displayName: 'Switch to docs branch'
