@@ -4,22 +4,24 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+container: dlang2/dmd-ubuntu:latest
+
 steps:
-- script: |
-    HOME="$(readlink -f ~)"; export HOME
-    
-    sudo apt-get update;
-    
-    sudo apt-get install gcc
-    sudo apt-get install libz-dev
-    
-    if [ ! -f ~/dlang/install.sh ]; then
-        curl https://dlang.org/install.sh | bash -s
-    fi
-    
-    ~/dlang/install.sh install dmd
-    ~/dlang/install.sh install ldc
-  displayName: 'Install dlang tools'
+#- script: |
+#    HOME="$(readlink -f ~)"; export HOME
+#    
+#    sudo apt-get update;
+#    
+#    sudo apt-get install gcc
+#    sudo apt-get install libz-dev
+#    
+#    if [ ! -f ~/dlang/install.sh ]; then
+#        curl https://dlang.org/install.sh | bash -s
+#    fi
+#    
+#    ~/dlang/install.sh install dmd
+#    ~/dlang/install.sh install ldc
+#  displayName: 'Install dlang tools'
 
 #- script: |
 #    if [ ! -f ~/dlang/trial/trial-v0.7.2/trial ]; then
@@ -44,17 +46,9 @@ steps:
 #  displayName: 'Run unit tests'
 
 - script: |
-    HOME="$(readlink -f ~)"; export HOME
-    source $(~/dlang/install.sh dmd -a)
-    
     dub upgrade
     dub test -b unittest-cov
     bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
   displayName: 'Generate code coverage'
   env:
     CODECOV_TOKEN: $(CODECOV_TOKEN)
-
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results'
-  inputs:
-    testResultsFiles: '.trial/xunit/*.xml'
