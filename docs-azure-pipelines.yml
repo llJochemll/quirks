@@ -4,12 +4,11 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-container: 
-  image: dlang2/dmd-ubuntu:latest
-  options: -u 0
+container: dlang2/dmd-ubuntu:latest
 
 steps:
 - script: |
+    su root
     apt-get install hub
     apt-get install git
   displayName: 'Install hub'
