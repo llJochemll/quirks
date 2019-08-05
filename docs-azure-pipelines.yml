@@ -7,7 +7,7 @@ pool:
 container: dlang2/dmd-ubuntu:latest
 
 steps:
-- script: |
+- bash: |
     su root
     apt-get install hub
     apt-get install git
