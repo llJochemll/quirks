@@ -1,0 +1,16 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+container: dlang2/dmd-ubuntu:latest
+
+steps:
+- script: |
+    dub upgrade
+    dub test -b unittest-cov
+    bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+  displayName: 'Generate code coverage'
+  env:
+    CODECOV_TOKEN: $(CODECOV_TOKEN)
