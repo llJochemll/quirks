@@ -22,6 +22,7 @@ steps:
 - script: |
     git config user.email "dev.azure.com"
     git config user.name "Azure Pipelines"
+    git stash drop
     git checkout gh-pages
   displayName: 'Switch to gh-pages branch'
 
