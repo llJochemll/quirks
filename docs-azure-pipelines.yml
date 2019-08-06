@@ -26,8 +26,8 @@ steps:
   displayName: 'Switch to gh-pages branch'
 
 - script: |
-    rm -rf .
-    cp -R /tmp/docs .
+    rm -rf *
+    cp -R /tmp/docs/. .
     git add -A
     git commit -m "[skip ci] Update docs"
     git push
