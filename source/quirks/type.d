@@ -50,3 +50,13 @@ pure nothrow auto isAggregate(alias aggregate)() {
     isAggregate!C.should.equal(true);
     isAggregate!c.should.equal(true);
 }
+
+@safe
+pure nothrow auto isArray(alias aggregate)() {
+    return isArray!(TypeOf!aggregate);
+}
+
+@safe
+pure nothrow auto isAssociativeArray(alias aggregate)() {
+    return isAssociativeArray!(TypeOf!aggregate);
+}

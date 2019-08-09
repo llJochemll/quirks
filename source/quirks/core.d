@@ -9,27 +9,29 @@ import quirks.type : TypeOf, isAggregate;
 import quirks.utility : interpolateMixin;
 import std.meta;
 
+private alias quirksTuple = AliasSeq!(
+    "attributes", q{__traits(getAttributes, thing)},
+    "fields", q{Fields!thing},
+    "functionAttributes", q{FunctionAttributes!thing},
+    "isAggregate", q{quirks.type.isAggregate!thing},
+    "isArray", q{std.traits.isArray!thing},
+    "isAssociativeArray", q{std.traits.isAssociativeArray!thing},
+    "isBasic", q{std.traits.isBasicType!thing},
+    "isNested", q{std.traits.isNested!thing},
+    "isNumeric", q{std.traits.isNumeric!thing},
+    "isSomeString", q{std.traits.isSomeString!thing},
+    "isStatic", q{quirks.expression.isStatic!thing},
+    "methods", q{Methods!thing},
+    "parameters", q{Parameters!thing},
+    "returnType", q{std.traits.ReturnType!thing},
+    "type", q{TypeOf!thing},
+);
+
 /++
-+ 
++
 +/
 template Quirks(alias thing, alias specializedQuirks) if (is(TypeOf!specializedQuirks == struct) || is(TypeOf!specializedQuirks == void)) {
-    alias quirksTuple = AliasSeq!(
-        "attributes", q{__traits(getAttributes, thing)},
-        "fields", q{Fields!thing},
-        "functionAttributes", q{FunctionAttributes!thing},
-        "isAggregate", q{quirks.type.isAggregate!thing},
-        "isArray", q{std.traits.isArray!thing},
-        "isAssociativeArray", q{std.traits.isAssociativeArray!thing},
-        "isBasic", q{std.traits.isBasicType!thing},
-        "isNested", q{std.traits.isNested!thing},
-        "isNumeric", q{std.traits.isNumeric!thing},
-        "isSomeString", q{std.traits.isSomeString!thing},
-        "isStatic", q{quirks.expression.isStatic!thing},
-        "methods", q{Methods!thing},
-        "parameters", q{Parameters!thing},
-        "returnType", q{std.traits.ReturnType!thing},
-        "type", q{TypeOf!thing},
-    );
+    
 
     struct QuirksStruct(alias thing, string nameParam, T) {
         static foreach (i, expression; quirksTuple) {
