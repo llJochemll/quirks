@@ -16,6 +16,7 @@
 
 # DUB
 .dub
+docs
 docs.json
 __dummy.html
 

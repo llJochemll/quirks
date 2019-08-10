@@ -13,7 +13,7 @@ import std.traits;
 import std.typecons;
 
 /++
-+ Returns a tuple of structs containing the name and type of the fields of the given aggregate
++ Returns a tuple of each field in the form of the `Quirks` template 
 + 
 + Example:
 + ---
@@ -25,10 +25,10 @@ import std.typecons;
 +     }
 + }
 + 
-+ alias fields = Fields!S; // is equal to a tuple of 3 structs containing the name and type of the field
++ alias fields = Fields!S;
 + 
 + static foreach (field; fields) {
-+     pragma(msg, field.type.stringof);
++     pragma(msg, field.type);
 +     pragma(msg, field.name);
 + }
 + ---
@@ -82,7 +82,7 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
 }
 
 /++
-+ Returns a tuple of structs containing the name and type of the fields of the given aggregate, filtered with the given predicate
++ Returns a tuple of each field in the form of the `Quirks` template, filtered with the given predicate
 + 
 + Example:
 + ---
@@ -97,7 +97,7 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
 + alias fields = Fields!(S, field => isNumeric!(field.type)); // is equal to a tuple of 2 structs containing the name and type of the field
 + 
 + static foreach (field; fields) {
-+     pragma(msg, field.type.stringof);
++     pragma(msg, field.type);
 +     pragma(msg, field.name);
 + }
 + ---
@@ -160,6 +160,27 @@ template Fields(alias aggregate, alias predicate) if (isAggregate!aggregate && i
     Fields!(c, field => field.name == "doesNotExist").length.should.equal(0);
 }
 
+/++
++ Returns a tuple of each method in the form of the `Quirks` template
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ alias fields = Methods!S;
++ 
++ static foreach (method; fields) {
++     pragma(msg, method.returnType);
++     pragma(msg, method.name);
++ }
++ ---
++/
 @safe
 template Methods(alias aggregate) if (isAggregate!aggregate) {
     auto getMethodsMixinList() {
@@ -179,6 +200,27 @@ template Methods(alias aggregate) if (isAggregate!aggregate) {
     }));
 }
 
+/++
++ Returns a tuple of each method in the form of the `Quirks` template, filtered with the given predicate
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ alias fields = Methods!S;
++ 
++ static foreach (method; fields) {
++     pragma(msg, method.returnType);
++     pragma(msg, method.name);
++ }
++ ---
++/
 @safe
 template Methods(alias aggregate, alias predicate) if (isAggregate!aggregate  && is(typeof(unaryFun!predicate))) {
     alias Methods = FilterTuple!(predicate, Methods!aggregate);
@@ -357,8 +399,8 @@ template MemberNames(alias aggregate, alias predicate) if (isAggregate!aggregate
 + hasMember!(S, "doesNotExist"); // returns false
 + ---
 +/
-@safe 
-pure auto hasMember(alias aggregate, string memberName)() if (isAggregate!aggregate) {
+@safe
+pure nothrow auto hasMember(alias aggregate, string memberName)() if (isAggregate!aggregate) {
     return [MemberNames!aggregate].canFind(memberName);
 } unittest {
     import fluent.asserts;
@@ -412,13 +454,13 @@ pure auto hasMember(alias aggregate, string memberName)() if (isAggregate!aggreg
 +     }
 + }
 + 
-+ hasField!(S, field => "id"); // returns true
-+ hasField!(S, field => "name"); // returns false
++ hasField!(S, "id"); // returns true
++ hasField!(S, "name"); // returns false
 + ---
 +/
 @safe
-pure auto hasField(alias aggregate, string fieldName)() if (isAggregate!aggregate) {
-    return [MemberNames!aggregate].canFind(fieldName) && __traits(compiles, __traits(getMember, aggregate, fieldName).stringof);
+pure nothrow auto hasField(alias aggregate, string fieldName)() if (isAggregate!aggregate) {
+    return hasField!(aggregate, field => field.name == fieldName);
 } unittest {
     import fluent.asserts;
 
@@ -476,7 +518,7 @@ pure auto hasField(alias aggregate, string fieldName)() if (isAggregate!aggregat
 + ---
 +/
 @safe
-pure auto hasField(alias aggregate, alias predicate)() if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
+pure nothrow auto hasField(alias aggregate, alias predicate)() if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
     return FilterTuple!(predicate, Fields!aggregate).length > 0;
 } unittest {
     import fluent.asserts;
@@ -533,8 +575,25 @@ pure auto hasField(alias aggregate, alias predicate)() if (isAggregate!aggregate
     hasField!(c, field => field.name == "doesNotExist").should.equal(false);
 }
 
+/++
++ Returns true if a method can be found on aggregate with the given methodName, false otherwise.
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ hasField!(S, "name"); // returns true
++ hasField!(S, "age"); // returns false
++ ---
++/
 @safe
-pure auto hasMethod(alias aggregate, string methodName)() if (isAggregate!aggregate) {
+pure nothrow auto hasMethod(alias aggregate, string methodName)() if (isAggregate!aggregate) {
     return Methods!(aggregate, method => method.name == methodName).length > 0;
 } unittest {
     import fluent.asserts;
@@ -575,11 +634,28 @@ pure auto hasMethod(alias aggregate, string methodName)() if (isAggregate!aggreg
     hasMethod!(c, "doesNotExist").should.equal(false);
 }
 
+/++
++ Returns true if a method can be found on aggregate filtered with the given predicate, false otherwise.
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ hasField!(S, method => method.name == "name"); // returns true
++ hasField!(S, method => is(method.returnType == int)); // returns false
++ ---
++/
 @safe
-pure auto hasMethod(alias aggregate, alias predicate)() if (isAggregate!aggregate) {
+pure nothrow auto hasMethod(alias aggregate, alias predicate)() if (isAggregate!aggregate) {
     return Methods!(aggregate, predicate).length > 0;
 } unittest {
-        import fluent.asserts;
+    import fluent.asserts;
 
     struct S {
         long id;
