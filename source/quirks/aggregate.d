@@ -412,8 +412,8 @@ pure nothrow auto hasMember(alias aggregate, string memberName)() if (isAggregat
 +     }
 + }
 + 
-+ hasField!(S, field => "id"); // returns true
-+ hasField!(S, field => "name"); // returns false
++ hasField!(S, "id"); // returns true
++ hasField!(S, "name"); // returns false
 + ---
 +/
 @safe
@@ -533,6 +533,23 @@ pure nothrow auto hasField(alias aggregate, alias predicate)() if (isAggregate!a
     hasField!(c, field => field.name == "doesNotExist").should.equal(false);
 }
 
+/++
++ Returns true if a method can be found on aggregate with the given methodName, false otherwise.
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ hasField!(S, "name"); // returns true
++ hasField!(S, "age"); // returns false
++ ---
++/
 @safe
 pure nothrow auto hasMethod(alias aggregate, string methodName)() if (isAggregate!aggregate) {
     return Methods!(aggregate, method => method.name == methodName).length > 0;
@@ -575,6 +592,23 @@ pure nothrow auto hasMethod(alias aggregate, string methodName)() if (isAggregat
     hasMethod!(c, "doesNotExist").should.equal(false);
 }
 
+/++
++ Returns true if a method can be found on aggregate filtered with the given predicate, false otherwise.
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ hasField!(S, method => method.name == "name"); // returns true
++ hasField!(S, method => is(method.returnType == int)); // returns false
++ ---
++/
 @safe
 pure nothrow auto hasMethod(alias aggregate, alias predicate)() if (isAggregate!aggregate) {
     return Methods!(aggregate, predicate).length > 0;
