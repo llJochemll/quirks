@@ -1,11 +1,12 @@
 module quirks.core;
 
 static import quirks.expression;
+static import quirks.type;
 static import std.traits;
 import quirks.aggregate : Fields, Methods;
 import quirks.expression : isStatic;
 import quirks.functional : Parameters, FunctionAttributes;
-import quirks.type : TypeOf, isAggregate, isArray, isAssociativeArray, isNumeric;
+import quirks.type : TypeOf;
 import quirks.utility : interpolateMixin;
 import std.meta;
 
@@ -63,13 +64,6 @@ template Quirks(alias thing, alias specializedQuirks) if (is(TypeOf!specializedQ
     }
 
     alias Quirks = QuirksStruct!(thing, __traits(identifier, thing), TypeOf!specializedQuirks);
-} unittest {
-    import fluent.asserts;
-
-    int a;
-    alias quirks = Quirks!0;
-
-    quirks.isNumeric.should.equal(true);
 }
 
 template Quirks(alias thing) {
