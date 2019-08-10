@@ -10,6 +10,55 @@ import quirks.type : TypeOf;
 import quirks.utility : interpolateMixin;
 import std.meta;
 
+/++
++ Swiss army knife for getting information about things.
++ 
++ Takes thing and tries to apply a list of functions and templates to it. All that compile can be accessed using property syntax on the resulting alias.
++ 
++ The code for this is generated during compile-time using traits and mixins. Below is a list of properties that are possible to access (note not all will be available for every instantiation):
++ $(UL
++ $(LI attributes)
++ $(LI fields)
++ $(LI functionAttributes)
++ $(LI isAggregate)
++ $(LI isArray)
++ $(LI isAssociativeArray)
++ $(LI isBasic)
++ $(LI isNested)
++ $(LI isNumeric)
++ $(LI isSomeString)
++ $(LI isStatic)
++ $(LI methods)
++ $(LI parameters)
++ $(LI returnType)
++ $(LI type)
++ )
++
++ In addition, the following functions and templates are also available: 
++ $(UL
++ $(LI getUDAs(alias uda) -> returns the same as getUDAs from std.traits)
++ $(LI getUDA(alias uda) -> returns the first result returned by getUDAs)
++ $(LI hasUDA(alias uda) -> return the same as hasUDA from std.traits)
++ )
++
++ Example:
++ ---
++ struct S {
++     static long id;
++     int age;
++     static string name() {
++         return "name";
++     }
++     void update(bool force) { }
++ }
++ 
++ Quirks!S.type; // S
++ Quirks!S.fields.length; // 2
++ Quirks!S.methods[1].name; //update
++ Quirks!S.isArray; // false
++ Quirks!S.methods[1].parameters[0].type; // bool
++ ---
++/
 template Quirks(alias thing, alias specializedQuirks) if (is(TypeOf!specializedQuirks == struct) || is(TypeOf!specializedQuirks == void)) {
     alias quirksTuple = AliasSeq!(
         "attributes", q{__traits(getAttributes, thing)},
@@ -66,6 +115,7 @@ template Quirks(alias thing, alias specializedQuirks) if (is(TypeOf!specializedQ
     alias Quirks = QuirksStruct!(thing, __traits(identifier, thing), TypeOf!specializedQuirks);
 }
 
+/// Shorthand when no specialized struct is needed
 template Quirks(alias thing) {
     alias Quirks = Quirks!(thing, void);
 }

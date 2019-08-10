@@ -10,7 +10,7 @@ import std.string;
 +   code = code to be mixed in
 +/
 @safe
-pure static string interpolateMixin(string code) {
+pure nothrow static string interpolateMixin(string code) {
 	string interpolatedCode = "";
 
 	auto insideInterpolation = false;

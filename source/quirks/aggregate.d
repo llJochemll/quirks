@@ -13,7 +13,7 @@ import std.traits;
 import std.typecons;
 
 /++
-+ Returns a tuple of structs containing the name and type of the fields of the given aggregate
++ Returns a tuple of each field in the form of the `Quirks` template 
 + 
 + Example:
 + ---
@@ -25,10 +25,10 @@ import std.typecons;
 +     }
 + }
 + 
-+ alias fields = Fields!S; // is equal to a tuple of 3 structs containing the name and type of the field
++ alias fields = Fields!S;
 + 
 + static foreach (field; fields) {
-+     pragma(msg, field.type.stringof);
++     pragma(msg, field.type);
 +     pragma(msg, field.name);
 + }
 + ---
@@ -82,7 +82,7 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
 }
 
 /++
-+ Returns a tuple of structs containing the name and type of the fields of the given aggregate, filtered with the given predicate
++ Returns a tuple of each field in the form of the `Quirks` template, filtered with the given predicate
 + 
 + Example:
 + ---
@@ -97,7 +97,7 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
 + alias fields = Fields!(S, field => isNumeric!(field.type)); // is equal to a tuple of 2 structs containing the name and type of the field
 + 
 + static foreach (field; fields) {
-+     pragma(msg, field.type.stringof);
++     pragma(msg, field.type);
 +     pragma(msg, field.name);
 + }
 + ---
@@ -160,6 +160,27 @@ template Fields(alias aggregate, alias predicate) if (isAggregate!aggregate && i
     Fields!(c, field => field.name == "doesNotExist").length.should.equal(0);
 }
 
+/++
++ Returns a tuple of each method in the form of the `Quirks` template
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ alias fields = Methods!S;
++ 
++ static foreach (method; fields) {
++     pragma(msg, method.returnType);
++     pragma(msg, method.name);
++ }
++ ---
++/
 @safe
 template Methods(alias aggregate) if (isAggregate!aggregate) {
     auto getMethodsMixinList() {
@@ -179,6 +200,27 @@ template Methods(alias aggregate) if (isAggregate!aggregate) {
     }));
 }
 
+/++
++ Returns a tuple of each method in the form of the `Quirks` template, filtered with the given predicate
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ alias fields = Methods!S;
++ 
++ static foreach (method; fields) {
++     pragma(msg, method.returnType);
++     pragma(msg, method.name);
++ }
++ ---
++/
 @safe
 template Methods(alias aggregate, alias predicate) if (isAggregate!aggregate  && is(typeof(unaryFun!predicate))) {
     alias Methods = FilterTuple!(predicate, Methods!aggregate);

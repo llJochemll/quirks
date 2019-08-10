@@ -23,7 +23,7 @@ alias isExpression = std.traits.isExpressions;
 + TypeOf!int; // int
 + TypeOf!number; // int
 + TypeOf!S; // S
-+ TypeOf!s; // s
++ TypeOf!s; // S
 + ---
 +/
 @safe
@@ -50,7 +50,7 @@ template TypeOf(alias thing) {
     is(TypeOf!c == C).should.equal(true);
 }
 
-/// Return std.traits.isAggregate!(TypeOf!thing)
+/// Returns std.traits.isAggregate!(TypeOf!thing)
 @safe
 pure nothrow auto isAggregate(alias thing)() {
     return std.traits.isAggregateType!(TypeOf!thing);
@@ -73,7 +73,7 @@ pure nothrow auto isAggregate(alias thing)() {
     isAggregate!c.should.equal(true);
 }
 
-/// Return std.traits.isArray!(TypeOf!thing)
+/// Returns std.traits.isArray!(TypeOf!thing)
 @safe
 pure nothrow auto isArray(alias thing)() {
     return std.traits.isArray!(TypeOf!thing);
@@ -92,7 +92,7 @@ pure nothrow auto isArray(alias thing)() {
     isArray!s.should.equal(true);
 }
 
-/// Return std.traits.isAssociativeArray!(TypeOf!thing)
+/// Returns std.traits.isAssociativeArray!(TypeOf!thing)
 @safe
 pure nothrow auto isAssociativeArray(alias thing)() {
     return std.traits.isAssociativeArray!(TypeOf!thing);
@@ -113,7 +113,7 @@ pure nothrow auto isAssociativeArray(alias thing)() {
     isAssociativeArray!s2.should.equal(true);
 }
 
-/// Return std.traits.isNumeric!(TypeOf!thing)
+/// Returns std.traits.isNumeric!(TypeOf!thing)
 @safe
 pure nothrow auto isNumeric(alias thing)() {
     return std.traits.isNumeric!(TypeOf!thing);
