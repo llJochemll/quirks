@@ -37,6 +37,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../../quirks/expression.html">expression</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -60,11 +65,12 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Function isAggregate</h1><p></p>
+			<h1>Function isAggregate</h1><p>Returns std.traits.isAggregate!(TypeOf!thing)
+</p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="typ">bool</span> <span class="pln">isAggregate</span>(alias aggregate)<span class="pun">(</span><span class="pun">)</span><span class="pun">;</span>
+			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">isAggregate</span>(alias thing)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure nothrow @safe</span><span class="pun">;</span>
 					</div>
 				</code>
 			</div>

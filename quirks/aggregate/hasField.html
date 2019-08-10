@@ -37,6 +37,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../../quirks/expression.html">expression</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -79,7 +84,7 @@ $('#symbolSearchPane').show();</script>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">hasField</span>(alias aggregate, <span class="typ">string</span> fieldName)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure @safe</span>
+			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">hasField</span>(alias aggregate, <span class="typ">string</span> fieldName)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure nothrow @safe</span>
 			<br/>
 			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isAggregate</span><span class="pun">!</span><span class="pln">aggregate</span><span class="pun">);</span>
 					</div>
@@ -96,15 +101,15 @@ $('#symbolSearchPane').show();</script>
     }
 }
 
-</span><span class="pln">hasField</span><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">field </span><span class="pun">=&gt; </span><span class="str">"id"</span><span class="pun">); </span><span class="com">// returns true
-</span><span class="pln">hasField</span><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">field </span><span class="pun">=&gt; </span><span class="str">"name"</span><span class="pun">); </span><span class="com">// returns false</span></code></pre>
+</span><span class="pln">hasField</span><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="str">"id"</span><span class="pun">); </span><span class="com">// returns true
+</span><span class="pln">hasField</span><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="str">"name"</span><span class="pun">); </span><span class="com">// returns false</span></code></pre>
 </section>
 <h2 id="1">Function hasField</h2><p>Returns true if a field can be found on aggregate filtered with the given predicate, false otherwise.
 </p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">hasField</span>(alias aggregate, alias predicate)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure @safe</span>
+			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">hasField</span>(alias aggregate, alias predicate)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure nothrow @safe</span>
 			<br/>
 			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isAggregate</span><span class="pun">!</span><span class="pln">aggregate </span><span class="pun">&amp;&amp; </span><span class="kwd">is</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">unaryFun</span><span class="pun">!</span><span class="pln">predicate</span><span class="pun">))</span><span class="pun">);</span>
 					</div>

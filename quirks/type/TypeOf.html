@@ -37,6 +37,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../../quirks/expression.html">expression</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -60,7 +65,8 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Alias TypeOf</h1><p></p>
+			<h1>Alias TypeOf</h1><p>Returns the type of thing. Accepts both expressions and types.
+</p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
@@ -69,8 +75,25 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</code>
 			</div>
-			
-			
+			<section></section>
+
+			<section><h2>Example</h2>
+<pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">S </span><span class="pun">{
+    </span><span class="typ">long </span><span class="pln">id</span><span class="pun">;
+    </span><span class="typ">int </span><span class="pln">age</span><span class="pun">;
+    </span><span class="typ">string </span><span class="pln">name</span><span class="pun">() {
+        </span><span class="kwd">return </span><span class="str">"name"</span><span class="pun">;
+    }
+}
+</span><span class="typ">int </span><span class="pln">number</span><span class="pun">;
+</span><span class="pln">S s</span><span class="pun">;
+
+</span><span class="typ">TypeOf</span><span class="pun">!</span><span class="typ">int</span><span class="pun">; </span><span class="com">// int
+</span><span class="typ">TypeOf</span><span class="pun">!</span><span class="pln">number</span><span class="pun">; </span><span class="com">// int
+</span><span class="typ">TypeOf</span><span class="pun">!</span><span class="pln">S</span><span class="pun">; </span><span class="com">// S
+</span><span class="typ">TypeOf</span><span class="pun">!</span><span class="pln">s</span><span class="pun">; </span><span class="com">// S</span></code></pre>
+</section>
+
 			<footer>
 				<table class="license-info">
 					<tr>

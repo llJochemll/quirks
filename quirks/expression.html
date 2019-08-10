@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Module quirks.core</title>
+		<title>Module quirks.expression</title>
 		<link rel="stylesheet" type="text/css" href="../styles/ddox.css"/>
 		<link rel="stylesheet" href="../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../scripts/jquery.js">/**/</script><script type="text/javascript" src="../scripts/ddox.js">/**/</script>
@@ -31,12 +31,12 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</li>
 				<li>
-					<div class="module selected">
+					<div class="module ">
 						<a href="../quirks/core.html">core</a>
 					</div>
 				</li>
 				<li>
-					<div class="module ">
+					<div class="module selected">
 						<a href="../quirks/expression.html">expression</a>
 					</div>
 				</li>
@@ -65,7 +65,7 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Module quirks.core</h1><p></p>
+			<h1>Module quirks.expression</h1><p></p>
 			<section></section>
 			<section>
 				<h2>Aliases</h2>
@@ -76,26 +76,14 @@ $('#symbolSearchPane').show();</script>
 					</tr>
 					<tr>
 						<td>
-							<a id="Quirks" class="public" href="../quirks/core/Quirks.html">
-								<code>Quirks</code>
+							<a id="isStatic" class="public" href="../quirks/expression/isStatic.html">
+								<code>isStatic</code>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><a href="../quirks/core/Quirks.QuirksStruct.html"><span class="typ">Quirks<wbr/></span><span class="pun">.<wbr/></span><span class="typ">QuirksStruct</span></a>!(thing,__traits(identifier,thing),TypeOf!specializedQuirks)</code>
+							<code class="prettyprint lang-d"><span class="pln">stat</span></code>
 						</td>
-						<td>Swiss army knife for getting information about things.
-</td>
-					</tr>
-					<tr>
-						<td>
-							<a id="Quirks" class="public" href="../quirks/core/Quirks.html">
-								<code>Quirks</code>
-							</a>
-						</td>
-						<td>
-							<code class="prettyprint lang-d"><a href="../quirks/core/Quirks.html"><span class="typ">Quirks</span></a>!(thing,void)</code>
-						</td>
-						<td>Shorthand when no specialized struct is needed
+						<td>Returns is the given thing is either a static function or a static declaration declaration
 </td>
 					</tr>
 				</table>

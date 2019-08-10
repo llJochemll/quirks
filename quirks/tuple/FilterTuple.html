@@ -37,6 +37,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../../quirks/expression.html">expression</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -60,7 +65,8 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Template FilterTuple</h1><p></p>
+			<h1>Template FilterTuple</h1><p>Takes a tuple and filters it with the given aggregate.
+</p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
@@ -69,7 +75,8 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</code>
 			</div>
-			
+			<section></section>
+
 			<section><h2>Contained Functions</h2>
 				<table>
 					<col class="caption"/>
@@ -84,7 +91,13 @@ $('#symbolSearchPane').show();</script>
 					</tr>
 				</table>
 			</section>
-			
+			<section><h2>Example</h2>
+<pre class="code"><code class="lang-d"><span class="kwd">alias </span><span class="pln">tuple </span><span class="pun">= </span><span class="typ">AliasSeq</span><span class="pun">!(</span><span class="lit">1</span><span class="pun">, </span><span class="str">"hello"</span><span class="pun">, </span><span class="lit">0.5</span><span class="pun">, [</span><span class="lit">1</span><span class="pun">, </span><span class="lit">2</span><span class="pun">, </span><span class="lit">3</span><span class="pun">]);
+
+</span><span class="typ">FilterTuple</span><span class="pun">!(</span><span class="pln">a </span><span class="pun">=&gt; </span><span class="kwd">is</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">a</span><span class="pun">) == </span><span class="typ">double</span><span class="pun">), </span><span class="pln">tuple</span><span class="pun">); </span><span class="com">// gives (0.5)
+</span><span class="typ">FilterTuple</span><span class="pun">!(</span><span class="pln">a </span><span class="pun">=&gt; </span><span class="pln">isNumeric</span><span class="pun">!</span><span class="pln">a</span><span class="pun">, </span><span class="pln">tuple</span><span class="pun">); </span><span class="com">// gives (1, 0.5)</span></code></pre>
+</section>
+
 			<footer>
 				<table class="license-info">
 					<tr>

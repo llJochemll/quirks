@@ -37,6 +37,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../../quirks/expression.html">expression</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -74,29 +79,57 @@ $('#symbolSearchPane').show();</script>
 						</a>
 					</li>
 				</ul>
-			</nav><h2 id="0">Function hasMethod</h2><p></p>
+			</nav><h2 id="0">Function hasMethod</h2><p>Returns true if a method can be found on aggregate with the given methodName, false otherwise.
+</p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">hasMethod</span>(alias aggregate, <span class="typ">string</span> methodName)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure @safe</span>
+			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">hasMethod</span>(alias aggregate, <span class="typ">string</span> methodName)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure nothrow @safe</span>
 			<br/>
 			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isAggregate</span><span class="pun">!</span><span class="pln">aggregate</span><span class="pun">);</span>
 					</div>
 				</code>
 			</div>
-			
-			<h2 id="1">Function hasMethod</h2><p></p>
+			<section></section>
+
+			<section><h3>Example</h3>
+<pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">S </span><span class="pun">{
+    </span><span class="typ">long </span><span class="pln">id</span><span class="pun">;
+    </span><span class="typ">int </span><span class="pln">age</span><span class="pun">;
+    </span><span class="typ">string </span><span class="pln">name</span><span class="pun">() {
+        </span><span class="kwd">return </span><span class="str">"name"</span><span class="pun">;
+    }
+}
+
+<a href="../../quirks/aggregate/hasField.html"></span><span class="pln">hasField</span></a><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="str">"name"</span><span class="pun">); </span><span class="com">// returns true
+<a href="../../quirks/aggregate/hasField.html"></span><span class="pln">hasField</span></a><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="str">"age"</span><span class="pun">); </span><span class="com">// returns false</span></code></pre>
+</section>
+<h2 id="1">Function hasMethod</h2><p>Returns true if a method can be found on aggregate filtered with the given predicate, false otherwise.
+</p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">hasMethod</span>(alias aggregate, alias predicate)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure @safe</span>
+			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">hasMethod</span>(alias aggregate, alias predicate)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure nothrow @safe</span>
 			<br/>
 			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isAggregate</span><span class="pun">!</span><span class="pln">aggregate</span><span class="pun">);</span>
 					</div>
 				</code>
 			</div>
-			
-			
+			<section></section>
+
+			<section><h3>Example</h3>
+<pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">S </span><span class="pun">{
+    </span><span class="typ">long </span><span class="pln">id</span><span class="pun">;
+    </span><span class="typ">int </span><span class="pln">age</span><span class="pun">;
+    </span><span class="typ">string </span><span class="pln">name</span><span class="pun">() {
+        </span><span class="kwd">return </span><span class="str">"name"</span><span class="pun">;
+    }
+}
+
+<a href="../../quirks/aggregate/hasField.html"></span><span class="pln">hasField</span></a><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">method </span><span class="pun">=&gt; </span><span class="pln">method<wbr/></span><span class="pun">.</span><span class="pln">name </span><span class="pun">== </span><span class="str">"name"</span><span class="pun">); </span><span class="com">// returns true
+<a href="../../quirks/aggregate/hasField.html"></span><span class="pln">hasField</span></a><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">method </span><span class="pun">=&gt; </span><span class="kwd">is</span><span class="pun">(</span><span class="pln">method<wbr/></span><span class="pun">.</span><span class="pln">returnType </span><span class="pun">== </span><span class="typ">int</span><span class="pun">)); </span><span class="com">// returns false</span></code></pre>
+</section>
+
 			<footer>
 				<table class="license-info">
 					<tr>

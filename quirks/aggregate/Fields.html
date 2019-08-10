@@ -37,6 +37,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../../quirks/expression.html">expression</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -74,7 +79,7 @@ $('#symbolSearchPane').show();</script>
 						</a>
 					</li>
 				</ul>
-			</nav><h2 id="0">Template Fields</h2><p>Returns a tuple of structs containing the name and type of the fields of the given aggregate
+			</nav><h2 id="0">Template Fields</h2><p>Returns a tuple of each field in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template
 </p>
 			<div class="prototype">
 				<code class="lang-d">
@@ -109,14 +114,14 @@ $('#symbolSearchPane').show();</script>
     }
 }
 
-</span><span class="kwd">alias </span><span class="pln">fields </span><span class="pun">= </span><span class="typ">Fields</span><span class="pun">!</span><span class="pln">S</span><span class="pun">; </span><span class="com">// is equal to a tuple of 3 structs containing the name and type of the field
+</span><span class="kwd">alias </span><span class="pln">fields </span><span class="pun">= </span><span class="typ">Fields</span><span class="pun">!</span><span class="pln">S</span><span class="pun">;
 
 </span><span class="kwd">static foreach </span><span class="pun">(</span><span class="pln">field</span><span class="pun">; </span><span class="pln">fields</span><span class="pun">) {
-    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type<wbr/></span><span class="pun">.</span><span class="pln">stringof</span><span class="pun">);
+    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type</span><span class="pun">);
     </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">name</span><span class="pun">);
 }</span></code></pre>
 </section>
-<h2 id="1">Alias Fields</h2><p>Returns a tuple of structs containing the name and type of the fields of the given aggregate, filtered with the given predicate
+<h2 id="1">Alias Fields</h2><p>Returns a tuple of each field in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template, filtered with the given predicate
 </p>
 			<div class="prototype">
 				<code class="lang-d">
@@ -140,7 +145,7 @@ $('#symbolSearchPane').show();</script>
 </span><span class="kwd">alias </span><span class="pln">fields </span><span class="pun">= <a href="../../quirks/aggregate/Fields.html"></span><span class="typ">Fields</span></a><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">field </span><span class="pun">=&gt; </span><span class="pln">isNumeric</span><span class="pun">!(</span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type</span><span class="pun">)); </span><span class="com">// is equal to a tuple of 2 structs containing the name and type of the field
 
 </span><span class="kwd">static foreach </span><span class="pun">(</span><span class="pln">field</span><span class="pun">; </span><span class="pln">fields</span><span class="pun">) {
-    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type<wbr/></span><span class="pun">.</span><span class="pln">stringof</span><span class="pun">);
+    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type</span><span class="pun">);
     </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">name</span><span class="pun">);
 }</span></code></pre>
 </section>

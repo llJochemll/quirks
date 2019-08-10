@@ -37,6 +37,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../../quirks/expression.html">expression</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -74,7 +79,8 @@ $('#symbolSearchPane').show();</script>
 						</a>
 					</li>
 				</ul>
-			</nav><h2 id="0">Template Methods</h2><p></p>
+			</nav><h2 id="0">Template Methods</h2><p>Returns a tuple of each method in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template
+</p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
@@ -83,7 +89,8 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</code>
 			</div>
-			
+			<section></section>
+
 			<section><h3>Contained Functions</h3>
 				<table>
 					<col class="caption"/>
@@ -98,7 +105,24 @@ $('#symbolSearchPane').show();</script>
 					</tr>
 				</table>
 			</section>
-			<h2 id="1">Alias Methods</h2><p></p>
+			<section><h3>Example</h3>
+<pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">S </span><span class="pun">{
+    </span><span class="typ">long </span><span class="pln">id</span><span class="pun">;
+    </span><span class="typ">int </span><span class="pln">age</span><span class="pun">;
+    </span><span class="typ">string </span><span class="pln">name</span><span class="pun">() {
+        </span><span class="kwd">return </span><span class="str">"name"</span><span class="pun">;
+    }
+}
+
+</span><span class="kwd">alias </span><span class="pln">fields </span><span class="pun">= </span><span class="typ">Methods</span><span class="pun">!</span><span class="pln">S</span><span class="pun">;
+
+</span><span class="kwd">static foreach </span><span class="pun">(</span><span class="pln">method</span><span class="pun">; </span><span class="pln">fields</span><span class="pun">) {
+    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">method<wbr/></span><span class="pun">.</span><span class="pln">returnType</span><span class="pun">);
+    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">method<wbr/></span><span class="pun">.</span><span class="pln">name</span><span class="pun">);
+}</span></code></pre>
+</section>
+<h2 id="1">Alias Methods</h2><p>Returns a tuple of each method in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template, filtered with the given predicate
+</p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
@@ -107,8 +131,25 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</code>
 			</div>
-			
-			
+			<section></section>
+
+			<section><h3>Example</h3>
+<pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">S </span><span class="pun">{
+    </span><span class="typ">long </span><span class="pln">id</span><span class="pun">;
+    </span><span class="typ">int </span><span class="pln">age</span><span class="pun">;
+    </span><span class="typ">string </span><span class="pln">name</span><span class="pun">() {
+        </span><span class="kwd">return </span><span class="str">"name"</span><span class="pun">;
+    }
+}
+
+</span><span class="kwd">alias </span><span class="pln">fields </span><span class="pun">= <a href="../../quirks/aggregate/Methods.html"></span><span class="typ">Methods</span></a><span class="pun">!</span><span class="pln">S</span><span class="pun">;
+
+</span><span class="kwd">static foreach </span><span class="pun">(</span><span class="pln">method</span><span class="pun">; </span><span class="pln">fields</span><span class="pun">) {
+    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">method<wbr/></span><span class="pun">.</span><span class="pln">returnType</span><span class="pun">);
+    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">method<wbr/></span><span class="pun">.</span><span class="pln">name</span><span class="pun">);
+}</span></code></pre>
+</section>
+
 			<footer>
 				<table class="license-info">
 					<tr>

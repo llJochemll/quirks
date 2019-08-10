@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Alias ParameterTypes</title>
+		<title>Alias isStatic</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -36,12 +36,12 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</li>
 				<li>
-					<div class="module ">
+					<div class="module selected">
 						<a href="../../quirks/expression.html">expression</a>
 					</div>
 				</li>
 				<li>
-					<div class="module selected">
+					<div class="module ">
 						<a href="../../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -65,18 +65,34 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Alias ParameterTypes</h1><p>Alias for Parameters
+			<h1>Alias isStatic</h1><p>Returns is the given thing is either a static function or a static declaration declaration
 </p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">alias</span> <span class="pln">ParameterTypes</span>
-			<span class="pun">;</span>
+			<span class="kwd">alias</span> <span class="pln">isStatic</span>(alias thing)
+			 <span class="pun">=</span> <span class="pln">stat</span><span class="pun">;</span>
 					</div>
 				</code>
 			</div>
-			
-			
+			<section></section>
+
+			<section><h2>Example</h2>
+<pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">S </span><span class="pun">{
+    </span><span class="kwd">static </span><span class="typ">long </span><span class="pln">id</span><span class="pun">;
+    </span><span class="typ">int </span><span class="pln">age</span><span class="pun">;
+    </span><span class="kwd">static </span><span class="typ">string </span><span class="pln">name</span><span class="pun">() {
+        </span><span class="kwd">return </span><span class="str">"name"</span><span class="pun">;
+    }
+    </span><span class="typ">void </span><span class="pln">update</span><span class="pun">(</span><span class="typ">bool </span><span class="pln">force</span><span class="pun">) { }
+}
+
+</span><span class="pln">isStatic</span><span class="pun">!(</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">id</span><span class="pun">); </span><span class="com">// true
+</span><span class="pln">isStatic</span><span class="pun">!(</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">age</span><span class="pun">)<wbr/>.</span><span class="pln">should<wbr/></span><span class="pun">.</span><span class="pln">equal</span><span class="pun">(</span><span class="kwd">false</span><span class="pun">); </span><span class="com">// false
+</span><span class="pln">isStatic</span><span class="pun">!(</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">name</span><span class="pun">)<wbr/>.</span><span class="pln">should<wbr/></span><span class="pun">.</span><span class="pln">equal</span><span class="pun">(</span><span class="kwd">true</span><span class="pun">); </span><span class="com">// true
+</span><span class="pln">isStatic</span><span class="pun">!(</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">update</span><span class="pun">)<wbr/>.</span><span class="pln">should<wbr/></span><span class="pun">.</span><span class="pln">equal</span><span class="pun">(</span><span class="kwd">false</span><span class="pun">); </span><span class="com">// false</span></code></pre>
+</section>
+
 			<footer>
 				<table class="license-info">
 					<tr>

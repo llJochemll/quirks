@@ -37,6 +37,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../quirks/expression.html">expression</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -75,7 +80,35 @@ $('#symbolSearchPane').show();</script>
 								<a id="isAggregate" class="public" href="../quirks/type/isAggregate.html">isAggregate</a><span class="decoration">()</span>
 							</code>
 						</td>
-						<td></td>
+						<td>Returns std.traits.isAggregate!(TypeOf!thing)
+</td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="isArray" class="public" href="../quirks/type/isArray.html">isArray</a><span class="decoration">()</span>
+							</code>
+						</td>
+						<td>Returns std.traits.isArray!(TypeOf!thing)
+</td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="isAssociativeArray" class="public" href="../quirks/type/isAssociativeArray.html">isAssociativeArray</a><span class="decoration">()</span>
+							</code>
+						</td>
+						<td>Returns std.traits.isAssociativeArray!(TypeOf!thing)
+</td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="isNumeric" class="public" href="../quirks/type/isNumeric.html">isNumeric</a><span class="decoration">()</span>
+							</code>
+						</td>
+						<td>Returns std.traits.isNumeric!(TypeOf!thing)
+</td>
 					</tr>
 				</table>
 			</section>
@@ -106,7 +139,8 @@ $('#symbolSearchPane').show();</script>
 						<td>
 							<code class="prettyprint lang-d"><span class="pln">thing</span></code>
 						</td>
-						<td></td>
+						<td>Returns the type of thing. Accepts both expressions and types.
+</td>
 					</tr>
 				</table>
 			</section>

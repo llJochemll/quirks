@@ -37,6 +37,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../quirks/expression.html">expression</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -102,7 +107,8 @@ $('#symbolSearchPane').show();</script>
 								<a id="hasMethod" class="public" href="../quirks/aggregate/hasMethod.html">hasMethod</a><span class="decoration">()</span>
 							</code>
 						</td>
-						<td></td>
+						<td>Returns true if a method can be found on aggregate with the given methodName, false otherwise.
+</td>
 					</tr>
 					<tr>
 						<td>
@@ -110,7 +116,8 @@ $('#symbolSearchPane').show();</script>
 								<a id="hasMethod" class="public" href="../quirks/aggregate/hasMethod.html">hasMethod</a><span class="decoration">()</span>
 							</code>
 						</td>
-						<td></td>
+						<td>Returns true if a method can be found on aggregate filtered with the given predicate, false otherwise.
+</td>
 					</tr>
 				</table>
 			</section>
@@ -127,7 +134,7 @@ $('#symbolSearchPane').show();</script>
 								<a id="Fields" class="public" href="../quirks/aggregate/Fields.html">Fields</a>
 							</code>
 						</td>
-						<td>Returns a tuple of structs containing the name and type of the fields of the given aggregate
+						<td>Returns a tuple of each field in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template
 </td>
 					</tr>
 					<tr>
@@ -136,7 +143,8 @@ $('#symbolSearchPane').show();</script>
 								<a id="Methods" class="public" href="../quirks/aggregate/Methods.html">Methods</a>
 							</code>
 						</td>
-						<td></td>
+						<td>Returns a tuple of each method in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template
+</td>
 					</tr>
 				</table>
 			</section>
@@ -156,7 +164,7 @@ $('#symbolSearchPane').show();</script>
 						<td>
 							<code class="prettyprint lang-d"><span class="typ">FilterTuple</span>!(predicate,Fields!aggregate)</code>
 						</td>
-						<td>Returns a tuple of structs containing the name and type of the fields of the given aggregate, filtered with the given predicate
+						<td>Returns a tuple of each field in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template, filtered with the given predicate
 </td>
 					</tr>
 					<tr>
@@ -192,7 +200,8 @@ $('#symbolSearchPane').show();</script>
 						<td>
 							<code class="prettyprint lang-d"><span class="typ">FilterTuple</span>!(predicate,Methods!aggregate)</code>
 						</td>
-						<td></td>
+						<td>Returns a tuple of each method in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template, filtered with the given predicate
+</td>
 					</tr>
 				</table>
 			</section>

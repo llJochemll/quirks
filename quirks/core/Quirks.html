@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Alias Quirks</title>
+		<title>Quirks - multiple declarations</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -37,6 +37,11 @@ $('#symbolSearchPane').show();</script>
 				</li>
 				<li>
 					<div class="module ">
+						<a href="../../quirks/expression.html">expression</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
 						<a href="../../quirks/functional.html">functional</a>
 					</div>
 				</li>
@@ -60,12 +65,83 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Alias Quirks</h1><p></p>
+			<h1>Quirks - multiple declarations</h1>
+			<nav class="page-nav">
+				<ul>
+					<li>
+						<a href="#0">
+							Alias <code>Quirks</code>
+						</a>
+					</li>
+					<li>
+						<a href="#1">
+							Alias <code>Quirks</code>
+						</a>
+					</li>
+				</ul>
+			</nav><h2 id="0">Alias Quirks</h2><p>Swiss army knife for getting information about things.
+</p>
+			<div class="prototype">
+				<code class="lang-d">
+					<div class="single-prototype">
+			<span class="kwd">alias</span> <span class="pln">Quirks</span>(alias thing, alias specializedQuirks)
+			 <span class="pun">=</span> <a href="../../quirks/core/Quirks.QuirksStruct.html"><span class="typ">Quirks<wbr/></span><span class="pun">.<wbr/></span><span class="typ">QuirksStruct</span></a>!(thing,__traits(identifier,thing),TypeOf!specializedQuirks)<span class="pun">;</span>
+					</div>
+				</code>
+			</div>
+			<section><p>Takes thing and tries to apply a list of functions and templates to it. All that compile can be accessed using property syntax on the resulting alias.
+</p>
+
+<p> The code for this is generated during compile-time using traits and mixins. Below is a list of properties that are possible to access (note not all will be available for every instantiation):
+ <ul> <li>attributes</li>
+ <li>fields</li>
+ <li>functionAttributes</li>
+ <li>isAggregate</li>
+ <li>isArray</li>
+ <li>isAssociativeArray</li>
+ <li>isBasic</li>
+ <li>isNested</li>
+ <li>isNumeric</li>
+ <li>isSomeString</li>
+ <li>isStatic</li>
+ <li>methods</li>
+ <li>parameters</li>
+ <li>returnType</li>
+ <li>type</li>
+ </ul>
+</p>
+
+<p> In addition, the following functions and templates are also available:
+ <ul> <li>getUDAs(alias uda) -&gt; returns the same as getUDAs from std.traits</li>
+ <li>getUDA(alias uda) -&gt; returns the first result returned by getUDAs</li>
+ <li>hasUDA(alias uda) -&gt; return the same as hasUDA from std.traits</li>
+ </ul>
+</p>
+</section>
+
+			<section><h3>Example</h3>
+<pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">S </span><span class="pun">{
+    </span><span class="kwd">static </span><span class="typ">long </span><span class="pln">id</span><span class="pun">;
+    </span><span class="typ">int </span><span class="pln">age</span><span class="pun">;
+    </span><span class="kwd">static </span><span class="typ">string </span><span class="pln">name</span><span class="pun">() {
+        </span><span class="kwd">return </span><span class="str">"name"</span><span class="pun">;
+    }
+    </span><span class="typ">void </span><span class="pln">update</span><span class="pun">(</span><span class="typ">bool </span><span class="pln">force</span><span class="pun">) { }
+}
+
+</span><span class="typ">Quirks</span><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">type</span><span class="pun">; </span><span class="com">// S
+</span><span class="typ">Quirks</span><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">fields<wbr/></span><span class="pun">.</span><span class="pln">length</span><span class="pun">; </span><span class="com">// 2
+</span><span class="typ">Quirks</span><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">methods</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]<wbr/>.</span><span class="pln">name</span><span class="pun">; </span><span class="com">//update
+</span><span class="typ">Quirks</span><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">isArray</span><span class="pun">; </span><span class="com">// false
+</span><span class="typ">Quirks</span><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">methods</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]<wbr/>.</span><span class="pln">parameters</span><span class="pun">[</span><span class="lit">0</span><span class="pun">]<wbr/>.</span><span class="pln">type</span><span class="pun">; </span><span class="com">// bool</span></code></pre>
+</section>
+<h2 id="1">Alias Quirks</h2><p>Shorthand when no specialized struct is needed
+</p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
 			<span class="kwd">alias</span> <span class="pln">Quirks</span>(alias thing)
-			 <span class="pun">=</span> <a href="../../quirks/core/Quirks.QuirksStruct.html"><span class="typ">Quirks<wbr/></span><span class="pun">.<wbr/></span><span class="typ">QuirksStruct</span></a>!(thing,__traits(identifier,thing))<span class="pun">;</span>
+			 <span class="pun">=</span> <a href="../../quirks/core/Quirks.html"><span class="typ">Quirks</span></a>!(thing,void)<span class="pun">;</span>
 					</div>
 				</code>
 			</div>
