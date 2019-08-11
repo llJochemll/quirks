@@ -16,6 +16,23 @@ alias ParameterNames = ParameterIdentifierTuple;
 /// Alias for Parameters
 alias ParameterTypes = std.traits.Parameters;
 
+/++
++ Returns the functionAttributes of func as an array of strings
++
++ Example:
++ ---
++ nothrow pure @trusted @nogc void foo();
++ pure @nogc void bar();
++ @safe
++ struct S {
++     pure void foo() {}
++ }
++
++ FunctionAttributes!foo; // ["nothrow", "pure", "@trusted", "@nogc"]
++ FunctionAttributes!bar; // ["pure", "@nogc", "@system"]
++ FunctionAttributes!(S.foo); // ["pure", "@safe"]
++ ---
++/
 @safe
 template FunctionAttributes(alias func) if (isCallable!func) {
     private auto attributesMixinList() {
@@ -29,6 +46,20 @@ template FunctionAttributes(alias func) if (isCallable!func) {
     enum attributes = attributesMixinList();
 
     alias FunctionAttributes = attributes;
+} unittest {
+    import fluent.asserts;
+
+    nothrow pure @trusted @nogc void foo();
+    pure @nogc void bar();
+
+    @safe
+    struct S {
+        pure void foo() {}
+    }
+
+    FunctionAttributes!foo.should.containOnly(["nothrow", "pure", "@trusted", "@nogc"]);
+    FunctionAttributes!bar.should.containOnly(["pure", "@nogc", "@system"]);
+    FunctionAttributes!(S.foo).should.containOnly(["pure", "@safe"]);
 }
 
 /++
