@@ -17,7 +17,7 @@ import std.meta;
 +/
 @safe
 template FilterTuple(T...) if (T.length > 0) {
-    auto getElementsMixinList() {
+    private auto getElementsMixinList() {
         string[] elements;
 
         static foreach (i, element; T) {
