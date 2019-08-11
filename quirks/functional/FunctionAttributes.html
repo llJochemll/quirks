@@ -65,7 +65,8 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Alias FunctionAttributes</h1><p></p>
+			<h1>Alias FunctionAttributes</h1><p>Returns the functionAttributes of func as an array of strings
+</p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
@@ -74,8 +75,21 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</code>
 			</div>
-			
-			
+			<section></section>
+
+			<section><h2>Example</h2>
+<pre class="code"><code class="lang-d"><span class="kwd">nothrow pure @trusted @nogc </span><span class="typ">void </span><span class="pln">foo</span><span class="pun">();
+</span><span class="kwd">pure @nogc </span><span class="typ">void </span><span class="pln">bar</span><span class="pun">();
+</span><span class="kwd">@safe
+struct </span><span class="pln">S </span><span class="pun">{
+    </span><span class="kwd">pure </span><span class="typ">void </span><span class="pln">foo</span><span class="pun">() {}
+}
+
+</span><span class="typ">FunctionAttributes</span><span class="pun">!</span><span class="pln">foo</span><span class="pun">; </span><span class="com">// ["nothrow", "pure", "@trusted", "@nogc"]
+</span><span class="typ">FunctionAttributes</span><span class="pun">!</span><span class="pln">bar</span><span class="pun">; </span><span class="com">// ["pure", "@nogc", "@system"]
+</span><span class="typ">FunctionAttributes</span><span class="pun">!(</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">foo</span><span class="pun">); </span><span class="com">// ["pure", "@safe"]</span></code></pre>
+</section>
+
 			<footer>
 				<table class="license-info">
 					<tr>
