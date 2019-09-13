@@ -12,8 +12,10 @@
 <url><loc>http://127.0.0.1/quirks/aggregate/hasMethod.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/aggregate/MemberNames.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/aggregate/MemberNames.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/aggregate/Members.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/aggregate/Members.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/aggregate/Methods.html</loc></url>
-<url><loc>http://127.0.0.1/quirks/aggregate/Methods.getMethodsMixinList.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/aggregate/Methods.generateNames.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/aggregate/Methods.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/core.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/core/Quirks.html</loc></url>
@@ -37,8 +39,12 @@
 <url><loc>http://127.0.0.1/quirks/type/isAggregate.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type/isArray.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type/isAssociativeArray.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/type/isBasic.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/type/isBuiltin.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type/isExpression.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/type/isModule.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type/isNumeric.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/type/isSomeString.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type/TypeOf.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/utility.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/utility/interpolateMixin.html</loc></url>

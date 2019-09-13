@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Methods - multiple declarations</title>
+		<title>Members - multiple declarations</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -65,46 +65,32 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Methods - multiple declarations</h1>
+			<h1>Members - multiple declarations</h1>
 			<nav class="page-nav">
 				<ul>
 					<li>
 						<a href="#0">
-							Template <code>Methods</code>
+							Alias <code>Members</code>
 						</a>
 					</li>
 					<li>
 						<a href="#1">
-							Alias <code>Methods</code>
+							Alias <code>Members</code>
 						</a>
 					</li>
 				</ul>
-			</nav><h2 id="0">Template Methods</h2><p>Returns a tuple of each method in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template
+			</nav><h2 id="0">Alias Members</h2><p>Returns an AliasSeq combining Fields!aggregate and Methods!aggregate
 </p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">template</span> <span class="pln">Methods</span>(alias aggregate)
-			;
+			<span class="kwd">alias</span> <span class="pln">Members</span>(alias aggregate)
+			 <span class="pun">=</span> <span class="typ">AliasSeq</span>!(Fields!aggregate,Methods!aggregate)<span class="pun">;</span>
 					</div>
 				</code>
 			</div>
 			<section></section>
 
-			<section><h3>Contained Functions</h3>
-				<table>
-					<col class="caption"/>
-					<tr>
-						<th>Name</th><th>Description</th>
-					</tr>
-					<tr>
-						<td>
-							<a href="../../quirks/aggregate/Methods.generateNames.html">generateNames</a>
-						</td>
-						<td></td>
-					</tr>
-				</table>
-			</section>
 			<section><h3>Example</h3>
 <pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">S </span><span class="pun">{
     </span><span class="typ">long </span><span class="pln">id</span><span class="pun">;
@@ -114,20 +100,15 @@ $('#symbolSearchPane').show();</script>
     }
 }
 
-</span><span class="kwd">alias </span><span class="pln">fields </span><span class="pun">= </span><span class="typ">Methods</span><span class="pun">!</span><span class="pln">S</span><span class="pun">;
-
-</span><span class="kwd">static foreach </span><span class="pun">(</span><span class="pln">method</span><span class="pun">; </span><span class="pln">fields</span><span class="pun">) {
-    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">method<wbr/></span><span class="pun">.</span><span class="pln">returnType</span><span class="pun">);
-    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">method<wbr/></span><span class="pun">.</span><span class="pln">name</span><span class="pun">);
-}</span></code></pre>
+</span><span class="typ">Members</span><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">length</span><span class="pun">; </span><span class="com">// is 3</span></code></pre>
 </section>
-<h2 id="1">Alias Methods</h2><p>Returns a tuple of each method in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template, filtered with the given predicate
+<h2 id="1">Alias Members</h2><p>Returns an AliasSeq combining Fields!aggregate and Methods!aggregate, filtered with the given alias
 </p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">alias</span> <span class="pln">Methods</span>(alias aggregate, alias predicate)
-			 <span class="pun">=</span> <span class="typ">FilterTuple</span>!(predicate,Methods!aggregate)<span class="pun">;</span>
+			<span class="kwd">alias</span> <span class="pln">Members</span>(alias aggregate, alias predicate)
+			 <span class="pun">=</span> <span class="typ">FilterTuple</span>!(predicate,Members!aggregate)<span class="pun">;</span>
 					</div>
 				</code>
 			</div>
@@ -142,12 +123,7 @@ $('#symbolSearchPane').show();</script>
     }
 }
 
-</span><span class="kwd">alias </span><span class="pln">fields </span><span class="pun">= <a href="../../quirks/aggregate/Methods.html"></span><span class="typ">Methods</span></a><span class="pun">!</span><span class="pln">S</span><span class="pun">;
-
-</span><span class="kwd">static foreach </span><span class="pun">(</span><span class="pln">method</span><span class="pun">; </span><span class="pln">fields</span><span class="pun">) {
-    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">method<wbr/></span><span class="pun">.</span><span class="pln">returnType</span><span class="pun">);
-    </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">method<wbr/></span><span class="pun">.</span><span class="pln">name</span><span class="pun">);
-}</span></code></pre>
+<a href="../../quirks/aggregate/Members.html"></span><span class="typ">Members</span></a><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">member </span><span class="pun">=&gt; </span><span class="pln">member<wbr/></span><span class="pun">.</span><span class="pln">name<wbr/></span><span class="pun">.</span><span class="pln">canFind</span><span class="pun">(</span><span class="str">"a"</span><span class="pun">))<wbr/>.</span><span class="pln">length</span><span class="pun">; </span><span class="com">// is 2</span></code></pre>
 </section>
 
 			<footer>
