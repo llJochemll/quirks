@@ -4,6 +4,9 @@
   ],
   "configurations": [
     {
+      "name": "library"
+    },
+    {
       "name": "unittest",
       "dependencies": {
         "fluent-asserts": "~>0.12.0"

@@ -28,7 +28,7 @@ alias isExpression = std.traits.isExpressions;
 +/
 @safe
 template TypeOf(alias thing) {
-    static if (std.traits.isType!thing) {
+    static if (std.traits.isType!thing || !__traits(compiles, typeof(thing))) {
         alias TypeOf = thing;
     } else {
         alias TypeOf = typeof(thing);
@@ -53,7 +53,13 @@ template TypeOf(alias thing) {
 /// Returns std.traits.isAggregate!(TypeOf!thing)
 @safe
 pure nothrow auto isAggregate(alias thing)() {
-    return std.traits.isAggregateType!(TypeOf!thing);
+    alias Type = TypeOf!thing;
+
+    static if (std.traits.isType!Type) {
+        return std.traits.isAggregateType!Type;
+    } else {
+        return false;
+    }
 } unittest {
     import fluent.asserts;
 
@@ -76,7 +82,13 @@ pure nothrow auto isAggregate(alias thing)() {
 /// Returns std.traits.isArray!(TypeOf!thing)
 @safe
 pure nothrow auto isArray(alias thing)() {
-    return std.traits.isArray!(TypeOf!thing);
+    alias Type = TypeOf!thing;
+
+    static if (std.traits.isType!Type) {
+        return std.traits.isArray!Type;
+    } else {
+        return false;
+    }
 } unittest {
     import fluent.asserts;
 
@@ -95,7 +107,13 @@ pure nothrow auto isArray(alias thing)() {
 /// Returns std.traits.isAssociativeArray!(TypeOf!thing)
 @safe
 pure nothrow auto isAssociativeArray(alias thing)() {
-    return std.traits.isAssociativeArray!(TypeOf!thing);
+    alias Type = TypeOf!thing;
+
+    static if (std.traits.isType!Type) {
+        return std.traits.isAssociativeArray!Type;
+    } else {
+        return false;
+    }
 } unittest {
     import fluent.asserts;
 
@@ -113,10 +131,76 @@ pure nothrow auto isAssociativeArray(alias thing)() {
     isAssociativeArray!s2.should.equal(true);
 }
 
+/// Returns std.traits.isBasic!(TypeOf!thing)
+@safe
+pure nothrow auto isBasic(alias thing)() {
+    alias Type = TypeOf!thing;
+
+    static if (std.traits.isType!Type) {
+        return std.traits.isBasicType!Type;
+    } else {
+        return false;
+    }
+} unittest {
+    import fluent.asserts;
+
+    struct S { }
+
+    S s;
+
+    isBasic!int.should.equal(true);
+    isBasic!0.should.equal(true);
+    isBasic!string.should.equal(false);
+    isBasic!"hello".should.equal(false);
+    isBasic!S.should.equal(false);
+    isBasic!s.should.equal(false);
+}
+
+/// Returns std.traits.isBuiltin!(TypeOf!thing)
+@safe
+pure nothrow auto isBuiltin(alias thing)() {
+    alias Type = TypeOf!thing;
+
+    static if (std.traits.isType!Type) {
+        return std.traits.isBuiltinType!Type;
+    } else {
+        return false;
+    }
+} unittest {
+    import fluent.asserts;
+
+    struct S { }
+
+    S s;
+
+    isBuiltin!int.should.equal(true);
+    isBuiltin!0.should.equal(true);
+    isBuiltin!string.should.equal(true);
+    isBuiltin!"hello".should.equal(true);
+    isBuiltin!S.should.equal(false);
+    isBuiltin!s.should.equal(false);
+}
+
+@safe
+pure nothrow auto isModule(alias thing)() {
+    return __traits(isModule, thing);
+} unittest {
+    import fluent.asserts;
+
+    isModule!(std.traits).should.equal(true);
+    isModule!(std.traits.hasNested).should.equal(false);
+}
+
 /// Returns std.traits.isNumeric!(TypeOf!thing)
 @safe
 pure nothrow auto isNumeric(alias thing)() {
-    return std.traits.isNumeric!(TypeOf!thing);
+    alias Type = TypeOf!thing;
+
+    static if (std.traits.isType!Type) {
+        return std.traits.isNumeric!Type;
+    } else {
+        return false;
+    }
 } unittest {
     import fluent.asserts;
 
@@ -132,4 +216,30 @@ pure nothrow auto isNumeric(alias thing)() {
     isNumeric!"hello".should.equal(false);
     isNumeric!S.should.equal(false);
     isNumeric!s.should.equal(false);
+}
+
+/// Returns std.traits.isSomeString!(TypeOf!thing)
+@safe
+pure nothrow static auto isSomeString(alias thing)() {
+    alias Type = TypeOf!thing;
+
+    static if (std.traits.isType!Type) {
+        return std.traits.isSomeString!Type;
+    } else {
+        return false;
+    }
+} unittest {
+    import fluent.asserts;
+    
+    isSomeString!string.should.equal(true);
+    isSomeString!(wchar[]).should.equal(true);
+    isSomeString!(dchar[]).should.equal(true);
+    isSomeString!"aaa".should.equal(true);
+    isSomeString!(const(char)[]).should.equal(true);
+
+    isSomeString!int.should.equal(false);
+    isSomeString!(int[]).should.equal(false);
+    isSomeString!(byte[]).should.equal(false);
+    isSomeString!null.should.equal(false);
+    isSomeString!(char[4]).should.equal(false);
 }

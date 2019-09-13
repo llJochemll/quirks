@@ -3,10 +3,11 @@ module quirks.aggregate;
 import quirks.core : Quirks;
 import quirks.functional: Parameters;
 import quirks.tuple : FilterTuple;
-import quirks.type : TypeOf, isAggregate;
+import quirks.type : TypeOf, isAggregate, isModule;
 import quirks.utility;
 import std.algorithm;
 import std.array;
+import std.conv;
 import std.functional : unaryFun;
 import std.meta;
 import std.traits;
@@ -39,13 +40,22 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
         string[] members;
 
         static foreach (memberName; MemberNames!aggregate) {
-            static if (!isCallable!(TypeOf!(__traits(getMember, aggregate, memberName)))) {
+            static if (!isCallable!(TypeOf!(__traits(getMember, aggregate, memberName))) && !is(TypeOf!(__traits(getMember, aggregate, memberName)) == void)) {
                 members ~= `Quirks!(__traits(getMember, aggregate, "` ~ memberName ~ `"))()`;
             }
         }
 
         return members;
     }
+
+    /*pragma(msg, FilterTuple!(method => isCallable!(TypeOf!(__traits(getMember, aggregate, method.name)))));
+
+    enum memberNames = MemberNames!aggregate;
+
+    alias Fields = FilterTuple!(memberName => {
+            return !isCallable!(TypeOf!(__traits(getMember, aggregate, memberName))) 
+                && !is(TypeOf!(__traits(getMember, aggregate, memberName)) == void);
+        }, memberNames);*/
 
     mixin(interpolateMixin(q{
         alias Fields = AliasSeq!(${fieldsMixinList.join(",")});
@@ -59,6 +69,7 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -68,6 +79,7 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -114,6 +126,7 @@ template Fields(alias aggregate, alias predicate) if (isAggregate!aggregate && i
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -123,6 +136,7 @@ template Fields(alias aggregate, alias predicate) if (isAggregate!aggregate && i
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -158,125 +172,6 @@ template Fields(alias aggregate, alias predicate) if (isAggregate!aggregate && i
     Fields!(c, field => field.name == "name").length.should.equal(0);
     Fields!(C, field => field.name == "doesNotExist").length.should.equal(0);
     Fields!(c, field => field.name == "doesNotExist").length.should.equal(0);
-}
-
-/++
-+ Returns a tuple of each method in the form of the `Quirks` template
-+ 
-+ Example:
-+ ---
-+ struct S {
-+     long id;
-+     int age;
-+     string name() {
-+         return "name";
-+     }
-+ }
-+ 
-+ alias fields = Methods!S;
-+ 
-+ static foreach (method; fields) {
-+     pragma(msg, method.returnType);
-+     pragma(msg, method.name);
-+ }
-+ ---
-+/
-@safe
-template Methods(alias aggregate) if (isAggregate!aggregate) {
-    auto getMethodsMixinList() {
-        string[] methods;
-
-        static foreach (memberName; MemberNames!aggregate) {
-            static if (!hasField!(aggregate, memberName)) {
-                methods ~= `Quirks!(__traits(getMember, aggregate, "` ~ memberName ~ `"))()`;
-            }
-        }
-
-        return methods;
-    }
-
-    mixin(interpolateMixin(q{
-        alias Methods = AliasSeq!(${getMethodsMixinList.join(",")});
-    }));
-}
-
-/++
-+ Returns a tuple of each method in the form of the `Quirks` template, filtered with the given predicate
-+ 
-+ Example:
-+ ---
-+ struct S {
-+     long id;
-+     int age;
-+     string name() {
-+         return "name";
-+     }
-+ }
-+ 
-+ alias fields = Methods!S;
-+ 
-+ static foreach (method; fields) {
-+     pragma(msg, method.returnType);
-+     pragma(msg, method.name);
-+ }
-+ ---
-+/
-@safe
-template Methods(alias aggregate, alias predicate) if (isAggregate!aggregate  && is(typeof(unaryFun!predicate))) {
-    alias Methods = FilterTuple!(predicate, Methods!aggregate);
-} unittest {
-    import fluent.asserts;
-
-    struct S {
-        long id;
-        int age;
-        string name() {
-            return "name";
-        }
-        void update(bool force) { }
-    }
-
-    class C {
-        long id;
-        int age;
-        string name() {
-            return "name";
-        }
-        void update(bool force) { }
-    }
-
-    S s;
-    auto c = new C;
-
-    Methods!(S, method => is(method.returnType == string)).length.should.equal(1);
-    Methods!(s, method => is(method.returnType == string)).length.should.equal(1);
-    Methods!(S, method => is(method.returnType == long)).length.should.equal(0);
-    Methods!(s, method => is(method.returnType == long)).length.should.equal(0);
-    Methods!(S, method => isNumeric!(method.returnType)).length.should.equal(0);
-    Methods!(s, method => isNumeric!(method.returnType)).length.should.equal(0);
-    Methods!(S, method => isSomeString!(method.returnType)).length.should.equal(1);
-    Methods!(s, method => isSomeString!(method.returnType)).length.should.equal(1);
-    Methods!(S, method => method.name == "id").length.should.equal(0);
-    Methods!(s, method => method.name == "id").length.should.equal(0);
-    Methods!(S, method => method.name == "name").length.should.equal(1);
-    Methods!(s, method => method.name == "name").length.should.equal(1);
-    Methods!(S, method => method.name == "doesNotExist").length.should.equal(0);
-    Methods!(s, method => method.name == "doesNotExist").length.should.equal(0);
-
-    Methods!(C, method => is(method.returnType == string)).length.should.equal(1);
-    Methods!(c, method => is(method.returnType == string)).length.should.equal(1);
-    Methods!(C, method => is(method.returnType == long)).length.should.equal(0);
-    Methods!(c, method => is(method.returnType == long)).length.should.equal(0);
-    Methods!(C, method => isNumeric!(method.returnType)).length.should.equal(0);
-    Methods!(c, method => isNumeric!(method.returnType)).length.should.equal(0);
-    Methods!(C, method => isSomeString!(method.returnType)).length.should.equal(1);
-    Methods!(c, method => isSomeString!(method.returnType)).length.should.equal(1);
-    Methods!(C, method => method.name == "id").length.should.equal(0);
-    Methods!(c, method => method.name == "id").length.should.equal(0);
-    Methods!(C, method => method.name == "name").length.should.equal(1);
-    Methods!(c, method => method.name == "name").length.should.equal(1);
-    Methods!(C, method => method.name == "doesNotExist").length.should.equal(0);
-    Methods!(c, method => method.name == "doesNotExist").length.should.equal(0);
 }
 
 /++
@@ -382,6 +277,187 @@ template MemberNames(alias aggregate, alias predicate) if (isAggregate!aggregate
 }
 
 /++
++ Returns an AliasSeq combining Fields!aggregate and Methods!aggregate
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ Members!S.length; // is 3
++ ---
++/
+@safe
+template Members(alias aggregate) if (isAggregate!aggregate) {
+    alias Members = AliasSeq!(Fields!aggregate, Methods!aggregate);
+}
+
+/++
++ Returns an AliasSeq combining Fields!aggregate and Methods!aggregate, filtered with the given alias
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ Members!(S, member => member.name.canFind("a")).length; // is 2
++ ---
++/
+@safe
+template Members(alias aggregate, alias predicate) if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
+    alias Members = FilterTuple!(predicate, Members!aggregate);
+}
+
+/++
++ Returns a tuple of each method in the form of the `Quirks` template
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ alias fields = Methods!S;
++ 
++ static foreach (method; fields) {
++     pragma(msg, method.returnType);
++     pragma(msg, method.name);
++ }
++ ---
++/
+@safe
+template Methods(alias aggregate) if (isAggregate!aggregate) {
+    auto generateNames() {
+        string[] names;
+
+        static foreach (memberName; MemberNames!aggregate) {
+            static if (!hasField!(aggregate, memberName)) {
+                static foreach (i, overload; __traits(getOverloads, TypeOf!aggregate, memberName)) {
+                    mixin(interpolateMixin(q{
+                        names ~= "method_${memberName}_${i}";
+                    }));
+                } 
+            }
+        }
+
+        return names;
+    }
+
+    static foreach (memberName; MemberNames!aggregate) {
+        static if (!hasField!(aggregate, memberName)) {
+            static foreach (i, overload; __traits(getOverloads, TypeOf!aggregate, memberName)) {
+                mixin(interpolateMixin(q{
+                    alias method_${memberName}_${i} = overload;
+                }));
+            } 
+        }
+    }
+
+    mixin(interpolateMixin(q{
+        alias Methods = AliasSeq!(Quirks!(${generateNames.join(")(),Quirks!(")})());
+    }));
+}
+
+/++
++ Returns a tuple of each method in the form of the `Quirks` template, filtered with the given predicate
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ alias fields = Methods!S;
++ 
++ static foreach (method; fields) {
++     pragma(msg, method.returnType);
++     pragma(msg, method.name);
++ }
++ ---
++/
+@safe
+template Methods(alias aggregate, alias predicate) if (isAggregate!aggregate  && is(typeof(unaryFun!predicate))) {
+    alias Methods = FilterTuple!(predicate, Methods!aggregate);
+} unittest {
+    import fluent.asserts;
+
+    struct S {
+        long id;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update() { }
+        void update(bool force) { }
+    }
+
+    class C {
+        long id;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update() { }
+        void update(bool force) { }
+    }
+
+    S s;
+    auto c = new C;
+
+    Methods!(S, method => is(method.returnType == string)).length.should.equal(1);
+    Methods!(s, method => is(method.returnType == string)).length.should.equal(1);
+    Methods!(S, method => is(method.returnType == long)).length.should.equal(0);
+    Methods!(s, method => is(method.returnType == long)).length.should.equal(0);
+    Methods!(S, method => isNumeric!(method.returnType)).length.should.equal(0);
+    Methods!(s, method => isNumeric!(method.returnType)).length.should.equal(0);
+    Methods!(S, method => isSomeString!(method.returnType)).length.should.equal(1);
+    Methods!(s, method => isSomeString!(method.returnType)).length.should.equal(1);
+    Methods!(S, method => method.name == "id").length.should.equal(0);
+    Methods!(s, method => method.name == "id").length.should.equal(0);
+    Methods!(S, method => method.name == "name").length.should.equal(1);
+    Methods!(s, method => method.name == "name").length.should.equal(1);
+    Methods!(S, method => method.name == "update").length.should.equal(2);
+    Methods!(s, method => method.name == "update").length.should.equal(2);
+    Methods!(S, method => method.name == "doesNotExist").length.should.equal(0);
+    Methods!(s, method => method.name == "doesNotExist").length.should.equal(0);
+
+    Methods!(C, method => is(method.returnType == string)).length.should.equal(1);
+    Methods!(c, method => is(method.returnType == string)).length.should.equal(1);
+    Methods!(C, method => is(method.returnType == long)).length.should.equal(0);
+    Methods!(c, method => is(method.returnType == long)).length.should.equal(0);
+    Methods!(C, method => isNumeric!(method.returnType)).length.should.equal(0);
+    Methods!(c, method => isNumeric!(method.returnType)).length.should.equal(0);
+    Methods!(C, method => isSomeString!(method.returnType)).length.should.equal(1);
+    Methods!(c, method => isSomeString!(method.returnType)).length.should.equal(1);
+    Methods!(C, method => method.name == "id").length.should.equal(0);
+    Methods!(c, method => method.name == "id").length.should.equal(0);
+    Methods!(C, method => method.name == "name").length.should.equal(1);
+    Methods!(c, method => method.name == "name").length.should.equal(1);
+    Methods!(C, method => method.name == "update").length.should.equal(2);
+    Methods!(c, method => method.name == "update").length.should.equal(2);
+    Methods!(C, method => method.name == "doesNotExist").length.should.equal(0);
+    Methods!(c, method => method.name == "doesNotExist").length.should.equal(0);
+}
+
+/++
 + Returns true if a member can be found on aggregate with the given memberName, false otherwise.
 + 
 + Example:
@@ -411,6 +487,7 @@ pure nothrow auto hasMember(alias aggregate, string memberName)() if (isAggregat
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -420,6 +497,7 @@ pure nothrow auto hasMember(alias aggregate, string memberName)() if (isAggregat
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -470,6 +548,7 @@ pure nothrow auto hasField(alias aggregate, string fieldName)() if (isAggregate!
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -479,6 +558,7 @@ pure nothrow auto hasField(alias aggregate, string fieldName)() if (isAggregate!
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -529,6 +609,7 @@ pure nothrow auto hasField(alias aggregate, alias predicate)() if (isAggregate!a
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -538,6 +619,7 @@ pure nothrow auto hasField(alias aggregate, alias predicate)() if (isAggregate!a
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -604,6 +686,7 @@ pure nothrow auto hasMethod(alias aggregate, string methodName)() if (isAggregat
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -613,6 +696,7 @@ pure nothrow auto hasMethod(alias aggregate, string methodName)() if (isAggregat
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -663,6 +747,7 @@ pure nothrow auto hasMethod(alias aggregate, alias predicate)() if (isAggregate!
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
@@ -672,6 +757,7 @@ pure nothrow auto hasMethod(alias aggregate, alias predicate)() if (isAggregate!
         string name() {
             return "name";
         }
+        void update() { }
         void update(bool force) { }
     }
 
