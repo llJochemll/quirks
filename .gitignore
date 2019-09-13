@@ -26,3 +26,5 @@ __dummy.html
 # Visual Studio
 *.sln
 .vs
+
+quirks-test-unittest
