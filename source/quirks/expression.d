@@ -17,9 +17,9 @@ import std.traits;
 + }
 + 
 + isStatic!(S.id); // true
-+ isStatic!(S.age).should.equal(false); // false
-+ isStatic!(S.name).should.equal(true); // true
-+ isStatic!(S.update).should.equal(false); // false
++ isStatic!(S.age); // false
++ isStatic!(S.name); // true
++ isStatic!(S.update); // false
 + ---
 +/
 @safe
