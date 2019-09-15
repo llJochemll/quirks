@@ -5,8 +5,6 @@
 quirks is a small library to facilitate programming with traits and mixins.<br/>
 See https://lljochemll.github.io/quirks/ for documentation and examples
 
-Note: the API is very unstable right now as I'm experimenting with what I think is useful
-
 Some features:
 
 ### Quirks template
