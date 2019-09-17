@@ -1,5 +1,6 @@
 # quirks
 [![Build Status](https://dev.azure.com/jochemdejaeghere/github-pipes/_apis/build/status/quirks/CI?branchName=master)](https://dev.azure.com/jochemdejaeghere/github-pipes/_build/latest?definitionId=3&branchName=master)
+[![Github Actions](https://github.com/lljochemll/quirks/workflows/ci/badge.svg)](https://github.com/lljochemll/quirks/actions)
 [![codecov](https://codecov.io/gh/llJochemll/quirks/branch/master/graph/badge.svg)](https://codecov.io/gh/llJochemll/quirks)
 
 quirks is a small library to facilitate programming with traits and mixins.<br/>
