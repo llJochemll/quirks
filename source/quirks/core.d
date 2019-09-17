@@ -29,7 +29,7 @@ alias Quirks(alias thing) = Quirks!(thing, void);
 + $(LI isAssociativeArray -> see `isAssociativeArray`)
 + $(LI isBasic -> see `isBasic`)
 + $(LI isModule -> see `isModule`)
-+ $(LI isNested
++ $(LI isNested)
 + $(LI isNumeric -> see `isNumeric`)
 + $(LI isSomeString -> see `isSomeString`)
 + $(LI isStatic -> see `isStatic`)
