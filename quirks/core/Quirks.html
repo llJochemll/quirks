@@ -79,7 +79,18 @@ $('#symbolSearchPane').show();</script>
 						</a>
 					</li>
 				</ul>
-			</nav><h2 id="0">Alias Quirks</h2><p>Swiss army knife for getting information about things.
+			</nav><h2 id="0">Alias Quirks</h2><p>Shorthand when no specialized struct is needed
+</p>
+			<div class="prototype">
+				<code class="lang-d">
+					<div class="single-prototype">
+			<span class="kwd">alias</span> <span class="pln">Quirks</span>(alias thing)
+			 <span class="pun">=</span> <a href="../../quirks/core/Quirks.html"><span class="typ">Quirks</span></a>!(thing,void)<span class="pun">;</span>
+					</div>
+				</code>
+			</div>
+			
+			<h2 id="1">Alias Quirks</h2><p>Swiss army knife for getting information about things.
 </p>
 			<div class="prototype">
 				<code class="lang-d">
@@ -94,32 +105,38 @@ $('#symbolSearchPane').show();</script>
 
 <p> The code for this is generated during compile-time using traits and mixins. Below is a list of properties that are possible to access (note not all will be available for every instantiation):
  <ul> <li>attributes</li>
- <li>fields</li>
- <li>functionAttributes</li>
- <li>isAggregate</li>
- <li>isArray</li>
- <li>isAssociativeArray</li>
- <li>isBasic</li>
- <li>isModule</li>
+ <li>fields -&gt; see <code class="lang-d"><span class="typ">Fields</span></code></li>
+ <li>functionAttributes -&gt; see <code class="lang-d"><span class="typ">FunctionAttributes</span></code></li>
+ <li>isAggregate -&gt; see <code class="lang-d"><span class="pln">isAggregate</span></code></li>
+ <li>isArray -&gt; see <code class="lang-d"><span class="pln">isArray</span></code></li>
+ <li>isAssociativeArray -&gt; see <code class="lang-d"><span class="pln">isAssociativeArray</span></code></li>
+ <li>isBasic -&gt; see <code class="lang-d"><span class="pln">isBasic</span></code></li>
+ <li>isModule -&gt; see <code class="lang-d"><span class="pln">isModule</span></code></li>
  <li>isNested</li>
- <li>isNumeric</li>
- <li>isSomeString</li>
- <li>isStatic</li>
- <li>memberNames</li>
- <li>members</li>
- <li>methods</li>
+ <li>isNumeric -&gt; see <code class="lang-d"><span class="pln">isNumeric</span></code></li>
+ <li>isSomeString -&gt; see <code class="lang-d"><span class="pln">isSomeString</span></code></li>
+ <li>isStatic -&gt; see <code class="lang-d"><span class="pln">isStatic</span></code></li>
+ <li>memberNames -&gt; see <code class="lang-d"><span class="typ">MemberNames</span></code></li>
+ <li>members -&gt; see <code class="lang-d"><span class="typ">Members</span></code></li>
+ <li>methods -&gt; see <code class="lang-d"><span class="typ">Methods</span></code></li>
  <li>name</li>
- <li>parameters</li>
+ <li>parameters -&gt; see <code class="lang-d"><span class="typ">Parameters</span></code></li>
  <li>qualifiedName</li>
  <li>returnType</li>
  <li>type</li>
  </ul>
 </p>
 
-<p> In addition, the following functions and templates are also available:
- <ul> <li>getUDAs(alias uda) -&gt; returns the same as getUDAs from std.traits</li>
+<p> In addition, the following properties that require a template parameter are also available:
+ <ul> <li>fieldsFilter(alias predicate) -&gt; returns the fields property filtered with the given predicate</li>
+ <li>getUDAs(alias uda) -&gt; returns the same as getUDAs from std.traits</li>
  <li>getUDA(alias uda) -&gt; returns the first result returned by getUDAs</li>
+ <li>hasField(alias predicate) -&gt; see <code class="lang-d"><span class="pln">hasField</span></code></li>
+ <li>hasMember(alias predicate) -&gt; see <code class="lang-d"><span class="pln">hasMember</span></code></li>
+ <li>hasMethod(alias predicate) -&gt; see <code class="lang-d"><span class="pln">hasMethod</span></code></li>
  <li>hasUDA(alias uda) -&gt; return the same as hasUDA from std.traits</li>
+ <li>membersFilter(alias predicate) -&gt; returns the members property filtered with the given predicate</li>
+ <li>methodsFilter(alias predicate) -&gt; returns the methods property filtered with the given predicate</li>
  </ul>
 </p>
 </section>
@@ -134,24 +151,13 @@ $('#symbolSearchPane').show();</script>
     </span><span class="typ">void </span><span class="pln">update</span><span class="pun">(</span><span class="typ">bool </span><span class="pln">force</span><span class="pun">) { }
 }
 
-</span><span class="typ">Quirks</span><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">type</span><span class="pun">; </span><span class="com">// S
-</span><span class="typ">Quirks</span><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">fields<wbr/></span><span class="pun">.</span><span class="pln">length</span><span class="pun">; </span><span class="com">// 2
-</span><span class="typ">Quirks</span><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">methods</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]<wbr/>.</span><span class="pln">name</span><span class="pun">; </span><span class="com">//update
-</span><span class="typ">Quirks</span><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">isArray</span><span class="pun">; </span><span class="com">// false
-</span><span class="typ">Quirks</span><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">methods</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]<wbr/>.</span><span class="pln">parameters</span><span class="pun">[</span><span class="lit">0</span><span class="pun">]<wbr/>.</span><span class="pln">type</span><span class="pun">; </span><span class="com">// bool</span></code></pre>
+<a href="../../quirks/core/Quirks.html"></span><span class="typ">Quirks</span></a><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">type</span><span class="pun">; </span><span class="com">// S
+<a href="../../quirks/core/Quirks.html"></span><span class="typ">Quirks</span></a><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">fields<wbr/></span><span class="pun">.</span><span class="pln">length</span><span class="pun">; </span><span class="com">// 2
+<a href="../../quirks/core/Quirks.html"></span><span class="typ">Quirks</span></a><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">methods</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]<wbr/>.</span><span class="pln">name</span><span class="pun">; </span><span class="com">//update
+<a href="../../quirks/core/Quirks.html"></span><span class="typ">Quirks</span></a><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">isArray</span><span class="pun">; </span><span class="com">// false
+<a href="../../quirks/core/Quirks.html"></span><span class="typ">Quirks</span></a><span class="pun">!</span><span class="pln">S<wbr/></span><span class="pun">.</span><span class="pln">methods</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]<wbr/>.</span><span class="pln">parameters</span><span class="pun">[</span><span class="lit">0</span><span class="pun">]<wbr/>.</span><span class="pln">type</span><span class="pun">; </span><span class="com">// bool</span></code></pre>
 </section>
-<h2 id="1">Alias Quirks</h2><p>Shorthand when no specialized struct is needed
-</p>
-			<div class="prototype">
-				<code class="lang-d">
-					<div class="single-prototype">
-			<span class="kwd">alias</span> <span class="pln">Quirks</span>(alias thing)
-			 <span class="pun">=</span> <a href="../../quirks/core/Quirks.html"><span class="typ">Quirks</span></a>!(thing,void)<span class="pun">;</span>
-					</div>
-				</code>
-			</div>
-			
-			
+
 			<footer>
 				<table class="license-info">
 					<tr>

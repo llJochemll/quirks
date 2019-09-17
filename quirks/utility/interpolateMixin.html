@@ -80,11 +80,27 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</code>
 			</div>
-			
+			<section></section>
+
 			<section><h2>Parameters</h2>
 <table><col class="caption"><tr><th>Name</th><th>Description</th></tr>
 <tr><td id="code">code</td><td> code to be mixed in</td></tr>
 </table>
+</section>
+<section><h2>Example</h2>
+<pre class="code"><code class="lang-d"><span class="kwd">class </span><span class="typ">Foo </span><span class="pun">{
+    </span><span class="typ">int </span><span class="pln">id </span><span class="pun">= </span><span class="lit">1</span><span class="pun">;
+    </span><span class="typ">uint </span><span class="pln">age </span><span class="pun">= </span><span class="lit">23</span><span class="pun">;
+    </span><span class="typ">string </span><span class="pln">name </span><span class="pun">= </span><span class="str">"foo"</span><span class="pun">;
+}
+
+</span><span class="kwd">auto </span><span class="pln">foo </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">Foo</span><span class="pun">;
+
+</span><span class="kwd">static foreach </span><span class="pun">(</span><span class="pln">member</span><span class="pun">; </span><span class="typ">FieldNameTuple</span><span class="pun">!(</span><span class="typ">Foo</span><span class="pun">)) {
+    </span><span class="kwd">mixin</span><span class="pun">(</span><span class="pln">interpolateMixin</span><span class="pun">(</span><span class="str">q{
+        writeln("Field ${member} has a value of: ", foo.${member});
+    }</span><span class="pun">));
+}</span></code></pre>
 </section>
 
 			<footer>
