@@ -48,15 +48,6 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
         return members;
     }
 
-    /*pragma(msg, FilterTuple!(method => isCallable!(TypeOf!(__traits(getMember, aggregate, method.name)))));
-
-    enum memberNames = MemberNames!aggregate;
-
-    alias Fields = FilterTuple!(memberName => {
-            return !isCallable!(TypeOf!(__traits(getMember, aggregate, memberName))) 
-                && !is(TypeOf!(__traits(getMember, aggregate, memberName)) == void);
-        }, memberNames);*/
-
     mixin(interpolateMixin(q{
         alias Fields = AliasSeq!(${fieldsMixinList.join(",")});
     }));
@@ -458,68 +449,6 @@ template Methods(alias aggregate, alias predicate) if (isAggregate!aggregate  &&
 }
 
 /++
-+ Returns true if a member can be found on aggregate with the given memberName, false otherwise.
-+ 
-+ Example:
-+ ---
-+ struct S {
-+     long id;
-+     int age;
-+     string name() {
-+         return "name";
-+     }
-+ }
-+ 
-+ hasMember!(S, "id"); // returns true
-+ hasMember!(S, "name"); // returns true
-+ hasMember!(S, "doesNotExist"); // returns false
-+ ---
-+/
-@safe
-pure nothrow auto hasMember(alias aggregate, string memberName)() if (isAggregate!aggregate) {
-    return [MemberNames!aggregate].canFind(memberName);
-} unittest {
-    import fluent.asserts;
-
-    struct S {
-        long id;
-        int age;
-        string name() {
-            return "name";
-        }
-        void update() { }
-        void update(bool force) { }
-    }
-
-    class C {
-        long id;
-        int age;
-        string name() {
-            return "name";
-        }
-        void update() { }
-        void update(bool force) { }
-    }
-
-    S s;
-    auto c = new C;
-
-    hasMember!(S, "id").should.equal(true);
-    hasMember!(s, "id").should.equal(true);
-    hasMember!(S, "name").should.equal(true);
-    hasMember!(s, "name").should.equal(true);
-    hasMember!(S, "doesNotExist").should.equal(false);
-    hasMember!(s, "doesNotExist").should.equal(false);
-
-    hasMember!(C, "id").should.equal(true);
-    hasMember!(c, "id").should.equal(true);
-    hasMember!(C, "name").should.equal(true);
-    hasMember!(c, "name").should.equal(true);
-    hasMember!(C, "doesNotExist").should.equal(false);
-    hasMember!(c, "doesNotExist").should.equal(false);
-}
-
-/++
 + Returns true if a field can be found on aggregate with the given fieldName, false otherwise.
 + 
 + Example:
@@ -599,7 +528,7 @@ pure nothrow auto hasField(alias aggregate, string fieldName)() if (isAggregate!
 +/
 @safe
 pure nothrow auto hasField(alias aggregate, alias predicate)() if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
-    return FilterTuple!(predicate, Fields!aggregate).length > 0;
+    return Fields!(aggregate, predicate).length > 0;
 } unittest {
     import fluent.asserts;
 
@@ -655,6 +584,146 @@ pure nothrow auto hasField(alias aggregate, alias predicate)() if (isAggregate!a
     hasField!(c, field => field.name == "name").should.equal(false);
     hasField!(C, field => field.name == "doesNotExist").should.equal(false);
     hasField!(c, field => field.name == "doesNotExist").should.equal(false);
+}
+
+/++
++ Returns true if a member can be found on aggregate with the given memberName, false otherwise.
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ hasMember!(S, "id"); // returns true
++ hasMember!(S, "name"); // returns true
++ hasMember!(S, "doesNotExist"); // returns false
++ ---
++/
+@safe
+pure nothrow auto hasMember(alias aggregate, string memberName)() if (isAggregate!aggregate) {
+    return [MemberNames!aggregate].canFind(memberName);
+} unittest {
+    import fluent.asserts;
+
+    struct S {
+        long id;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update() { }
+        void update(bool force) { }
+    }
+
+    class C {
+        long id;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update() { }
+        void update(bool force) { }
+    }
+
+    S s;
+    auto c = new C;
+
+    hasMember!(S, "id").should.equal(true);
+    hasMember!(s, "id").should.equal(true);
+    hasMember!(S, "name").should.equal(true);
+    hasMember!(s, "name").should.equal(true);
+    hasMember!(S, "doesNotExist").should.equal(false);
+    hasMember!(s, "doesNotExist").should.equal(false);
+
+    hasMember!(C, "id").should.equal(true);
+    hasMember!(c, "id").should.equal(true);
+    hasMember!(C, "name").should.equal(true);
+    hasMember!(c, "name").should.equal(true);
+    hasMember!(C, "doesNotExist").should.equal(false);
+    hasMember!(c, "doesNotExist").should.equal(false);
+}
+
+/++
++ Returns true if a member can be found on aggregate filtered with the given predicate, false otherwise.
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ 
++ hasMember!(S, member => is(member.type == long)); // returns true
++ hasMember!(S, member => is(member.type == string)); // returns true
++ hasMember!(S, member => member.name == "doesNotExist"); // returns false
++ ---
++/
+@safe
+pure nothrow auto hasMember(alias aggregate, alias predicate)() if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
+    return Members!(aggregate, predicate).length > 0;
+} unittest {
+    import fluent.asserts;
+
+    struct S {
+        long id;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update() { }
+        void update(bool force) { }
+    }
+
+    class C {
+        long id;
+        int age;
+        string name() {
+            return "name";
+        }
+        void update() { }
+        void update(bool force) { }
+    }
+
+    S s;
+    auto c = new C;
+
+    hasMember!(S, member => is(member.type == long)).should.equal(true);
+    hasMember!(s, member => is(member.type == long)).should.equal(true);
+    hasMember!(S, member => is(member.returnType == string)).should.equal(true);
+    hasMember!(s, member => is(member.returnType == string)).should.equal(true);
+    hasMember!(S, member => isNumeric!(member.type)).should.equal(true);
+    hasMember!(s, member => isNumeric!(member.type)).should.equal(true);
+    hasMember!(S, member => isArray!(member.type)).should.equal(false);
+    hasMember!(s, member => isArray!(member.type)).should.equal(false);
+    hasMember!(S, member => member.name == "id").should.equal(true);
+    hasMember!(s, member => member.name == "id").should.equal(true);
+    hasMember!(S, member => member.name == "name").should.equal(true);
+    hasMember!(s, member => member.name == "name").should.equal(true);
+    hasMember!(S, member => member.name == "doesNotExist").should.equal(false);
+    hasMember!(s, member => member.name == "doesNotExist").should.equal(false);
+
+    hasMember!(C, member => is(member.type == long)).should.equal(true);
+    hasMember!(c, member => is(member.type == long)).should.equal(true);
+    hasMember!(C, member => is(member.returnType == string)).should.equal(true);
+    hasMember!(c, member => is(member.returnType == string)).should.equal(true);
+    hasMember!(C, member => isNumeric!(member.type)).should.equal(true);
+    hasMember!(c, member => isNumeric!(member.type)).should.equal(true);
+    hasMember!(C, member => isArray!(member.type)).should.equal(false);
+    hasMember!(c, member => isArray!(member.type)).should.equal(false);
+    hasMember!(C, member => member.name == "id").should.equal(true);
+    hasMember!(c, member => member.name == "id").should.equal(true);
+    hasMember!(C, member => member.name == "name").should.equal(true);
+    hasMember!(c, member => member.name == "name").should.equal(true);
+    hasMember!(C, member => member.name == "doesNotExist").should.equal(false);
+    hasMember!(c, member => member.name == "doesNotExist").should.equal(false);
 }
 
 /++

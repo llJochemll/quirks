@@ -1,5 +1,6 @@
 module quirks.core;
 
+static import quirks.aggregate;
 static import quirks.expression;
 static import quirks.type;
 static import std.traits;
@@ -10,6 +11,9 @@ import quirks.type : TypeOf;
 import quirks.utility : interpolateMixin;
 import std.meta;
 
+/// Shorthand when no specialized struct is needed
+alias Quirks(alias thing) = Quirks!(thing, void);
+
 /++
 + Swiss army knife for getting information about things.
 + 
@@ -18,32 +22,38 @@ import std.meta;
 + The code for this is generated during compile-time using traits and mixins. Below is a list of properties that are possible to access (note not all will be available for every instantiation):
 + $(UL
 + $(LI attributes)
-+ $(LI fields)
-+ $(LI functionAttributes)
-+ $(LI isAggregate)
-+ $(LI isArray)
-+ $(LI isAssociativeArray)
-+ $(LI isBasic)
-+ $(LI isModule)
-+ $(LI isNested)
-+ $(LI isNumeric)
-+ $(LI isSomeString)
-+ $(LI isStatic)
-+ $(LI memberNames)
-+ $(LI members)
-+ $(LI methods)
++ $(LI fields -> see `Fields`)
++ $(LI functionAttributes -> see `FunctionAttributes`)
++ $(LI isAggregate -> see `isAggregate`)
++ $(LI isArray -> see `isArray`)
++ $(LI isAssociativeArray -> see `isAssociativeArray`)
++ $(LI isBasic -> see `isBasic`)
++ $(LI isModule -> see `isModule`)
++ $(LI isNested
++ $(LI isNumeric -> see `isNumeric`)
++ $(LI isSomeString -> see `isSomeString`)
++ $(LI isStatic -> see `isStatic`)
++ $(LI memberNames -> see `MemberNames`)
++ $(LI members -> see `Members`)
++ $(LI methods -> see `Methods`)
 + $(LI name)
-+ $(LI parameters)
++ $(LI parameters -> see `Parameters`)
 + $(LI qualifiedName)
 + $(LI returnType)
 + $(LI type)
 + )
 +
-+ In addition, the following functions and templates are also available: 
++ In addition, the following properties that require a template parameter are also available: 
 + $(UL
++ $(LI fieldsFilter(alias predicate) -> returns the fields property filtered with the given predicate)
 + $(LI getUDAs(alias uda) -> returns the same as getUDAs from std.traits)
 + $(LI getUDA(alias uda) -> returns the first result returned by getUDAs)
++ $(LI hasField(alias predicate) -> see `hasField`)
++ $(LI hasMember(alias predicate) -> see `hasMember`)
++ $(LI hasMethod(alias predicate) -> see `hasMethod`)
 + $(LI hasUDA(alias uda) -> return the same as hasUDA from std.traits)
++ $(LI membersFilter(alias predicate) -> returns the members property filtered with the given predicate)
++ $(LI methodsFilter(alias predicate) -> returns the methods property filtered with the given predicate)
 + )
 +
 + Example:
@@ -86,19 +96,32 @@ template Quirks(alias thing, alias specializedQuirks) if (is(TypeOf!specializedQ
         "qualifiedName", q{std.traits.fullyQualifiedName!thing},
         "returnType", q{std.traits.ReturnType!thing},
         "type", q{TypeOf!thing},
+        q{fieldsFilter(alias predicate)}, q{Fields!(thing, predicate)},
+        q{getUDAs(alias uda)}, q{std.traits.getUDAs!(thing, uda)},
+        q{getUDA(alias uda)}, q{getUDAs!uda[0]},
+        q{hasField(alias predicate)}, q{quirks.aggregate.hasField!(thing, predicate)},
+        q{hasMember(alias predicate)}, q{quirks.aggregate.hasMember!(thing, predicate)},
+        q{hasMethod(alias predicate)}, q{quirks.aggregate.hasMethod!(thing, predicate)},
+        q{hasUDA(alias uda)}, q{std.traits.hasUDA!(thing, uda)},
+        q{membersFilter(alias predicate)}, q{Members!(thing, predicate)},
+        q{methodsFilter(alias predicate)}, q{Methods!(thing, predicate)},
     );
 
     alias quirksEnumTuple = AliasSeq!(
         "name", q{__traits(identifier, thing)},
     );
 
-    struct QuirksStruct(alias thing, T) {
-        alias raw = thing;
+    alias quirksTemplateTuple = AliasSeq!(
+        
+    );
+
+    struct QuirksStruct(alias thingParam, T) {
+        alias thing = thingParam;
 
         static foreach (i, expression; quirksAliasTuple) {
             static if (i % 2 == 1) {
                 mixin(interpolateMixin(q{
-                    static if (__traits(compiles, ${expression})) {
+                    static if (__traits(compiles, {alias ${quirksAliasTuple[i - 1]} = ${expression};})) {
                         alias ${quirksAliasTuple[i - 1]} = ${expression};
                     }
                 }));
@@ -115,21 +138,6 @@ template Quirks(alias thing, alias specializedQuirks) if (is(TypeOf!specializedQ
             }
         }
 
-        @safe
-        template getUDAs(alias uda) {
-            alias getUDAs = std.traits.getUDAs!(thing, uda);
-        }
-
-        @safe
-        pure nothrow static auto getUDA(alias uda)() if (getUDAs!uda.length > 0) {
-            return getUDAs!uda[0];
-        }
-
-        @safe
-        pure nothrow static auto hasUDA(alias uda)() {
-            return std.traits.hasUDA!(thing, uda);
-        }
-
         static if (is(T == struct)) {
             private T m_specializedQuirks;
             alias m_specializedQuirks this;
@@ -137,9 +145,4 @@ template Quirks(alias thing, alias specializedQuirks) if (is(TypeOf!specializedQ
     }
 
     alias Quirks = QuirksStruct!(thing, TypeOf!specializedQuirks);
-}
-
-/// Shorthand when no specialized struct is needed
-template Quirks(alias thing) {
-    alias Quirks = Quirks!(thing, void);
 }

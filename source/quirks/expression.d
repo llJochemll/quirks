@@ -1,5 +1,6 @@
 module quirks.expression;
 
+import std.meta;
 import std.traits;
 
 /++
@@ -17,20 +18,18 @@ import std.traits;
 + }
 + 
 + isStatic!(S.id); // true
-+ isStatic!(S.age).should.equal(false); // false
-+ isStatic!(S.name).should.equal(true); // true
-+ isStatic!(S.update).should.equal(false); // false
++ isStatic!(S.age); // false
++ isStatic!(S.name); // true
++ isStatic!(S.update); // false
 + ---
 +/
 @safe
 template isStatic(alias thing) {
     static if (isSomeFunction!thing) {
-        enum stat = __traits(isStaticFunction, thing);
+        alias isStatic = Alias!(__traits(isStaticFunction, thing));
     } else {
-        enum stat = __traits(compiles, &thing);
+        alias isStatic = Alias!(__traits(compiles, &thing));
     }
-
-    alias isStatic = stat;
 } unittest {
     import fluent.asserts;
 

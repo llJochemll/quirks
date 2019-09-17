@@ -2,6 +2,7 @@ module quirks.tuple;
 
 import quirks.utility : interpolateMixin;
 import std.conv;
+import std.functional : unaryFun;
 import std.meta;
 
 /++
@@ -16,7 +17,7 @@ import std.meta;
 + ---
 +/
 @safe
-template FilterTuple(T...) if (T.length > 0) {
+template FilterTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
     private auto getElementsMixinList() {
         string[] elements;
 

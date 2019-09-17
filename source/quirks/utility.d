@@ -6,8 +6,26 @@ import std.string;
 /++
 + Takes code in the form of a string and interpolates variables defined in the form of ${variableName}.
 + Usefull in combination with the q{} string literal, to keep syntax highlighting for mixed in code and avoid string concatenations, which keeps the code readable
++
 + Params: 
 +   code = code to be mixed in
++
++ Example:
++ ---
++ class Foo {
++     int id = 1;
++     uint age = 23;
++     string name = "foo";
++ }
++
++ auto foo = new Foo;
++
++ static foreach (member; FieldNameTuple!(Foo)) {
++     mixin(interpolateMixin(q{
++         writeln("Field ${member} has a value of: ", foo.${member});
++     }));
++ }
++ ---
 +/
 @safe
 pure nothrow static string interpolateMixin(string code) {
