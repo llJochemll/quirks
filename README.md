@@ -1,9 +1,14 @@
 # quirks
+[![DUB](https://img.shields.io/dub/v/quirks)](http://quirks.dub.pm)
+![DUB](https://img.shields.io/dub/l/quirks)
+
 [![Build Status](https://dev.azure.com/jochemdejaeghere/github-pipes/_apis/build/status/quirks/CI?branchName=master)](https://dev.azure.com/jochemdejaeghere/github-pipes/_build/latest?definitionId=3&branchName=master)
 [![Github Actions](https://github.com/lljochemll/quirks/workflows/ci/badge.svg)](https://github.com/lljochemll/quirks/actions)
 [![codecov](https://codecov.io/gh/llJochemll/quirks/branch/master/graph/badge.svg)](https://codecov.io/gh/llJochemll/quirks)
 
-quirks is a small library to facilitate programming with traits and mixins.<br/>
+
+quirks is a small library to facilitate programming with traits and mixins.
+
 See https://lljochemll.github.io/quirks/ for documentation and examples
 
 Some features:
@@ -14,7 +19,7 @@ Swiss army knife for getting information about things
 import quirks;
 import std.stdio;
 
-struct User {
+class User {
     uint age;
     string name;
 
@@ -23,13 +28,23 @@ struct User {
 
         writeln(message);
     }
+
+    bool isSitting() {
+        return false;
+    }
 }
 
-alias quirks = Quirks!User;
+auto userInstance = new User;
 
-writeln(quirks.methods.length); // 1
+// can use both type and variable
+alias quirks = Quirks!userInstance; // also works with Quirks!User
+
+writeln(quirks.methods.length); // 2
 writeln(quirks.fields.length); // 2
+writeln(quirks.members.length); // 4
+writeln(quirks.isAggregate); // true
 writeln(quirks.methods[0].name); // talk
+writeln(quirks.methods[0].parameters[0].name); // message
 ```
 
 ### interpolateMixin
