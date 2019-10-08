@@ -3,8 +3,30 @@ module quirks.type;
 static import std.traits;
 import std.typecons;
 
+/// Alias for std.traits.isExpressions
 alias isExpression = std.traits.isExpressions;
 
+/++
++ Returns the same as TypeOf, but but does away with pointers
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ int number;
++ auto s = new S;
++ 
++ TypeOf!int; // int
++ TypeOf!number; // int
++ TypeOf!(S**); // S
++ TypeOf!s; // S
++ ---
++/
 @safe
 template SimpleTypeOf(alias thing) {
     alias Type = TypeOf!thing;
