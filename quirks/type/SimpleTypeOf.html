@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Alias isExpression</title>
+		<title>Alias SimpleTypeOf</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -65,18 +65,35 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Alias isExpression</h1><p>Alias for std.traits.isExpressions
+			<h1>Alias SimpleTypeOf</h1><p>Returns the same as TypeOf, but but does away with pointers
 </p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">alias</span> <span class="pln">isExpression</span>
-			<span class="pun">;</span>
+			<span class="kwd">alias</span> <span class="pln">SimpleTypeOf</span>(alias thing)
+			 <span class="pun">=</span> <a href="../../quirks/type/SimpleTypeOf.html"><span class="typ">SimpleTypeOf</span></a>!(std.traits.PointerTarget!Type)<span class="pun">;</span>
 					</div>
 				</code>
 			</div>
-			
-			
+			<section></section>
+
+			<section><h2>Example</h2>
+<pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">S </span><span class="pun">{
+    </span><span class="typ">long </span><span class="pln">id</span><span class="pun">;
+    </span><span class="typ">int </span><span class="pln">age</span><span class="pun">;
+    </span><span class="typ">string </span><span class="pln">name</span><span class="pun">() {
+        </span><span class="kwd">return </span><span class="str">"name"</span><span class="pun">;
+    }
+}
+</span><span class="typ">int </span><span class="pln">number</span><span class="pun">;
+</span><span class="kwd">auto </span><span class="pln">s </span><span class="pun">= </span><span class="kwd">new </span><span class="pln">S</span><span class="pun">;
+
+<a href="../../quirks/type/TypeOf.html"></span><span class="typ">TypeOf</span></a><span class="pun">!</span><span class="typ">int</span><span class="pun">; </span><span class="com">// int
+<a href="../../quirks/type/TypeOf.html"></span><span class="typ">TypeOf</span></a><span class="pun">!</span><span class="pln">number</span><span class="pun">; </span><span class="com">// int
+<a href="../../quirks/type/TypeOf.html"></span><span class="typ">TypeOf</span></a><span class="pun">!(</span><span class="pln">S</span><span class="pun">**); </span><span class="com">// S
+<a href="../../quirks/type/TypeOf.html"></span><span class="typ">TypeOf</span></a><span class="pun">!</span><span class="pln">s</span><span class="pun">; </span><span class="com">// S</span></code></pre>
+</section>
+
 			<footer>
 				<table class="license-info">
 					<tr>

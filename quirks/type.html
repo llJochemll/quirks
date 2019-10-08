@@ -139,6 +139,15 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
+								<a id="isPointer" class="public" href="../quirks/type/isPointer.html">isPointer</a><span class="decoration">()</span>
+							</code>
+						</td>
+						<td>Returns std.traits.isPointer!(TypeOf!thing)
+</td>
+					</tr>
+					<tr>
+						<td>
+							<code>
 								<a id="isSomeString" class="public" href="../quirks/type/isSomeString.html">isSomeString</a><span class="decoration">()</span>
 							</code>
 						</td>
@@ -163,7 +172,20 @@ $('#symbolSearchPane').show();</script>
 						<td>
 							<code class="prettyprint lang-d"></code>
 						</td>
-						<td></td>
+						<td>Alias for std.traits.isExpressions
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a id="SimpleTypeOf" class="public" href="../quirks/type/SimpleTypeOf.html">
+								<code>SimpleTypeOf</code>
+							</a>
+						</td>
+						<td>
+							<code class="prettyprint lang-d"><a href="../quirks/type/SimpleTypeOf.html"><span class="typ">SimpleTypeOf</span></a>!(std.traits.PointerTarget!Type)</code>
+						</td>
+						<td>Returns the same as TypeOf, but but does away with pointers
+</td>
 					</tr>
 					<tr>
 						<td>
@@ -172,7 +194,7 @@ $('#symbolSearchPane').show();</script>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><a href="../quirks/core/Quirks.QuirksStruct.thing.html"><span class="typ">Quirks<wbr/></span><span class="pun">.<wbr/></span><span class="typ">QuirksStruct<wbr/></span><span class="pun">.<wbr/></span><span class="pln">thing</span></a></code>
+							<code class="prettyprint lang-d"><span class="pln">thing</span></code>
 						</td>
 						<td>Returns the type of thing. Accepts both expressions and types.
 </td>
