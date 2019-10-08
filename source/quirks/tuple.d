@@ -1,5 +1,7 @@
 module quirks.tuple;
 
+static import std.traits;
+import quirks.core : Quirks;
 import quirks.utility : interpolateMixin;
 import std.conv;
 import std.functional : unaryFun;
@@ -22,8 +24,16 @@ template FilterTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
         string[] elements;
 
         static foreach (i, element; T) {
-            static if (i > 0 && T[0](element)) {
-                elements ~= "T[" ~ i.to!long.to!string ~ "]";
+            static if (i > 0) {
+                static if (__traits(compiles, T[0](element))) {
+                    static if (i > 0 && T[0](element)) {
+                        elements ~= "T[" ~ i.to!long.to!string ~ "]";
+                    }
+                } else {
+                    static assert(false, "One of the elements provided is not a value. " ~
+                        "This can be the case if the element is a type (i.e. int) or a template. "
+                    );
+                }
             }
         }
 

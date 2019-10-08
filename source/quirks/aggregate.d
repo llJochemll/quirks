@@ -41,7 +41,7 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
 
         static foreach (memberName; MemberNames!aggregate) {
             static if (!isCallable!(TypeOf!(__traits(getMember, aggregate, memberName))) && !is(TypeOf!(__traits(getMember, aggregate, memberName)) == void)) {
-                members ~= `Quirks!(__traits(getMember, aggregate, "` ~ memberName ~ `"))()`;
+                members ~= `Quirks!(__traits(getMember, aggregate, "` ~ memberName ~ `"))`;
             }
         }
 
@@ -359,7 +359,7 @@ template Methods(alias aggregate) if (isAggregate!aggregate) {
     }
 
     mixin(interpolateMixin(q{
-        alias Methods = AliasSeq!(Quirks!(${generateNames.join(")(),Quirks!(")})());
+        alias Methods = AliasSeq!(Quirks!(${generateNames.join("),Quirks!(")}));
     }));
 }
 

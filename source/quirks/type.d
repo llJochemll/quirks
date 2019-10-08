@@ -3,7 +3,53 @@ module quirks.type;
 static import std.traits;
 import std.typecons;
 
+/// Alias for std.traits.isExpressions
 alias isExpression = std.traits.isExpressions;
+
+/++
++ Returns the same as TypeOf, but but does away with pointers
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++ }
++ int number;
++ auto s = new S;
++ 
++ TypeOf!int; // int
++ TypeOf!number; // int
++ TypeOf!(S**); // S
++ TypeOf!s; // S
++ ---
++/
+@safe
+template SimpleTypeOf(alias thing) {
+    alias Type = TypeOf!thing;
+
+    static if (isPointer!Type) {
+        static if (isPointer!(std.traits.PointerTarget!Type)) {
+            alias SimpleTypeOf = SimpleTypeOf!(std.traits.PointerTarget!Type);
+        } else {
+            alias SimpleTypeOf = std.traits.PointerTarget!Type;
+        }
+    } else {
+        alias SimpleTypeOf = Type;
+    }
+} unittest {
+    import fluent.asserts;
+    
+    is(SimpleTypeOf!(void) == void).should.equal(true);
+    is(SimpleTypeOf!(void*) == void).should.equal(true);
+    is(SimpleTypeOf!(void**) == void).should.equal(true);
+    is(SimpleTypeOf!(string) == string).should.equal(true);
+    is(SimpleTypeOf!(string*) == string).should.equal(true);
+    is(SimpleTypeOf!(string**) == string).should.equal(true);
+}
 
 /++
 + Returns the type of thing. Accepts both expressions and types.
@@ -216,6 +262,44 @@ pure nothrow auto isNumeric(alias thing)() {
     isNumeric!"hello".should.equal(false);
     isNumeric!S.should.equal(false);
     isNumeric!s.should.equal(false);
+}
+
+/// Returns std.traits.isPointer!(TypeOf!thing)
+@safe
+pure nothrow static auto isPointer(alias thing)() {
+    alias Type = TypeOf!thing;
+
+    static if (std.traits.isType!Type) {
+        return std.traits.isPointer!Type;
+    } else {
+        return false;
+    }
+} unittest {
+    import fluent.asserts;
+
+    struct S { }
+    class C { }
+
+    auto a = 42;
+    auto b = "hello";
+
+    auto s = S();
+    auto sr = new S;
+    auto c = new C;
+    
+    isPointer!(int*).should.equal(true);
+    isPointer!(string*).should.equal(true);
+    isPointer!(S*).should.equal(true);
+    isPointer!(sr).should.equal(true);
+    isPointer!(C*).should.equal(true);
+
+    isPointer!(int).should.equal(false);
+    isPointer!(a).should.equal(false);
+    isPointer!(string).should.equal(false);
+    isPointer!(b).should.equal(false);
+    isPointer!(S).should.equal(false);
+    isPointer!(s).should.equal(false);
+    isPointer!(C).should.equal(false);
 }
 
 /// Returns std.traits.isSomeString!(TypeOf!thing)

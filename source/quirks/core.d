@@ -7,12 +7,9 @@ static import std.traits;
 import quirks.aggregate : Fields, MemberNames, Members, Methods;
 import quirks.expression : isStatic;
 import quirks.functional : Parameters, FunctionAttributes;
-import quirks.type : TypeOf;
+import quirks.type : SimpleTypeOf, TypeOf;
 import quirks.utility : interpolateMixin;
 import std.meta;
-
-/// Shorthand when no specialized struct is needed
-alias Quirks(alias thing) = Quirks!(thing, void);
 
 /++
 + Swiss army knife for getting information about things.
@@ -74,7 +71,7 @@ alias Quirks(alias thing) = Quirks!(thing, void);
 + Quirks!S.methods[1].parameters[0].type; // bool
 + ---
 +/
-template Quirks(alias thing, alias specializedQuirks) if (is(TypeOf!specializedQuirks == struct) || is(TypeOf!specializedQuirks == void)) {
+template Quirks(alias thing) {
     alias quirksAliasTuple = AliasSeq!(
         "attributes", q{__traits(getAttributes, thing)},
         "fields", q{Fields!thing},
@@ -95,6 +92,7 @@ template Quirks(alias thing, alias specializedQuirks) if (is(TypeOf!specializedQ
         "parameters", q{Parameters!thing},
         "qualifiedName", q{std.traits.fullyQualifiedName!thing},
         "returnType", q{std.traits.ReturnType!thing},
+        "simpleType", q{SimpleTypeOf!thing},
         "type", q{TypeOf!thing},
         q{fieldsFilter(alias predicate)}, q{Fields!(thing, predicate)},
         q{getUDAs(alias uda)}, q{std.traits.getUDAs!(thing, uda)},
@@ -115,14 +113,12 @@ template Quirks(alias thing, alias specializedQuirks) if (is(TypeOf!specializedQ
         
     );
 
-    struct QuirksStruct(alias thingParam, T) {
-        alias thing = thingParam;
-
+    struct ValueStruct {
         static foreach (i, expression; quirksAliasTuple) {
             static if (i % 2 == 1) {
                 mixin(interpolateMixin(q{
                     static if (__traits(compiles, {alias ${quirksAliasTuple[i - 1]} = ${expression};})) {
-                        alias ${quirksAliasTuple[i - 1]} = ${expression};
+                        public alias ${quirksAliasTuple[i - 1]} = ${expression};
                     }
                 }));
             }
@@ -132,17 +128,14 @@ template Quirks(alias thing, alias specializedQuirks) if (is(TypeOf!specializedQ
             static if (i % 2 == 1) {
                 mixin(interpolateMixin(q{
                     static if (__traits(compiles, ${expression})) {
-                        enum ${quirksEnumTuple[i - 1]} = (${expression});
+                        public enum ${quirksEnumTuple[i - 1]} = (${expression});
                     }
                 }));
             }
         }
-
-        static if (is(T == struct)) {
-            private T m_specializedQuirks;
-            alias m_specializedQuirks this;
-        }
     }
 
-    alias Quirks = QuirksStruct!(thing, TypeOf!specializedQuirks);
+    private enum ValueStruct value = ValueStruct();
+
+    alias Quirks = value;
 }
