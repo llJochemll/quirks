@@ -227,6 +227,7 @@ pure nothrow auto isBuiltin(alias thing)() {
     isBuiltin!s.should.equal(false);
 }
 
+/// Returns __traits(isModule, thing)
 @safe
 pure nothrow auto isModule(alias thing)() {
     return __traits(isModule, thing);

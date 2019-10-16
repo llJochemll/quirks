@@ -37,6 +37,7 @@ import std.meta;
 + $(LI parameters -> see `Parameters`)
 + $(LI qualifiedName)
 + $(LI returnType)
++ $(LI simpleType -> see `SimpleTypeOf`)
 + $(LI type)
 + )
 +
