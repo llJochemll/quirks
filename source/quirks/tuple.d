@@ -7,6 +7,18 @@ import std.conv;
 import std.functional : unaryFun;
 import std.meta;
 
+/++
++ Wrapper around AliasSeq
++ 
++ Example:
++ ---
++ alias seq = AliasTuple!(1, "hello", 0.5, [1, 2, 3]);
++
++ seq.tuple; // gives the original tuple
++ seq.length; // 4
++ seq.filter!(a => isNumeric!a); // gives AliasTuple!(1, 0.5)
++ ---
++/
 @safe
 template AliasTuple(T...) {
     private template Join(T...) {
