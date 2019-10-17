@@ -2,7 +2,7 @@ module quirks.aggregate;
 
 import quirks.core : Quirks;
 import quirks.functional: Parameters;
-import quirks.tuple : FilterTuple;
+import quirks.tuple : AliasTuple, FilterTuple;
 import quirks.type : TypeOf, isAggregate, isModule;
 import quirks.utility;
 import std.algorithm;
@@ -39,7 +39,7 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
     private auto fieldsMixinList() {
         string[] members;
 
-        static foreach (memberName; MemberNames!aggregate) {
+        static foreach (memberName; MemberNames!aggregate.tuple) {
             static if (!isCallable!(TypeOf!(__traits(getMember, aggregate, memberName))) && !is(TypeOf!(__traits(getMember, aggregate, memberName)) == void)) {
                 members ~= `Quirks!(__traits(getMember, aggregate, "` ~ memberName ~ `"))`;
             }
@@ -49,7 +49,7 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
     }
 
     mixin(interpolateMixin(q{
-        alias Fields = AliasSeq!(${fieldsMixinList.join(",")});
+        alias Fields = AliasTuple!(${fieldsMixinList.join(",")});
     }));
 } unittest {
     import fluent.asserts;
@@ -107,7 +107,7 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
 +/
 @safe
 template Fields(alias aggregate, alias predicate) if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
-    alias Fields = FilterTuple!(predicate, Fields!aggregate);
+    alias Fields = Fields!aggregate.filter!predicate;
 } unittest {
     import fluent.asserts;
 
@@ -183,32 +183,38 @@ template Fields(alias aggregate, alias predicate) if (isAggregate!aggregate && i
 +/
 @safe
 template MemberNames(alias aggregate) if (isAggregate!aggregate) {
-    alias MemberNames = FilterTuple!(name => ![__traits(allMembers, Object)].canFind(name) && name != "this", __traits(allMembers, TypeOf!aggregate));
+    alias MemberNames = AliasTuple!(__traits(allMembers, TypeOf!aggregate)).filter!(name => ![__traits(allMembers, Object)].canFind(name) && name != "this");
 } unittest {
     import fluent.asserts;
 
     struct S {
         long id;
+        int age;
         string name() {
             return "name";
         }
+        void update() { }
+        void update(bool force) { }
     }
 
     class C {
         long id;
+        int age;
         string name() {
             return "name";
         }
+        void update() { }
+        void update(bool force) { }
     }
 
     S s;
     auto c = new C;
 
-    MemberNames!S.length.should.equal(2);
-    MemberNames!s.length.should.equal(2);
+    MemberNames!S.length.should.equal(4);
+    MemberNames!s.length.should.equal(4);
 
-    MemberNames!C.length.should.equal(2);
-    MemberNames!c.length.should.equal(2);
+    MemberNames!C.length.should.equal(4);
+    MemberNames!c.length.should.equal(4);
 }
 
 /++
@@ -231,7 +237,7 @@ template MemberNames(alias aggregate) if (isAggregate!aggregate) {
 +/
 @safe
 template MemberNames(alias aggregate, alias predicate) if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
-    alias MemberNames = FilterTuple!(predicate, MemberNames!aggregate);
+    alias MemberNames = MemberNames!aggregate.filter!predicate;
 } unittest {
     import fluent.asserts;
 
@@ -285,7 +291,28 @@ template MemberNames(alias aggregate, alias predicate) if (isAggregate!aggregate
 +/
 @safe
 template Members(alias aggregate) if (isAggregate!aggregate) {
-    alias Members = AliasSeq!(Fields!aggregate, Methods!aggregate);
+    alias Members = Fields!aggregate.join!(Methods!aggregate);
+} unittest {
+    import fluent.asserts;
+
+    struct S {
+        long id;
+        string name() {
+            return "name";
+        }
+    }
+
+    class C {
+        long id;
+        string name() {
+            return "name";
+        }
+    }
+
+    S s;
+    auto c = new C;
+
+    Members!S.length.should.equal(2);
 }
 
 /++
@@ -306,7 +333,7 @@ template Members(alias aggregate) if (isAggregate!aggregate) {
 +/
 @safe
 template Members(alias aggregate, alias predicate) if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
-    alias Members = FilterTuple!(predicate, Members!aggregate);
+    alias Members = Members!aggregate.filter!predicate;
 }
 
 /++
@@ -335,7 +362,7 @@ template Methods(alias aggregate) if (isAggregate!aggregate) {
     auto generateNames() {
         string[] names;
 
-        static foreach (memberName; MemberNames!aggregate) {
+        static foreach (memberName; MemberNames!aggregate.tuple) {
             static if (!hasField!(aggregate, memberName)) {
                 static foreach (i, overload; __traits(getOverloads, TypeOf!aggregate, memberName)) {
                     mixin(interpolateMixin(q{
@@ -348,7 +375,7 @@ template Methods(alias aggregate) if (isAggregate!aggregate) {
         return names;
     }
 
-    static foreach (memberName; MemberNames!aggregate) {
+    static foreach (memberName; MemberNames!aggregate.tuple) {
         static if (!hasField!(aggregate, memberName)) {
             static foreach (i, overload; __traits(getOverloads, TypeOf!aggregate, memberName)) {
                 mixin(interpolateMixin(q{
@@ -359,7 +386,7 @@ template Methods(alias aggregate) if (isAggregate!aggregate) {
     }
 
     mixin(interpolateMixin(q{
-        alias Methods = AliasSeq!(Quirks!(${generateNames.join("),Quirks!(")}));
+        alias Methods = AliasTuple!(Quirks!(${generateNames.join("),Quirks!(")}));
     }));
 }
 
@@ -386,7 +413,7 @@ template Methods(alias aggregate) if (isAggregate!aggregate) {
 +/
 @safe
 template Methods(alias aggregate, alias predicate) if (isAggregate!aggregate  && is(typeof(unaryFun!predicate))) {
-    alias Methods = FilterTuple!(predicate, Methods!aggregate);
+    alias Methods = Methods!aggregate.filter!predicate;
 } unittest {
     import fluent.asserts;
 
@@ -606,7 +633,7 @@ pure nothrow auto hasField(alias aggregate, alias predicate)() if (isAggregate!a
 +/
 @safe
 pure nothrow auto hasMember(alias aggregate, string memberName)() if (isAggregate!aggregate) {
-    return [MemberNames!aggregate].canFind(memberName);
+    return [MemberNames!aggregate.tuple].canFind(memberName);
 } unittest {
     import fluent.asserts;
 
