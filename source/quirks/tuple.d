@@ -8,6 +8,36 @@ import std.functional : unaryFun;
 import std.meta;
 
 /++
++ Wrapper around AliasSeq
++ 
++ Example:
++ ---
++ alias seq = AliasTuple!(1, "hello", 0.5, [1, 2, 3]);
++
++ seq.tuple; // gives the original tuple
++ seq.length; // 4
++ seq.filter!(a => isNumeric!a); // gives AliasTuple!(1, 0.5)
++ ---
++/
+@safe
+template AliasTuple(T...) {
+    private template Join(T...) {
+        static if (T.length == 1 && is(typeof(T[0].tuple))) {
+            alias Join = AliasTuple!(tuple, T[0].tuple);
+        } else {
+            alias Join = AliasTuple!(tuple, T);
+        }
+    }
+    
+    alias tuple = T;
+
+    enum length = T.length; 
+
+    alias filter(alias predicate) = FilterTuple!(predicate, tuple);
+    alias join(T...) = Join!T;
+}
+
+/++
 + Takes a tuple and filters it with the given aggregate.
 + 
 + Example:
@@ -41,7 +71,7 @@ template FilterTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
     }
 
     mixin(interpolateMixin(q{
-        alias FilterTuple = AliasSeq!(${getElementsMixinList.join(",")});
+        alias FilterTuple = AliasTuple!(${getElementsMixinList.join(",")});
     }));
 } unittest {
     import fluent.asserts;
@@ -52,10 +82,10 @@ template FilterTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
 
     alias result1 = FilterTuple!(a => is(typeof(a) == double), tuple);
     result1.length.should.equal(1);
-    result1[0].should.equal(0.5);
+    result1.tuple[0].should.equal(0.5);
 
     alias result2 = FilterTuple!(a => isNumeric!a, tuple);
     result2.length.should.equal(2);
-    result2[0].should.equal(1);
-    result2[1].should.equal(0.5);
+    result2.tuple[0].should.equal(1);
+    result2.tuple[1].should.equal(0.5);
 }

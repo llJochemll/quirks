@@ -7,6 +7,7 @@ static import std.traits;
 import quirks.aggregate : Fields, MemberNames, Members, Methods;
 import quirks.expression : isStatic;
 import quirks.functional : Parameters, FunctionAttributes;
+import quirks.tuple : AliasTuple;
 import quirks.type : SimpleTypeOf, TypeOf;
 import quirks.utility : interpolateMixin;
 import std.meta;
@@ -37,6 +38,7 @@ import std.meta;
 + $(LI parameters -> see `Parameters`)
 + $(LI qualifiedName)
 + $(LI returnType)
++ $(LI simpleType -> see `SimpleTypeOf`)
 + $(LI type)
 + )
 +
@@ -73,7 +75,7 @@ import std.meta;
 +/
 template Quirks(alias thing) {
     alias quirksAliasTuple = AliasSeq!(
-        "attributes", q{__traits(getAttributes, thing)},
+        "attributes", q{AliasTuple!(__traits(getAttributes, thing))},
         "fields", q{Fields!thing},
         "functionAttributes", q{FunctionAttributes!thing},
         "isAggregate", q{quirks.type.isAggregate!thing},
@@ -113,7 +115,7 @@ template Quirks(alias thing) {
         
     );
 
-    struct ValueStruct {
+    struct QuirksStruct {
         static foreach (i, expression; quirksAliasTuple) {
             static if (i % 2 == 1) {
                 mixin(interpolateMixin(q{
@@ -135,7 +137,7 @@ template Quirks(alias thing) {
         }
     }
 
-    private enum ValueStruct value = ValueStruct();
+    private enum QuirksStruct value = QuirksStruct();
 
     alias Quirks = value;
 }
