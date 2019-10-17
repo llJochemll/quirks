@@ -37,14 +37,15 @@ class User {
 auto userInstance = new User;
 
 // can use both type and variable
-alias quirks = Quirks!userInstance; // also works with Quirks!User
+alias info = Quirks!userInstance; // also works with Quirks!User
 
-writeln(quirks.methods.length); // 2
-writeln(quirks.fields.length); // 2
-writeln(quirks.members.length); // 4
-writeln(quirks.isAggregate); // true
-writeln(quirks.methods[0].name); // talk
-writeln(quirks.methods[0].parameters[0].name); // message
+writeln(info.methods.length); // 2
+writeln(info.fields.length); // 2
+writeln(info.members.length); // 4
+writeln(info.isAggregate); // true
+writeln(info.methods.tuple[0].name); // talk
+writeln(info.methods.tuple[0].parameters[0].name); // message
+writeln(info.methods.filter!(m => m.parameters.filter!(p => p.name == "message").length > 0).tuple[0].name); // talk 
 ```
 
 ### interpolateMixin
@@ -110,7 +111,7 @@ uint calculateAge(long birthYear, string planet = "earth");
 
 alias parameters = Parameters!calculateAge;
 
-static foreach (parameter; parameters) {
+static foreach (parameter; parameters.tuple) {
     write("Parameter " , parameter.name, " has a type of ", parameter.type.stringof);
 
     static if (parameter.hasDefaultValue) {
