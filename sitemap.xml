@@ -33,6 +33,12 @@
 <url><loc>http://127.0.0.1/quirks/functional/Parameters.types.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/functional/ParameterTypes.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/tuple.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.filter.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.join.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.Join.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.length.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.tuple.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/tuple/FilterTuple.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/tuple/FilterTuple.getElementsMixinList.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type.html</loc></url>

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Function isModule</title>
+		<title>Template AliasTuple</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -46,12 +46,12 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</li>
 				<li>
-					<div class="module ">
+					<div class="module selected">
 						<a href="../../quirks/tuple.html">tuple</a>
 					</div>
 				</li>
 				<li>
-					<div class="module selected">
+					<div class="module ">
 						<a href="../../quirks/type.html">type</a>
 					</div>
 				</li>
@@ -65,17 +65,58 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Function isModule</h1><p>Returns _traits(isModule, thing)
+			<h1>Template AliasTuple</h1><p>Wrapper around AliasSeq
 </p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">isModule</span>(alias thing)<span class="pun">(</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">pure nothrow @safe</span><span class="pun">;</span>
+			<span class="kwd">template</span> <span class="pln">AliasTuple</span>(T...)
+			;
 					</div>
 				</code>
 			</div>
-			
-			
+			<section></section>
+
+			<section><h2>Contained Aliases</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th><th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../quirks/tuple/AliasTuple.filter.html">filter</a>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../quirks/tuple/AliasTuple.join.html">join</a>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../quirks/tuple/AliasTuple.Join.html">Join</a>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../quirks/tuple/AliasTuple.tuple.html">tuple</a>
+						</td>
+						<td></td>
+					</tr>
+				</table>
+			</section>
+			<section><h2>Example</h2>
+<pre class="code"><code class="lang-d"><span class="kwd">alias </span><span class="pln">seq </span><span class="pun">= </span><span class="typ">AliasTuple</span><span class="pun">!(</span><span class="lit">1</span><span class="pun">, </span><span class="str">"hello"</span><span class="pun">, </span><span class="lit">0.5</span><span class="pun">, [</span><span class="lit">1</span><span class="pun">, </span><span class="lit">2</span><span class="pun">, </span><span class="lit">3</span><span class="pun">]);
+
+</span><span class="pln">seq<wbr/></span><span class="pun">.</span><span class="pln">tuple</span><span class="pun">; </span><span class="com">// gives the original tuple
+</span><span class="pln">seq<wbr/></span><span class="pun">.</span><span class="pln">length</span><span class="pun">; </span><span class="com">// 4
+</span><span class="pln">seq<wbr/></span><span class="pun">.</span><span class="pln">filter</span><span class="pun">!(</span><span class="pln">a </span><span class="pun">=&gt; </span><span class="pln">isNumeric</span><span class="pun">!</span><span class="pln">a</span><span class="pun">); </span><span class="com">// gives AliasTuple!(1, 0.5)</span></code></pre>
+</section>
+
 			<footer>
 				<table class="license-info">
 					<tr>

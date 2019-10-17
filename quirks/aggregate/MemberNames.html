@@ -85,7 +85,7 @@ $('#symbolSearchPane').show();</script>
 				<code class="lang-d">
 					<div class="single-prototype">
 			<span class="kwd">alias</span> <span class="pln">MemberNames</span>(alias aggregate)
-			 <span class="pun">=</span> <span class="typ">FilterTuple</span>!((name)=>![__traits(allMembers,Object)].canFind(name)&&(name!="this"),__traits(allMembers,TypeOf!aggregate))<span class="pun">;</span>
+			 <span class="pun">=</span> <span class="typ">AliasTuple</span>!(__traits(allMembers,TypeOf!aggregate))<span class="pun">;</span>
 					</div>
 				</code>
 			</div>
@@ -108,7 +108,7 @@ $('#symbolSearchPane').show();</script>
 				<code class="lang-d">
 					<div class="single-prototype">
 			<span class="kwd">alias</span> <span class="pln">MemberNames</span>(alias aggregate, alias predicate)
-			 <span class="pun">=</span> <span class="typ">FilterTuple</span>!(predicate,MemberNames!aggregate)<span class="pun">;</span>
+			 <span class="pun">=</span> <a href="../../quirks/aggregate/MemberNames.html"><span class="typ">MemberNames</span></a>!aggregate<span class="pun">;</span>
 					</div>
 				</code>
 			</div>

@@ -171,7 +171,7 @@ $('#symbolSearchPane').show();</script>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><span class="typ">FilterTuple</span>!(predicate,Fields!aggregate)</code>
+							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Fields.html"><span class="typ">Fields</span></a>!aggregate</code>
 						</td>
 						<td>Returns a tuple of each field in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template, filtered with the given predicate
 </td>
@@ -183,7 +183,7 @@ $('#symbolSearchPane').show();</script>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><span class="typ">FilterTuple</span>!((name)=>![__traits(allMembers,Object)].canFind(name)&&(name!="this"),__traits(allMembers,TypeOf!aggregate))</code>
+							<code class="prettyprint lang-d"><span class="typ">AliasTuple</span>!(__traits(allMembers,TypeOf!aggregate))</code>
 						</td>
 						<td>Returns the same as _traits(allMembers, aggregate), excluding this and all default fields inherited from Object
 </td>
@@ -195,7 +195,7 @@ $('#symbolSearchPane').show();</script>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><span class="typ">FilterTuple</span>!(predicate,MemberNames!aggregate)</code>
+							<code class="prettyprint lang-d"><a href="../quirks/aggregate/MemberNames.html"><span class="typ">MemberNames</span></a>!aggregate</code>
 						</td>
 						<td>Returns the same as _traits(allMembers, aggregate), excluding this and all default fields inherited from Object, filtered with the provided predicate
 </td>
@@ -207,7 +207,7 @@ $('#symbolSearchPane').show();</script>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><span class="typ">AliasSeq</span>!(Fields!aggregate,Methods!aggregate)</code>
+							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Fields.html"><span class="typ">Fields</span></a>!aggregate</code>
 						</td>
 						<td>Returns an AliasSeq combining Fields!aggregate and Methods!aggregate
 </td>
@@ -219,7 +219,7 @@ $('#symbolSearchPane').show();</script>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><span class="typ">FilterTuple</span>!(predicate,Members!aggregate)</code>
+							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Members.html"><span class="typ">Members</span></a>!aggregate</code>
 						</td>
 						<td>Returns an AliasSeq combining Fields!aggregate and Methods!aggregate, filtered with the given alias
 </td>
@@ -231,7 +231,7 @@ $('#symbolSearchPane').show();</script>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><span class="typ">FilterTuple</span>!(predicate,Methods!aggregate)</code>
+							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Methods.html"><span class="typ">Methods</span></a>!aggregate</code>
 						</td>
 						<td>Returns a tuple of each method in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template, filtered with the given predicate
 </td>
