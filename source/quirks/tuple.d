@@ -35,17 +35,18 @@ template AliasTuple(T...) {
 
     alias filter(alias predicate) = FilterTuple!(predicate, tuple);
     alias join(T...) = Join!T;
+    alias map(alias predicate) = MapTuple!(predicate, tuple);
 }
 
 /++
-+ Takes a tuple and filters it with the given aggregate.
++ Takes a tuple and filters it with the given predicate.
 + 
 + Example:
 + ---
 + alias tuple = AliasSeq!(1, "hello", 0.5, [1, 2, 3]);
 +
-+ FilterTuple!(a => is(typeof(a) == double), tuple); // gives (0.5)
-+ FilterTuple!(a => isNumeric!a, tuple); // gives (1, 0.5)
++ FilterTuple!(a => is(typeof(a) == double), tuple); // gives AliasTuple!(0.5)
++ FilterTuple!(a => isNumeric!a, tuple); // gives AliasTuple!(1, 0.5)
 + ---
 +/
 @safe
@@ -54,16 +55,8 @@ template FilterTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
         string[] elements;
 
         static foreach (i, element; T) {
-            static if (i > 0) {
-                static if (__traits(compiles, T[0](element))) {
-                    static if (i > 0 && T[0](element)) {
-                        elements ~= "T[" ~ i.to!long.to!string ~ "]";
-                    }
-                } else {
-                    static assert(false, "One of the elements provided is not a value. " ~
-                        "This can be the case if the element is a type (i.e. int) or a template. "
-                    );
-                }
+            static if (i > 0 && T[0](element)) {
+                elements ~= "T[" ~ i.to!string ~ "]";
             }
         }
 
@@ -88,4 +81,43 @@ template FilterTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
     result2.length.should.equal(2);
     result2.tuple[0].should.equal(1);
     result2.tuple[1].should.equal(0.5);
+}
+
+/++
++ Takes a tuple and maps it with the given predicate.
++ 
++ Example:
++ ---
++ alias tuple = AliasSeq!(1, "hello", 1L, [1, 2, 3]);
++
++ MapTuple!(a => a.to!string, tuple); // gives AliasTuple!("1", "hello", "1", "[1, 2, 3]")
++ ---
++/
+@safe
+template MapTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
+    private auto getElementsMixinList() {
+        string[] elements;
+
+        static foreach (i, element; T) {
+            static if (i > 0) {
+                elements ~= "T[0](T[" ~ i.to!string ~ "])";
+            }
+        }
+
+        return elements;
+    }
+
+    mixin(interpolateMixin(q{
+        alias MapTuple = AliasTuple!(${getElementsMixinList.join(",")});
+    }));
+} unittest {
+    import fluent.asserts;
+    import quirks.core : Quirks;
+    import quirks.type : isNumeric;
+
+    alias tuple = AliasSeq!(1, "hello", 1L, [1, 2, 3]);
+
+    alias result1 = MapTuple!(a => a.to!string, tuple);
+    result1.length.should.equal(4);
+    result1.tuple[0].should.equal("1");
 }

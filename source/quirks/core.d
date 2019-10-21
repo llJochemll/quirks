@@ -51,6 +51,7 @@ import std.meta;
 + $(LI hasMember(alias predicate) -> see `hasMember`)
 + $(LI hasMethod(alias predicate) -> see `hasMethod`)
 + $(LI hasUDA(alias uda) -> return the same as hasUDA from std.traits)
++ $(LI isInstanceOf(alias templ) -> see `isInstanceOf`)
 + $(LI membersFilter(alias predicate) -> returns the members property filtered with the given predicate)
 + $(LI methodsFilter(alias predicate) -> returns the methods property filtered with the given predicate)
 + )
@@ -103,6 +104,7 @@ template Quirks(alias thing) {
         q{hasMember(alias predicate)}, q{quirks.aggregate.hasMember!(thing, predicate)},
         q{hasMethod(alias predicate)}, q{quirks.aggregate.hasMethod!(thing, predicate)},
         q{hasUDA(alias uda)}, q{std.traits.hasUDA!(thing, uda)},
+        q{isInstanceOf(alias templ)}, q{quirks.type.isInstanceOf(templ, thing)},
         q{membersFilter(alias predicate)}, q{Members!(thing, predicate)},
         q{methodsFilter(alias predicate)}, q{Methods!(thing, predicate)},
     );
