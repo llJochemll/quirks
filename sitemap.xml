@@ -35,12 +35,15 @@
 <url><loc>http://127.0.0.1/quirks/tuple.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.filter.html</loc></url>
-<url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.join.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.Join.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.join.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.length.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.map.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/tuple/AliasTuple.tuple.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/tuple/FilterTuple.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/tuple/FilterTuple.getElementsMixinList.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/tuple/MapTuple.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/tuple/MapTuple.getElementsMixinList.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type/isAggregate.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type/isArray.html</loc></url>
@@ -48,6 +51,7 @@
 <url><loc>http://127.0.0.1/quirks/type/isBasic.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type/isBuiltin.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type/isExpression.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/type/isInstanceOf.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type/isModule.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type/isNumeric.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/type/isPointer.html</loc></url>
