@@ -227,6 +227,32 @@ pure nothrow auto isBuiltin(alias thing)() {
     isBuiltin!s.should.equal(false);
 }
 
+/// Returns std.traits.isInstanceOf!(templ, TypeOf!thing)
+@safe
+pure nothrow auto isInstanceOf(alias templ, alias thing)() {
+    alias Type = TypeOf!thing;
+
+    return 
+        (__traits(compiles, std.traits.isInstanceOf!(templ, thing)) ? std.traits.isInstanceOf!(templ, thing) : false) ||
+        (__traits(compiles, std.traits.isInstanceOf!(templ, Type)) ? std.traits.isInstanceOf!(templ, Type) : false);
+} unittest {
+    import fluent.asserts;
+
+    class C(T) { }
+    template T(alias param) { }
+
+    auto c = new C!long;
+    alias t = T!false;
+
+    isInstanceOf!(C, C!int).should.equal(true);
+    isInstanceOf!(C, T!int).should.equal(false);
+    isInstanceOf!(C, c).should.equal(true);
+
+    isInstanceOf!(T, T!0).should.equal(true);
+    isInstanceOf!(T, C!int).should.equal(false);
+    isInstanceOf!(T, t).should.equal(true);
+}
+
 /// Returns __traits(isModule, thing)
 @safe
 pure nothrow auto isModule(alias thing)() {

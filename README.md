@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/llJochemll/quirks/branch/master/graph/badge.svg)](https://codecov.io/gh/llJochemll/quirks)
 
 
-quirks is a small library to facilitate programming with traits and mixins.
+quirks is a small library to simplify programming with traits and mixins.
 
 See https://lljochemll.github.io/quirks/ for documentation and examples
 
@@ -39,13 +39,15 @@ auto userInstance = new User;
 // can use both type and variable
 alias info = Quirks!userInstance; // also works with Quirks!User
 
-writeln(info.methods.length); // 2
-writeln(info.fields.length); // 2
-writeln(info.members.length); // 4
-writeln(info.isAggregate); // true
-writeln(info.methods.tuple[0].name); // talk
-writeln(info.methods.tuple[0].parameters[0].name); // message
-writeln(info.methods.filter!(m => m.parameters.filter!(p => p.name == "message").length > 0).tuple[0].name); // talk 
+// Works at compile and runtime
+pragma(msg, info.methods.length); // 2
+pragma(msg, info.fields.length); // 2
+pragma(msg, info.members.length); // 4
+pragma(msg, info.isAggregate); // true
+pragma(msg, info.methods.tuple[0].name); // talk
+pragma(msg, info.methods.tuple[0].parameters.tuple[0].name); // message
+pragma(msg, info.methods.filter!(m => is(m.returnType == bool)).filter!(m => true).tuple[0].name); // isSitting
+pragma(msg, info.methods.filter!(m => m.parameters.filter!(p => p.name == "message").length > 0).tuple[0].name); // talk 
 ```
 
 ### interpolateMixin
