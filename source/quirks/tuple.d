@@ -36,6 +36,14 @@ template AliasTuple(T...) {
     alias filter(alias predicate) = FilterTuple!(predicate, tuple);
     alias join(T...) = Join!T;
     alias map(alias predicate) = MapTuple!(predicate, tuple);
+} unittest {
+    import fluent.asserts;
+
+    alias seq = AliasSeq!(bool, false, int, 0, string, "hi");
+    alias tuple = AliasTuple!seq;
+
+    tuple.length.should.equal(seq.length);
+    tuple.join!(seq).length.should.equal(seq.length * 2);
 }
 
 /++
