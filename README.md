@@ -47,6 +47,7 @@ pragma(msg, info.isAggregate); // true
 pragma(msg, info.methods.tuple[0].name); // talk
 pragma(msg, info.methods.tuple[0].parameters.tuple[0].name); // message
 pragma(msg, info.methods.filter!(m => is(m.returnType == bool)).filter!(m => true).tuple[0].name); // isSitting
+pragma(msg, info.methods.filter!(m => m.parameters.filter!(p => p.name == "message").length > 0).tuple[0].name); // talk 
 ```
 
 ### interpolateMixin
@@ -112,7 +113,7 @@ uint calculateAge(long birthYear, string planet = "earth");
 
 alias parameters = Parameters!calculateAge;
 
-static foreach (parameter; parameters) {
+static foreach (parameter; parameters.tuple) {
     write("Parameter " , parameter.name, " has a type of ", parameter.type.stringof);
 
     static if (parameter.hasDefaultValue) {
