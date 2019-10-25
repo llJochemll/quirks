@@ -79,24 +79,23 @@ template Quirks(alias thing) {
         "attributes", q{AliasTuple!(__traits(getAttributes, thing))},
         "fields", q{Fields!thing},
         "functionAttributes", q{FunctionAttributes!thing},
-        "isAggregate", q{quirks.type.isAggregate!thing},
-        "isArray", q{quirks.type.isArray!thing},
-        "isAssociativeArray", q{quirks.type.isAssociativeArray!thing},
-        "isBasic", q{quirks.type.isBasic!thing},
-        "isModule", q{quirks.type.isModule!thing},
-        "isNested", q{isNested!thing},
-        "isNumeric", q{quirks.type.isNumeric!thing},
-        "isSomeFunction", q{quirks.type.isSomeFunction!thing},
-        "isSomeString", q{quirks.type.isSomeString!thing},
-        "isStatic", q{quirks.expression.isStatic!thing},
+        "isAggregate", q{quirks.type.isAggregate!type},
+        "isArray", q{quirks.type.isArray!type},
+        "isAssociativeArray", q{quirks.type.isAssociativeArray!type},
+        "isBasic", q{quirks.type.isBasic!type},
+        "isModule", q{quirks.type.isModule!type},
+        "isNested", q{isNested!type},
+        "isNumeric", q{quirks.type.isNumeric!type},
+        "isSomeFunction", q{quirks.type.isSomeFunction!type},
+        "isSomeString", q{quirks.type.isSomeString!type},
+        "isStatic", q{quirks.expression.isStatic!type},
         "memberNames", q{MemberNames!thing},
         "members", q{Members!thing},
         "methods", q{Methods!thing},
         "parameters", q{Parameters!thing},
         "qualifiedName", q{std.traits.fullyQualifiedName!thing},
-        "returnType", q{std.traits.ReturnType!thing},
+        "returnType", q{std.traits.ReturnType!type},
         "simpleType", q{SimpleTypeOf!thing},
-        "type", q{TypeOf!thing},
         q{fieldsFilter(alias predicate)}, q{Fields!(thing, predicate)},
         q{getUDAs(alias uda)}, q{std.traits.getUDAs!(thing, uda)},
         q{getUDA(alias uda)}, q{getUDAs!uda[0]},
@@ -118,6 +117,8 @@ template Quirks(alias thing) {
     );
 
     struct QuirksStruct {
+        alias type = TypeOf!thing;
+
         static foreach (i, expression; quirksAliasTuple) {
             static if (i % 2 == 1) {
                 mixin(interpolateMixin(q{
