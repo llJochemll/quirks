@@ -59,7 +59,7 @@ template FunctionAttributes(alias func) if (isCallable!func) {
 
     @safe
     struct S {
-        pure void foo() {}
+        pure void foo();
     }
 
     FunctionAttributes!foo.should.containOnly(["nothrow", "pure", "@trusted", "@nogc"]);
