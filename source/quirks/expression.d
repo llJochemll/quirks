@@ -31,44 +31,26 @@ template isStatic(alias thing) {
         alias isStatic = Alias!(__traits(compiles, &thing));
     }
 } unittest {
-    import fluent.asserts;
+    import quirks.internal.test;
 
-    struct S {
-        static long id;
-        int age;
-        static string name() {
-            return "name";
-        }
-        void update(bool force) { }
-    }
+    TestStruct s;
+    auto c = new TestClass;
 
-    class C {
-        static long id;
-        int age;
-        static string name() {
-            return "name";
-        }
-        void update(bool force) { }
-    }
-
-    S s;
-    auto c = new C;
-
-    isStatic!(S.id).should.equal(true);
-    isStatic!(s.id).should.equal(true);
-    isStatic!(S.age).should.equal(false);
+    isStatic!(TestStruct.classifier).should.equal(true);
+    isStatic!(s.classifier).should.equal(true);
+    isStatic!(TestStruct.age).should.equal(false);
     isStatic!(s.age).should.equal(false);
-    isStatic!(S.name).should.equal(true);
-    isStatic!(s.name).should.equal(true);
-    isStatic!(S.update).should.equal(false);
+    isStatic!(TestStruct.create).should.equal(true);
+    isStatic!(s.create).should.equal(true);
+    isStatic!(TestStruct.update).should.equal(false);
     isStatic!(s.update).should.equal(false);
 
-    isStatic!(C.id).should.equal(true);
-    isStatic!(c.id).should.equal(true);
-    isStatic!(C.age).should.equal(false);
+    isStatic!(TestClass.classifier).should.equal(true);
+    isStatic!(c.classifier).should.equal(true);
+    isStatic!(TestClass.age).should.equal(false);
     isStatic!(c.age).should.equal(false);
-    isStatic!(C.name).should.equal(true);
-    isStatic!(c.name).should.equal(true);
-    isStatic!(C.update).should.equal(false);
+    isStatic!(TestClass.create).should.equal(true);
+    isStatic!(c.create).should.equal(true);
+    isStatic!(TestClass.update).should.equal(false);
     isStatic!(c.update).should.equal(false);
 }
