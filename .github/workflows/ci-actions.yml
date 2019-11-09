@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        dmd_version: [2.088.0, 2.087.1, 2.087.0]
+        dmd_version: [2.089.0, 2.088.1, 2.088.0]
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
