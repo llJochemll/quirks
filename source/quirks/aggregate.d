@@ -304,9 +304,11 @@ template Methods(alias aggregate) if (isAggregate!aggregate) {
         static foreach (memberName; MemberNames!aggregate.tuple) {
             static if (!hasField!(aggregate, memberName)) {
                 static foreach (i, overload; __traits(getOverloads, TypeOf!aggregate, memberName)) {
-                    mixin(interpolateMixin(q{
-                        names ~= "method_${memberName}_${i}";
-                    }));
+                    static if (is(typeof(overload))) {
+                        mixin(interpolateMixin(q{
+                            names ~= "method_${memberName}_${i}";
+                        }));
+                    }
                 } 
             }
         }
@@ -317,16 +319,22 @@ template Methods(alias aggregate) if (isAggregate!aggregate) {
     static foreach (memberName; MemberNames!aggregate.tuple) {
         static if (!hasField!(aggregate, memberName)) {
             static foreach (i, overload; __traits(getOverloads, TypeOf!aggregate, memberName)) {
-                mixin(interpolateMixin(q{
-                    alias method_${memberName}_${i} = overload;
-                }));
-            } 
+                static if (is(typeof(overload))) {
+                    mixin(interpolateMixin(q{
+                        alias method_${memberName}_${i} = overload;
+                    }));
+                }
+            }
         }
     }
 
-    mixin(interpolateMixin(q{
-        alias Methods = AliasTuple!(Quirks!(${generateNames.join("),Quirks!(")}));
-    }));
+    static if (generateNames.length > 0) {
+        mixin(interpolateMixin(q{
+            alias Methods = AliasTuple!(Quirks!(${generateNames.join("),Quirks!(")}));
+        }));
+    } else {
+        alias Methods = AliasTuple!();
+    }
 }
 
 /++
