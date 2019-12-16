@@ -107,11 +107,11 @@ template Parameters(alias func) if (isCallable!func) {
     int foo(int num, string name = "hello", int[] = [1,2,3], lazy int x = 0);
     static assert(is(ParameterDefaults!foo[0] == void));
 
-    (is(typeof(parameters.tuple[0].defaultValue()) == void)).should.equal(true);
-    parameters.tuple[1].defaultValue().should.equal("john");
+    (is(typeof(parameters[0].defaultValue()) == void)).should.equal(true);
+    parameters[1].defaultValue().should.equal("john");
 
-    parameters.tuple[0].name.should.equal("age");
-    parameters.tuple[1].name.should.equal("name");
+    parameters[0].name.should.equal("age");
+    parameters[1].name.should.equal("name");
 
     (is(parameters.tuple[0].type == int)).should.equal(true);
     (is(parameters.tuple[1].type == string)).should.equal(true);

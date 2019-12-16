@@ -11,8 +11,9 @@ quirks is a small library to simplify programming with traits and mixins.
 
 See https://lljochemll.github.io/quirks/ for documentation and examples
 
-Some features:
+For a list of "weird" things, look at the bottom
 
+## Features
 ### Quirks template
 Swiss army knife for getting information about things
 ```D
@@ -44,10 +45,10 @@ pragma(msg, info.methods.length); // 2
 pragma(msg, info.fields.length); // 2
 pragma(msg, info.members.length); // 4
 pragma(msg, info.isAggregate); // true
-pragma(msg, info.methods.tuple[0].name); // talk
-pragma(msg, info.methods.tuple[0].parameters.tuple[0].name); // message
-pragma(msg, info.methods.filter!(m => is(m.returnType == bool)).filter!(m => true).tuple[0].name); // isSitting
-pragma(msg, info.methods.filter!(m => m.parameters.filter!(p => p.name == "message").length > 0).tuple[0].name); // talk 
+pragma(msg, info.methods[0].name); // talk
+pragma(msg, info.methods[0].parameters[0].name); // message
+pragma(msg, info.methods.filter!(m => is(m.returnType == bool)).filter!(m => true)[0].name); // isSitting
+pragma(msg, info.methods.filter!(m => m.parameters.filter!(p => p.name == "message").length > 0)[0].name); // talk 
 ```
 
 ### interpolateMixin
@@ -113,7 +114,7 @@ uint calculateAge(long birthYear, string planet = "earth");
 
 alias parameters = Parameters!calculateAge;
 
-static foreach (parameter; parameters.tuple) {
+static foreach (parameter; parameters) {
     write("Parameter " , parameter.name, " has a type of ", parameter.type.stringof);
 
     static if (parameter.hasDefaultValue) {
@@ -122,4 +123,31 @@ static foreach (parameter; parameters.tuple) {
         writeln(" and no default value");
     }
 }
+```
+## Weird things
+### AliasTuple
+```AliasTuple``` has some weird things going on
+
+TL;DR: use .tuple if you want to be sure it will always work
+
+While it is possible to do this:
+```D
+alias things = AliasTuple!(bool, string, "hi");
+
+pragma(msg, things[0]); // displays bool
+pragma(msg, things[2].length); // displays 2
+```
+This will not work:
+```D
+alias things = AliasTuple!(bool, string, "hi");
+
+pragma(msg, is(things[0] == bool); // displays false
+```
+But this will:
+```D
+alias things = AliasTuple!(bool, string, "hi");
+
+pragma(msg, is(things.tuple[0] == bool); // displays true
+pragma(msg, things[2].length == 2); // displays true
+pragma(msg, things.tuple[2].length == 2); // displays true
 ```
