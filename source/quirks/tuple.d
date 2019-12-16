@@ -20,7 +20,7 @@ import std.meta;
 + ---
 +/
 @safe
-template AliasTuple(T...) {
+struct AliasTuple(T...) {
     private template Join(T...) {
         static if (T.length == 1 && is(typeof(T[0].tuple))) {
             alias Join = AliasTuple!(tuple, T[0].tuple);
@@ -30,6 +30,7 @@ template AliasTuple(T...) {
     }
     
     alias tuple = T;
+    alias tuple this;
 
     enum length = T.length; 
 
@@ -41,6 +42,8 @@ template AliasTuple(T...) {
 
     alias seq = AliasSeq!(bool, false, int, 0, string, "hi");
     alias tuple = AliasTuple!seq;
+
+    pragma(msg, tuple[5].length == 2);
 
     tuple.length.should.equal(seq.length);
     tuple.join!(seq).length.should.equal(seq.length * 2);
@@ -83,12 +86,12 @@ template FilterTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
 
     alias result1 = FilterTuple!(a => is(typeof(a) == double), tuple);
     result1.length.should.equal(1);
-    result1.tuple[0].should.equal(0.5);
+    result1[0].should.equal(0.5);
 
     alias result2 = FilterTuple!(a => isNumeric!a, tuple);
     result2.length.should.equal(2);
-    result2.tuple[0].should.equal(1);
-    result2.tuple[1].should.equal(0.5);
+    result2[0].should.equal(1);
+    result2[1].should.equal(0.5);
 }
 
 /++
@@ -127,5 +130,5 @@ template MapTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
 
     alias result1 = MapTuple!(a => a.to!string, tuple);
     result1.length.should.equal(4);
-    result1.tuple[0].should.equal("1");
+    result1[0].should.equal("1");
 }

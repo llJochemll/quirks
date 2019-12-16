@@ -39,7 +39,7 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
     private auto fieldsMixinList() {
         string[] members;
 
-        static foreach (memberName; MemberNames!aggregate.tuple) {
+        static foreach (memberName; MemberNames!aggregate) {
             static if (!isCallable!(TypeOf!(__traits(getMember, TypeOf!aggregate, memberName))) && !is(TypeOf!(__traits(getMember, TypeOf!aggregate, memberName)) == void)) {
                 members ~= `Quirks!(__traits(getMember, TypeOf!aggregate, "` ~ memberName ~ `"))`;
             }
@@ -301,7 +301,7 @@ template Methods(alias aggregate) if (isAggregate!aggregate) {
     auto generateNames() {
         string[] names;
 
-        static foreach (memberName; MemberNames!aggregate.tuple) {
+        static foreach (memberName; MemberNames!aggregate) {
             static if (!hasField!(aggregate, memberName)) {
                 static foreach (i, overload; __traits(getOverloads, TypeOf!aggregate, memberName)) {
                     static if (is(typeof(overload))) {
@@ -316,7 +316,7 @@ template Methods(alias aggregate) if (isAggregate!aggregate) {
         return names;
     }
 
-    static foreach (memberName; MemberNames!aggregate.tuple) {
+    static foreach (memberName; MemberNames!aggregate) {
         static if (!hasField!(aggregate, memberName)) {
             static foreach (i, overload; __traits(getOverloads, TypeOf!aggregate, memberName)) {
                 static if (is(typeof(overload))) {
