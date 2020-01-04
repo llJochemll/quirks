@@ -25,6 +25,17 @@ $('#symbolSearchPane').show();</script>
 						<a href="../quirks.html">quirks</a>
 					</div>
 			<ul class="tree-view">
+				<li class="tree-view collapsed">
+					<div class="package ">internal
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../quirks/internal/test.html">test</a>
+					</div>
+				</li>
+			</ul>
+				</li>
 				<li>
 					<div class="module selected">
 						<a href="../quirks/aggregate.html">aggregate</a>
@@ -171,7 +182,7 @@ $('#symbolSearchPane').show();</script>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Fields.html"><span class="typ">Fields</span></a>!aggregate</code>
+							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Fields.html"><span class="typ">Fields</span></a>!(TypeOf!aggregate)</code>
 						</td>
 						<td>Returns a tuple of each field in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template, filtered with the given predicate
 </td>
@@ -183,7 +194,7 @@ $('#symbolSearchPane').show();</script>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><span class="typ">AliasTuple</span>!(__traits(allMembers,TypeOf!aggregate))</code>
+							<code class="prettyprint lang-d"><a href="../quirks/tuple/AliasTuple.html"><span class="typ">AliasTuple</span></a>!(__traits(allMembers,TypeOf!aggregate))</code>
 						</td>
 						<td>Returns the same as _traits(allMembers, aggregate), excluding this and all default fields inherited from Object
 </td>
@@ -219,7 +230,7 @@ $('#symbolSearchPane').show();</script>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Members.html"><span class="typ">Members</span></a>!aggregate</code>
+							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Members.html"><span class="typ">Members</span></a>!(TypeOf!aggregate)</code>
 						</td>
 						<td>Returns an AliasSeq combining Fields!aggregate and Methods!aggregate, filtered with the given alias
 </td>

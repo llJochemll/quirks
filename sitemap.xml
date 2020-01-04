@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>http://127.0.0.1/index.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestClass.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestClass.age.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestClass.classifier.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestClass.create.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestClass.id.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestClass.name.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestClass.update.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestClass.update.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestStruct.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestStruct.age.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestStruct.classifier.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestStruct.create.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestStruct.id.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestStruct.name.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestStruct.update.html</loc></url>
+<url><loc>http://127.0.0.1/quirks/internal/test/TestStruct.update.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/aggregate.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/aggregate/Fields.html</loc></url>
 <url><loc>http://127.0.0.1/quirks/aggregate/Fields.fieldsMixinList.html</loc></url>

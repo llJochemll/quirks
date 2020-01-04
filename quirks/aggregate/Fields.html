@@ -25,6 +25,17 @@ $('#symbolSearchPane').show();</script>
 						<a href="../../quirks.html">quirks</a>
 					</div>
 			<ul class="tree-view">
+				<li class="tree-view collapsed">
+					<div class="package ">internal
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../quirks/internal/test.html">test</a>
+					</div>
+				</li>
+			</ul>
+				</li>
 				<li>
 					<div class="module selected">
 						<a href="../../quirks/aggregate.html">aggregate</a>
@@ -127,7 +138,7 @@ $('#symbolSearchPane').show();</script>
 				<code class="lang-d">
 					<div class="single-prototype">
 			<span class="kwd">alias</span> <span class="pln">Fields</span>(alias aggregate, alias predicate)
-			 <span class="pun">=</span> <a href="../../quirks/aggregate/Fields.html"><span class="typ">Fields</span></a>!aggregate<span class="pun">;</span>
+			 <span class="pun">=</span> <a href="../../quirks/aggregate/Fields.html"><span class="typ">Fields</span></a>!(TypeOf!aggregate)<span class="pun">;</span>
 					</div>
 				</code>
 			</div>
@@ -142,7 +153,7 @@ $('#symbolSearchPane').show();</script>
     }
 }
 
-</span><span class="kwd">alias </span><span class="pln">fields </span><span class="pun">= <a href="../../quirks/aggregate/Fields.html"></span><span class="typ">Fields</span></a><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">field </span><span class="pun">=&gt; </span><span class="pln">isNumeric</span><span class="pun">!(</span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type</span><span class="pun">)); </span><span class="com">// is equal to a tuple of 2 structs containing the name and type of the field
+</span><span class="kwd">alias </span><span class="pln">fields </span><span class="pun">= <a href="../../quirks/aggregate/Fields.html"></span><span class="typ">Fields</span></a><span class="pun">!(</span><span class="typ">TestStruct</span><span class="pun">, </span><span class="pln">field </span><span class="pun">=&gt; </span><span class="pln">isNumeric</span><span class="pun">!(</span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type</span><span class="pun">)); </span><span class="com">// is equal to a tuple of 2 structs containing the name and type of the field
 
 </span><span class="kwd">static foreach </span><span class="pun">(</span><span class="pln">field</span><span class="pun">; </span><span class="pln">fields</span><span class="pun">) {
     </span><span class="kwd">pragma</span><span class="pun">(</span><span class="pln">msg</span><span class="pun">, </span><span class="pln">field<wbr/></span><span class="pun">.</span><span class="pln">type</span><span class="pun">);

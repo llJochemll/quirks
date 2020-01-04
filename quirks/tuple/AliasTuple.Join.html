@@ -25,6 +25,17 @@ $('#symbolSearchPane').show();</script>
 						<a href="../../quirks.html">quirks</a>
 					</div>
 			<ul class="tree-view">
+				<li class="tree-view collapsed">
+					<div class="package ">internal
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../quirks/internal/test.html">test</a>
+					</div>
+				</li>
+			</ul>
+				</li>
 				<li>
 					<div class="module ">
 						<a href="../../quirks/aggregate.html">aggregate</a>
@@ -69,7 +80,7 @@ $('#symbolSearchPane').show();</script>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">template</span> <a href="../../quirks/tuple/AliasTuple.html"><span class="typ">AliasTuple</span></a>
+			<span class="kwd">struct</span> <a href="../../quirks/tuple/AliasTuple.html"><span class="typ">AliasTuple</span></a>
 			<br/>
 			<span class="pun">
 				{
@@ -78,7 +89,7 @@ $('#symbolSearchPane').show();</script>
 			&nbsp;&nbsp;<span class="com">// ...</span>
 			<br/>
 			&nbsp;&nbsp;<span class="kwd">alias</span> <span class="pln">Join</span>(T...)
-			 <span class="pun">=</span> <span class="typ">AliasTuple</span>!(tuple,T[0].tuple)<span class="pun">;</span>
+			 <span class="pun">=</span> <a href="../../quirks/tuple/AliasTuple.html"><span class="typ">AliasTuple</span></a>!(tuple,T[0].tuple)<span class="pun">;</span>
 			<br/>
 			&nbsp;&nbsp;<span class="com">// ...</span>
 			<br/>

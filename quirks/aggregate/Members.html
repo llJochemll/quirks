@@ -25,6 +25,17 @@ $('#symbolSearchPane').show();</script>
 						<a href="../../quirks.html">quirks</a>
 					</div>
 			<ul class="tree-view">
+				<li class="tree-view collapsed">
+					<div class="package ">internal
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../quirks/internal/test.html">test</a>
+					</div>
+				</li>
+			</ul>
+				</li>
 				<li>
 					<div class="module selected">
 						<a href="../../quirks/aggregate.html">aggregate</a>
@@ -108,7 +119,7 @@ $('#symbolSearchPane').show();</script>
 				<code class="lang-d">
 					<div class="single-prototype">
 			<span class="kwd">alias</span> <span class="pln">Members</span>(alias aggregate, alias predicate)
-			 <span class="pun">=</span> <a href="../../quirks/aggregate/Members.html"><span class="typ">Members</span></a>!aggregate<span class="pun">;</span>
+			 <span class="pun">=</span> <a href="../../quirks/aggregate/Members.html"><span class="typ">Members</span></a>!(TypeOf!aggregate)<span class="pun">;</span>
 					</div>
 				</code>
 			</div>
@@ -123,7 +134,7 @@ $('#symbolSearchPane').show();</script>
     }
 }
 
-<a href="../../quirks/aggregate/Members.html"></span><span class="typ">Members</span></a><span class="pun">!(</span><span class="pln">S</span><span class="pun">, </span><span class="pln">member </span><span class="pun">=&gt; </span><span class="pln">member<wbr/></span><span class="pun">.</span><span class="pln">name<wbr/></span><span class="pun">.</span><span class="pln">canFind</span><span class="pun">(</span><span class="str">"a"</span><span class="pun">))<wbr/>.</span><span class="pln">length</span><span class="pun">; </span><span class="com">// is 2</span></code></pre>
+<a href="../../quirks/aggregate/Members.html"></span><span class="typ">Members</span></a><span class="pun">!(</span><span class="typ">TestStruct</span><span class="pun">, </span><span class="pln">member </span><span class="pun">=&gt; </span><span class="pln">member<wbr/></span><span class="pun">.</span><span class="pln">name<wbr/></span><span class="pun">.</span><span class="pln">canFind</span><span class="pun">(</span><span class="str">"a"</span><span class="pun">))<wbr/>.</span><span class="pln">length</span><span class="pun">; </span><span class="com">// is 2</span></code></pre>
 </section>
 
 			<footer>
