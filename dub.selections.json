@@ -5,7 +5,7 @@
 		"botan-math": "1.0.3",
 		"ddmp": "0.0.1-0.dev.3",
 		"diet-ng": "1.6.0",
-		"eventcore": "0.8.46",
+		"eventcore": "0.8.48",
 		"fluent-asserts": "0.12.5",
 		"libasync": "0.8.4",
 		"libdparse": "0.8.8",
@@ -14,8 +14,8 @@
 		"mir-linux-kernel": "1.0.1",
 		"openssl": "1.1.6+1.0.1g",
 		"stdx-allocator": "2.77.5",
-		"taggedalgebraic": "0.11.4",
-		"vibe-core": "1.7.0",
+		"taggedalgebraic": "0.11.8",
+		"vibe-core": "1.8.1",
 		"vibe-d": "0.8.6"
 	}
 }
