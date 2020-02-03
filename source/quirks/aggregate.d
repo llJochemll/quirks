@@ -35,7 +35,7 @@ import std.typecons;
 + ---
 +/
 @safe
-template Fields(alias aggregate) if (isAggregate!aggregate) {
+template Fields(alias aggregate) if (isAggregate!aggregate || isModule!aggregate) {
     private auto fieldsMixinList() {
         string[] members;
 
@@ -86,7 +86,7 @@ template Fields(alias aggregate) if (isAggregate!aggregate) {
 + ---
 +/
 @safe
-template Fields(alias aggregate, alias predicate) if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
+template Fields(alias aggregate, alias predicate) if ((isAggregate!aggregate || isModule!aggregate) && is(typeof(unaryFun!predicate))) {
     alias Fields = Fields!(TypeOf!aggregate).filter!predicate;
 } unittest {
     import quirks.internal.test;
@@ -141,8 +141,8 @@ template Fields(alias aggregate, alias predicate) if (isAggregate!aggregate && i
 + ---
 +/
 @safe
-template MemberNames(alias aggregate) if (isAggregate!aggregate) {
-    alias MemberNames = AliasTuple!(__traits(allMembers, TypeOf!aggregate)).filter!(name => ![__traits(allMembers, Object)].canFind(name) && name != "this");
+template MemberNames(alias aggregate) if (isAggregate!aggregate || isModule!aggregate) {
+    alias MemberNames = AliasTuple!(__traits(allMembers, TypeOf!aggregate)).filter!(name => ![__traits(allMembers, Object)].canFind(name) && !["this", "object"].canFind(name));
 } unittest {
     import quirks.internal.test;
 
@@ -175,7 +175,7 @@ template MemberNames(alias aggregate) if (isAggregate!aggregate) {
 + ---
 +/
 @safe
-template MemberNames(alias aggregate, alias predicate) if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
+template MemberNames(alias aggregate, alias predicate) if ((isAggregate!aggregate || isModule!aggregate) && is(typeof(unaryFun!predicate))) {
     alias MemberNames = MemberNames!aggregate.filter!predicate;
 } unittest {
     import quirks.internal.test;
@@ -229,7 +229,7 @@ template MemberNames(alias aggregate, alias predicate) if (isAggregate!aggregate
 + ---
 +/
 @safe
-template Members(alias aggregate) if (isAggregate!aggregate) {
+template Members(alias aggregate) if (isAggregate!aggregate || isModule!aggregate) {
     alias Members = Fields!aggregate.join!(Methods!aggregate);
 } unittest {
     import quirks.internal.test;
@@ -271,7 +271,7 @@ template Members(alias aggregate) if (isAggregate!aggregate) {
 + ---
 +/
 @safe
-template Members(alias aggregate, alias predicate) if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
+template Members(alias aggregate, alias predicate) if ((isAggregate!aggregate || isModule!aggregate) && is(typeof(unaryFun!predicate))) {
     alias Members = Members!(TypeOf!aggregate).filter!predicate;
 }
 
@@ -297,7 +297,7 @@ template Members(alias aggregate, alias predicate) if (isAggregate!aggregate && 
 + ---
 +/
 @safe
-template Methods(alias aggregate) if (isAggregate!aggregate) {
+template Methods(alias aggregate) if (isAggregate!aggregate || isModule!aggregate) {
     auto generateNames() {
         string[] names;
 
@@ -359,7 +359,7 @@ template Methods(alias aggregate) if (isAggregate!aggregate) {
 + ---
 +/
 @safe
-template Methods(alias aggregate, alias predicate) if (isAggregate!aggregate  && is(typeof(unaryFun!predicate))) {
+template Methods(alias aggregate, alias predicate) if ((isAggregate!aggregate || isModule!aggregate) && is(typeof(unaryFun!predicate))) {
     alias Methods = Methods!aggregate.filter!predicate;
 } unittest {
     import quirks.internal.test;
@@ -420,7 +420,7 @@ template Methods(alias aggregate, alias predicate) if (isAggregate!aggregate  &&
 + ---
 +/
 @safe
-pure nothrow auto hasField(alias aggregate, string fieldName)() if (isAggregate!aggregate) {
+pure nothrow auto hasField(alias aggregate, string fieldName)() if (isAggregate!aggregate || isModule!aggregate) {
     return hasField!(aggregate, field => field.name == fieldName);
 } unittest {
     import quirks.internal.test;
@@ -461,7 +461,7 @@ pure nothrow auto hasField(alias aggregate, string fieldName)() if (isAggregate!
 + ---
 +/
 @safe
-pure nothrow auto hasField(alias aggregate, alias predicate)() if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
+pure nothrow auto hasField(alias aggregate, alias predicate)() if ((isAggregate!aggregate || isModule!aggregate) && is(typeof(unaryFun!predicate))) {
     return Fields!(aggregate, predicate).length > 0;
 } unittest {
     import quirks.internal.test;
@@ -519,7 +519,7 @@ pure nothrow auto hasField(alias aggregate, alias predicate)() if (isAggregate!a
 + ---
 +/
 @safe
-pure nothrow auto hasMember(alias aggregate, string memberName)() if (isAggregate!aggregate) {
+pure nothrow auto hasMember(alias aggregate, string memberName)() if (isAggregate!aggregate || isModule!aggregate) {
     return [MemberNames!aggregate.tuple].canFind(memberName);
 } unittest {
     import quirks.internal.test;
@@ -561,7 +561,7 @@ pure nothrow auto hasMember(alias aggregate, string memberName)() if (isAggregat
 + ---
 +/
 @safe
-pure nothrow auto hasMember(alias aggregate, alias predicate)() if (isAggregate!aggregate && is(typeof(unaryFun!predicate))) {
+pure nothrow auto hasMember(alias aggregate, alias predicate)() if ((isAggregate!aggregate || isModule!aggregate) && is(typeof(unaryFun!predicate))) {
     return Members!(aggregate, predicate).length > 0;
 } unittest {
     import quirks.internal.test;
@@ -618,7 +618,7 @@ pure nothrow auto hasMember(alias aggregate, alias predicate)() if (isAggregate!
 + ---
 +/
 @safe
-pure nothrow auto hasMethod(alias aggregate, string methodName)() if (isAggregate!aggregate) {
+pure nothrow auto hasMethod(alias aggregate, string methodName)() if (isAggregate!aggregate || isModule!aggregate) {
     return Methods!(aggregate, method => method.name == methodName).length > 0;
 } unittest {
     import quirks.internal.test;
@@ -659,7 +659,7 @@ pure nothrow auto hasMethod(alias aggregate, string methodName)() if (isAggregat
 + ---
 +/
 @safe
-pure nothrow auto hasMethod(alias aggregate, alias predicate)() if (isAggregate!aggregate) {
+pure nothrow auto hasMethod(alias aggregate, alias predicate)() if (isAggregate!aggregate || isModule!aggregate) {
     return Methods!(aggregate, predicate).length > 0;
 } unittest {
     import quirks.internal.test;
