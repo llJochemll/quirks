@@ -151,3 +151,6 @@ pragma(msg, is(things.tuple[0] == bool); // displays true
 pragma(msg, things[2].length == 2); // displays true
 pragma(msg, things.tuple[2].length == 2); // displays true
 ```
+
+### Modules
+While using this library on a module will work, it is far from perfect. For now only use ```MemberNames``` if you want to know what is inside a module. other methods like ```Members``` or ```Fields``` might compile but probably won't result in what you'd think.

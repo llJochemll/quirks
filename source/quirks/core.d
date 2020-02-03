@@ -119,6 +119,12 @@ template Quirks(alias thing) {
     struct QuirksStruct {
         alias type = TypeOf!thing;
 
+        static if (quirks.type.isModule!type) {
+            mixin(interpolateMixin(q{
+                static import ${std.traits.fullyQualifiedName!thing};
+            }));
+        }
+
         static foreach (i, expression; quirksAliasTuple) {
             static if (i % 2 == 1) {
                 mixin(interpolateMixin(q{
