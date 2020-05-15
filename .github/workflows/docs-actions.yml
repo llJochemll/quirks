@@ -1,0 +1,35 @@
+name: Publish documentation
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  Generate and publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+        with:
+          persist-credentials: false
+
+      - name: Install DMD
+        uses: WebFreak001/setup-dmd@v1
+        with:
+          dmd-version: 2.091.0
+
+      - name: Build
+        run: |
+          rm -rf /docs
+          rm docs.json
+          dub upgrade
+          dub build -b ddox
+          cp -R ./docs /tmp/docs
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: . # The folder the action should deploy.

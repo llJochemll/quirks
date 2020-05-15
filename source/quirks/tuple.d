@@ -43,8 +43,6 @@ struct AliasTuple(T...) {
     alias seq = AliasSeq!(bool, false, int, 0, string, "hi");
     alias tuple = AliasTuple!seq;
 
-    pragma(msg, tuple[5].length == 2);
-
     tuple.length.should.equal(seq.length);
     tuple.join!(seq).length.should.equal(seq.length * 2);
 }
