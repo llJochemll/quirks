@@ -1,27 +1,32 @@
 {
-  "authors": [
-    "lljochemll"
-  ],
-  "configurations": [
-    {
-      "name": "library"
-    },
-    {
-      "name": "unittest",
-      "dependencies": {
-        "fluent-asserts": "~>0.12.0"
-      }
-    }
-  ],
-  "copyright": "Copyright © 2019, lljochemll",
-  "dependencies": {
-  },
-  "description": "Metaprogramming library for the D language",
-  "license": "MIT",
-  "name": "quirks",
-  "targetType": "library",
-  "toolchainRequirements": {
-    "frontend": ">=2.087"
-  },
-  "-ddoxFilterArgs": [ "--min-protection=Protected" ]
+	"-ddoxFilterArgs": [
+		"--min-protection=Protected"
+	],
+	"authors": [
+		"lljochemll"
+	],
+	"configurations": [
+		{
+			"name": "library",
+			"targetType": "library"
+		},
+		{
+			"dependencies": {
+				"fluent-asserts": "~>0.12.0",
+				"silly": "~>1.0.2"
+			},
+			"name": "unittest",
+			"targetType": "library"
+		}
+	],
+	"copyright": "Copyright © 2019, lljochemll",
+	"dependencies": {
+	},
+	"description": "Metaprogramming library for the D language",
+	"license": "MIT",
+	"name": "quirks",
+	"targetType": "library",
+	"toolchainRequirements": {
+		"frontend": ">=2.87.0"
+	}
 }

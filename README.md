@@ -1,9 +1,8 @@
 # quirks
-[![DUB](https://img.shields.io/dub/v/quirks)](http://quirks.dub.pm)
+[![DUB](https://img.shields.io/dub/v/quirks)](https://code.dlang.org/packages/quirks)
 ![DUB](https://img.shields.io/dub/l/quirks)
 
-[![Build Status](https://dev.azure.com/jochemdejaeghere/github-pipes/_apis/build/status/quirks/CI?branchName=master)](https://dev.azure.com/jochemdejaeghere/github-pipes/_build/latest?definitionId=3&branchName=master)
-[![Github Actions](https://github.com/lljochemll/quirks/workflows/ci/badge.svg)](https://github.com/lljochemll/quirks/actions)
+[![Github Actions](https://img.shields.io/github/workflow/status/lljochemll/quirks/ci/master)](https://github.com/lljochemll/quirks/actions?query=workflow%3Aci)
 [![codecov](https://codecov.io/gh/llJochemll/quirks/branch/master/graph/badge.svg)](https://codecov.io/gh/llJochemll/quirks)
 
 
@@ -126,7 +125,7 @@ static foreach (parameter; parameters) {
 ```
 ## Weird things
 ### AliasTuple
-```AliasTuple``` has some weird things going on
+AliasTuple has some weird things going on
 
 TL;DR: use .tuple if you want to be sure it will always work
 
@@ -147,7 +146,7 @@ But this will:
 ```D
 alias things = AliasTuple!(bool, string, "hi");
 
-pragma(msg, is(things.tuple[0] == bool); // displays true
+pragma(msg, is(things.tuple[0] == bool)); // displays true
 pragma(msg, things[2].length == 2); // displays true
 pragma(msg, things.tuple[2].length == 2); // displays true
 ```

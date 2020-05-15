@@ -1,4 +1,4 @@
-name: ci
+name: CI
 
 on:
   push:
@@ -14,11 +14,11 @@ jobs:
 
     strategy:
       matrix:
-        dmd_version: [2.090.0, 2.089.1, 2.088.1]
+        dmd_version: [2.092.0, 2.091.1, 2.090.1, 2.089.1, 2.088.1]
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     
     - name: Install DMD
       uses: WebFreak001/setup-dmd@v1
@@ -27,25 +27,23 @@ jobs:
         
     - name: Test
       run: dub test
-      
-    
-
+   
   codecov:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Install DMD
       uses: WebFreak001/setup-dmd@v1
       with:
-        dmd-version: 2.090.0
+        dmd-version: 2.091.0
 
     - name: Test
       run: dub test -b unittest-cov
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1.0.2
+      uses: codecov/codecov-action@v1.0.7
       with:
         token: ${{secrets.CODECOV_TOKEN}}
 
