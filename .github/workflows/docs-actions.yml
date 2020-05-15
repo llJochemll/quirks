@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  Generate and publish:
+  generate-and-publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
