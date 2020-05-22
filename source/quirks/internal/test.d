@@ -81,4 +81,11 @@ version (unittest) {
         c.update.should.not.throwAnyException;
         c.update(false).should.not.throwAnyException;
     }
+
+    unittest {
+        create.should.not.throwAnyException;
+        name.should.equal("name");
+        update.should.not.throwAnyException;
+        update(false).should.not.throwAnyException;
+    }
 }
