@@ -48,7 +48,7 @@ struct AliasTuple(T...) {
 }
 
 /++
-+ Takes a tuple and filters it with the given predicate.
++ Takes a tuple and filters it with the given predicate or template.
 + 
 + Example:
 + ---
@@ -56,16 +56,23 @@ struct AliasTuple(T...) {
 +
 + FilterTuple!(a => is(typeof(a) == double), tuple); // gives AliasTuple!(0.5)
 + FilterTuple!(a => isNumeric!a, tuple); // gives AliasTuple!(1, 0.5)
++ FilterTuple!(isNumeric, tuple); // gives AliasTuple!(1, 0.5)
 + ---
 +/
 @safe
-template FilterTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
+template FilterTuple(alias pred, T...) {
     private auto getElementsMixinList() {
         string[] elements;
 
         static foreach (i, element; T) {
-            static if (i > 0 && T[0](element)) {
-                elements ~= "T[" ~ i.to!string ~ "]";
+            static if (__traits(compiles, pred(element))) {
+                static if (pred(element)) {
+                    elements ~= "T[" ~ i.to!string ~ "]";
+                }
+            } else {
+                static if (pred!element) {
+                    elements ~= "T[" ~ i.to!string ~ "]";
+                }
             }
         }
 
@@ -93,23 +100,26 @@ template FilterTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
 }
 
 /++
-+ Takes a tuple and maps it with the given predicate.
++ Takes a tuple and maps it with the given function or template.
 + 
 + Example:
 + ---
 + alias tuple = AliasSeq!(1, "hello", 1L, [1, 2, 3]);
 +
 + MapTuple!(a => a.to!string, tuple); // gives AliasTuple!("1", "hello", "1", "[1, 2, 3]")
++ MapTuple!(Quirks, tuple); // gives AliasTuple!(Quirks!(1), Quirks!("hello"), Quirks!(1L), Quirks!([1, 2, 3]))
 + ---
 +/
 @safe
-template MapTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
+template MapTuple(alias mapper, T...) {
     private auto getElementsMixinList() {
         string[] elements;
 
         static foreach (i, element; T) {
-            static if (i > 0) {
-                elements ~= "T[0](T[" ~ i.to!string ~ "])";
+            static if (__traits(compiles, mapper(element))) {
+                elements ~= "mapper(T[" ~ i.to!string ~ "])";
+            } else {
+                elements ~= "mapper!(T[" ~ i.to!string ~ "])";
             }
         }
 
@@ -129,4 +139,8 @@ template MapTuple(T...) if (T.length > 0 && is(typeof(unaryFun!(T[0])))) {
     alias result1 = MapTuple!(a => a.to!string, tuple);
     result1.length.should.equal(4);
     result1[0].should.equal("1");
+
+    alias result2 = MapTuple!(Quirks, tuple);
+    result2.length.should.equal(4);
+    result2[0].isBasic.should.equal(true);
 }
