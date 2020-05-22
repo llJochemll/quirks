@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  Generate and publish:
+  generate-and-publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,15 +21,12 @@ jobs:
 
       - name: Build
         run: |
-          rm -rf /docs
-          rm docs.json
           dub upgrade
           dub build -b ddox
-          cp -R ./docs /tmp/docs
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: . # The folder the action should deploy.
+          FOLDER: docs # The folder the action should deploy.
