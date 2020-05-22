@@ -76,12 +76,12 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Template FilterTuple</h1><p>Takes a tuple and filters it with the given predicate.
+			<h1>Template FilterTuple</h1><p>Takes a tuple and filters it with the given predicate or template.
 </p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">template</span> <span class="pln">FilterTuple</span>(T...)
+			<span class="kwd">template</span> <span class="pln">FilterTuple</span>(alias pred, T...)
 			;
 					</div>
 				</code>
@@ -106,7 +106,8 @@ $('#symbolSearchPane').show();</script>
 <pre class="code"><code class="lang-d"><span class="kwd">alias </span><span class="pln">tuple </span><span class="pun">= </span><span class="typ">AliasSeq</span><span class="pun">!(</span><span class="lit">1</span><span class="pun">, </span><span class="str">"hello"</span><span class="pun">, </span><span class="lit">0.5</span><span class="pun">, [</span><span class="lit">1</span><span class="pun">, </span><span class="lit">2</span><span class="pun">, </span><span class="lit">3</span><span class="pun">]);
 
 </span><span class="typ">FilterTuple</span><span class="pun">!(</span><span class="pln">a </span><span class="pun">=&gt; </span><span class="kwd">is</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(</span><span class="pln">a</span><span class="pun">) == </span><span class="typ">double</span><span class="pun">), </span><span class="pln">tuple</span><span class="pun">); </span><span class="com">// gives AliasTuple!(0.5)
-</span><span class="typ">FilterTuple</span><span class="pun">!(</span><span class="pln">a </span><span class="pun">=&gt; </span><span class="pln">isNumeric</span><span class="pun">!</span><span class="pln">a</span><span class="pun">, </span><span class="pln">tuple</span><span class="pun">); </span><span class="com">// gives AliasTuple!(1, 0.5)</span></code></pre>
+</span><span class="typ">FilterTuple</span><span class="pun">!(</span><span class="pln">a </span><span class="pun">=&gt; </span><span class="pln">isNumeric</span><span class="pun">!</span><span class="pln">a</span><span class="pun">, </span><span class="pln">tuple</span><span class="pun">); </span><span class="com">// gives AliasTuple!(1, 0.5)
+</span><span class="typ">FilterTuple</span><span class="pun">!(</span><span class="pln">isNumeric</span><span class="pun">, </span><span class="pln">tuple</span><span class="pun">); </span><span class="com">// gives AliasTuple!(1, 0.5)</span></code></pre>
 </section>
 
 			<footer>

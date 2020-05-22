@@ -151,15 +151,6 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="Fields" class="public" href="../quirks/aggregate/Fields.html">Fields</a>
-							</code>
-						</td>
-						<td>Returns a tuple of each field in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template
-</td>
-					</tr>
-					<tr>
-						<td>
-							<code>
 								<a id="Methods" class="public" href="../quirks/aggregate/Methods.html">Methods</a>
 							</code>
 						</td>
@@ -177,14 +168,26 @@ $('#symbolSearchPane').show();</script>
 					</tr>
 					<tr>
 						<td>
+							<a id="Aggregates" class="public" href="../quirks/aggregate/Aggregates.html">
+								<code>Aggregates</code>
+							</a>
+						</td>
+						<td>
+							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Members.html"><span class="typ">Members</span></a>!aggregate</code>
+						</td>
+						<td>Returns a tuple of each aggregate in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template
+</td>
+					</tr>
+					<tr>
+						<td>
 							<a id="Fields" class="public" href="../quirks/aggregate/Fields.html">
 								<code>Fields</code>
 							</a>
 						</td>
 						<td>
-							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Fields.html"><span class="typ">Fields</span></a>!(TypeOf!aggregate)</code>
+							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Members.html"><span class="typ">Members</span></a>!aggregate</code>
 						</td>
-						<td>Returns a tuple of each field in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template, filtered with the given predicate
+						<td>Returns a tuple of each field in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template
 </td>
 					</tr>
 					<tr>
@@ -201,50 +204,14 @@ $('#symbolSearchPane').show();</script>
 					</tr>
 					<tr>
 						<td>
-							<a id="MemberNames" class="public" href="../quirks/aggregate/MemberNames.html">
-								<code>MemberNames</code>
+							<a id="Members" class="public" href="../quirks/aggregate/Members.html">
+								<code>Members</code>
 							</a>
 						</td>
 						<td>
 							<code class="prettyprint lang-d"><a href="../quirks/aggregate/MemberNames.html"><span class="typ">MemberNames</span></a>!aggregate</code>
 						</td>
-						<td>Returns the same as _traits(allMembers, aggregate), excluding this and all default fields inherited from Object, filtered with the provided predicate
-</td>
-					</tr>
-					<tr>
-						<td>
-							<a id="Members" class="public" href="../quirks/aggregate/Members.html">
-								<code>Members</code>
-							</a>
-						</td>
-						<td>
-							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Fields.html"><span class="typ">Fields</span></a>!aggregate</code>
-						</td>
-						<td>Returns an AliasSeq combining Fields!aggregate and Methods!aggregate
-</td>
-					</tr>
-					<tr>
-						<td>
-							<a id="Members" class="public" href="../quirks/aggregate/Members.html">
-								<code>Members</code>
-							</a>
-						</td>
-						<td>
-							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Members.html"><span class="typ">Members</span></a>!(TypeOf!aggregate)</code>
-						</td>
-						<td>Returns an AliasSeq combining Fields!aggregate and Methods!aggregate, filtered with the given alias
-</td>
-					</tr>
-					<tr>
-						<td>
-							<a id="Methods" class="public" href="../quirks/aggregate/Methods.html">
-								<code>Methods</code>
-							</a>
-						</td>
-						<td>
-							<code class="prettyprint lang-d"><a href="../quirks/aggregate/Methods.html"><span class="typ">Methods</span></a>!aggregate</code>
-						</td>
-						<td>Returns a tuple of each method in the form of the <code class="lang-d"><span class="typ">Quirks</span></code> template, filtered with the given predicate
+						<td>Returns the same as _traits(allMembers, aggregate) mapped with the <code class="lang-d"><span class="typ">Quirks</span></code> template
 </td>
 					</tr>
 				</table>

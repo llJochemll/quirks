@@ -76,12 +76,12 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Template MapTuple</h1><p>Takes a tuple and maps it with the given predicate.
+			<h1>Template MapTuple</h1><p>Takes a tuple and maps it with the given function or template.
 </p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">template</span> <span class="pln">MapTuple</span>(T...)
+			<span class="kwd">template</span> <span class="pln">MapTuple</span>(alias mapper, T...)
 			;
 					</div>
 				</code>
@@ -105,7 +105,8 @@ $('#symbolSearchPane').show();</script>
 			<section><h2>Example</h2>
 <pre class="code"><code class="lang-d"><span class="kwd">alias </span><span class="pln">tuple </span><span class="pun">= </span><span class="typ">AliasSeq</span><span class="pun">!(</span><span class="lit">1</span><span class="pun">, </span><span class="str">"hello"</span><span class="pun">, </span><span class="lit">1L</span><span class="pun">, [</span><span class="lit">1</span><span class="pun">, </span><span class="lit">2</span><span class="pun">, </span><span class="lit">3</span><span class="pun">]);
 
-</span><span class="typ">MapTuple</span><span class="pun">!(</span><span class="pln">a </span><span class="pun">=&gt; </span><span class="pln">a<wbr/></span><span class="pun">.</span><span class="pln">to</span><span class="pun">!</span><span class="typ">string</span><span class="pun">, </span><span class="pln">tuple</span><span class="pun">); </span><span class="com">// gives AliasTuple!("1", "hello", "1", "[1, 2, 3]")</span></code></pre>
+</span><span class="typ">MapTuple</span><span class="pun">!(</span><span class="pln">a </span><span class="pun">=&gt; </span><span class="pln">a<wbr/></span><span class="pun">.</span><span class="pln">to</span><span class="pun">!</span><span class="typ">string</span><span class="pun">, </span><span class="pln">tuple</span><span class="pun">); </span><span class="com">// gives AliasTuple!("1", "hello", "1", "[1, 2, 3]")
+</span><span class="typ">MapTuple</span><span class="pun">!(</span><span class="typ">Quirks</span><span class="pun">, </span><span class="pln">tuple</span><span class="pun">); </span><span class="com">// gives AliasTuple!(Quirks!(1), Quirks!("hello"), Quirks!(1L), Quirks!([1, 2, 3]))</span></code></pre>
 </section>
 
 			<footer>
