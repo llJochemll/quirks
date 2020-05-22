@@ -14,6 +14,50 @@ import std.traits;
 import std.typecons;
 
 /++
++ Returns a tuple of each aggregate in the form of the `Quirks` template 
++ 
++ Example:
++ ---
++ struct S {
++     long id;
++     int age;
++     string name() {
++         return "name";
++     }
++
++     struct Nested {
++    
++     }
++ }
++ 
++ alias aggregates = Aggregate!S;
++ 
++ static foreach (aggregate; aggregates) {
++     pragma(msg, aggregate.type);
++     pragma(msg, aggregate.name);
++ }
++ ---
++/
+@safe
+template Aggregates(alias aggregate) if (isAggregate!aggregate || isModule!aggregate) {
+    alias Aggregates = Members!aggregate
+        .filter!(member => member.isAggregate);
+} unittest {
+    import quirks.internal.test;
+
+    TestStruct s;
+    auto c = new TestClass;
+
+    Aggregates!(TestStruct).length.should.equal(2);
+    Aggregates!(s).length.should.equal(2);
+
+    Aggregates!(TestClass).length.should.equal(2);
+    Aggregates!(c).length.should.equal(2);
+
+    Aggregates!(quirks.internal.test).length.should.equal(2);
+}
+
+/++
 + Returns a tuple of each field in the form of the `Quirks` template 
 + 
 + Example:
@@ -36,21 +80,8 @@ import std.typecons;
 +/
 @safe
 template Fields(alias aggregate) if (isAggregate!aggregate || isModule!aggregate) {
-    private auto fieldsMixinList() {
-        string[] members;
-
-        static foreach (memberName; MemberNames!aggregate) {
-            static if (!isCallable!(TypeOf!(__traits(getMember, TypeOf!aggregate, memberName))) && !is(TypeOf!(__traits(getMember, TypeOf!aggregate, memberName)) == void)) {
-                members ~= `Quirks!(__traits(getMember, TypeOf!aggregate, "` ~ memberName ~ `"))`;
-            }
-        }
-
-        return members;
-    }
-
-    mixin(interpolateMixin(q{
-        alias Fields = AliasTuple!(${fieldsMixinList.join(",")});
-    }));
+    alias Fields = Members!aggregate
+        .filter!(member => !isCallable!(member.type) && !is(member.type == void) && !member.isAggregate);
 } unittest {
     import quirks.internal.test;
 
@@ -62,66 +93,8 @@ template Fields(alias aggregate) if (isAggregate!aggregate || isModule!aggregate
 
     Fields!(TestClass).length.should.equal(3);
     Fields!(c).length.should.equal(3);
-}
 
-/++
-+ Returns a tuple of each field in the form of the `Quirks` template, filtered with the given predicate
-+ 
-+ Example:
-+ ---
-+ struct S {
-+     long id;
-+     int age;
-+     string name() {
-+         return "name";
-+     }
-+ }
-+ 
-+ alias fields = Fields!(TestStruct, field => isNumeric!(field.type)); // is equal to a tuple of 2 structs containing the name and type of the field
-+ 
-+ static foreach (field; fields) {
-+     pragma(msg, field.type);
-+     pragma(msg, field.name);
-+ }
-+ ---
-+/
-@safe
-template Fields(alias aggregate, alias predicate) if ((isAggregate!aggregate || isModule!aggregate) && is(typeof(unaryFun!predicate))) {
-    alias Fields = Fields!(TypeOf!aggregate).filter!predicate;
-} unittest {
-    import quirks.internal.test;
-    TestStruct s;
-    auto c = new TestClass;
-
-    Fields!(TestStruct, field => is(field.type == long)).length.should.equal(2);
-    Fields!(s, field => is(field.type == long)).length.should.equal(2);
-    Fields!(TestStruct, field => is(field.type == string)).length.should.equal(0);
-    Fields!(s, field => is(field.type == string)).length.should.equal(0);
-    Fields!(TestStruct, field => isNumeric!(field.type)).length.should.equal(3);
-    Fields!(s, field => isNumeric!(field.type)).length.should.equal(3);
-    Fields!(TestStruct, field => isArray!(field.type)).length.should.equal(0);
-    Fields!(s, field => isArray!(field.type)).length.should.equal(0);
-    Fields!(TestStruct, field => field.name == "id").length.should.equal(1);
-    Fields!(s, field => field.name == "id").length.should.equal(1);
-    Fields!(TestStruct, field => field.name == "name").length.should.equal(0);
-    Fields!(s, field => field.name == "name").length.should.equal(0);
-    Fields!(TestStruct, field => field.name == "doesNotExist").length.should.equal(0);
-    Fields!(s, field => field.name == "doesNotExist").length.should.equal(0);
-
-    Fields!(TestClass, field => is(field.type == long)).length.should.equal(2);
-    Fields!(c, field => is(field.type == long)).length.should.equal(2);
-    Fields!(TestClass, field => is(field.type == string)).length.should.equal(0);
-    Fields!(c, field => is(field.type == string)).length.should.equal(0);
-    Fields!(TestClass, field => isNumeric!(field.type)).length.should.equal(3);
-    Fields!(c, field => isNumeric!(field.type)).length.should.equal(3);
-    Fields!(TestClass, field => isArray!(field.type)).length.should.equal(0);
-    Fields!(c, field => isArray!(field.type)).length.should.equal(0);
-    Fields!(TestClass, field => field.name == "id").length.should.equal(1);
-    Fields!(c, field => field.name == "id").length.should.equal(1);
-    Fields!(TestClass, field => field.name == "name").length.should.equal(0);
-    Fields!(c, field => field.name == "name").length.should.equal(0);
-    Fields!(TestClass, field => field.name == "doesNotExist").length.should.equal(0);
-    Fields!(c, field => field.name == "doesNotExist").length.should.equal(0);
+    Fields!(quirks.internal.test).length.should.equal(3);
 }
 
 /++
@@ -142,78 +115,25 @@ template Fields(alias aggregate, alias predicate) if ((isAggregate!aggregate || 
 +/
 @safe
 template MemberNames(alias aggregate) if (isAggregate!aggregate || isModule!aggregate) {
-    alias MemberNames = AliasTuple!(__traits(allMembers, TypeOf!aggregate)).filter!(name => ![__traits(allMembers, Object)].canFind(name) && !["this", "object"].canFind(name));
+    alias MemberNames = AliasTuple!(__traits(allMembers, TypeOf!aggregate))
+        .filter!(name => ![__traits(allMembers, Object)].canFind(name) && !["this", "object"].canFind(name));
 } unittest {
     import quirks.internal.test;
 
     TestStruct s;
     auto c = new TestClass;
 
-    MemberNames!TestStruct.length.should.equal(6);
-    MemberNames!s.length.should.equal(6);
+    MemberNames!TestStruct.length.should.equal(8);
+    MemberNames!s.length.should.equal(8);
 
-    MemberNames!TestClass.length.should.equal(6);
-    MemberNames!c.length.should.equal(6);
+    MemberNames!TestClass.length.should.equal(8);
+    MemberNames!c.length.should.equal(8);
+
+    MemberNames!(quirks.internal.test).length.should.equal(9);
 }
 
 /++
-+ Returns the same as __traits(allMembers, aggregate), excluding this and all default fields inherited from Object, filtered with the provided predicate
-+ 
-+ Example:
-+ ---
-+ struct S {
-+     long id;
-+     int age;
-+     string name() {
-+         return "name";
-+     }
-+ }
-+ 
-+ MemberNames!(TestStruct, name => name == "id"); // is equal to ("id")
-+ MemberNames!(TestStruct, name => name.length < 4); // is equal to ("id", "age")
-+ MemberNames!(TestStruct, name => false); // is equal to ()
-+ ---
-+/
-@safe
-template MemberNames(alias aggregate, alias predicate) if ((isAggregate!aggregate || isModule!aggregate) && is(typeof(unaryFun!predicate))) {
-    alias MemberNames = MemberNames!aggregate.filter!predicate;
-} unittest {
-    import quirks.internal.test;
-
-    struct S {
-        long id;
-        string name() {
-            return "name";
-        }
-    }
-
-    class C {
-        long id;
-        string name() {
-            return "name";
-        }
-    }
-
-    S s;
-    auto c = new C;
-
-    MemberNames!(TestStruct, name => name == "id").length.should.equal(1);
-    MemberNames!(s, name => name == "id").length.should.equal(1);
-    MemberNames!(TestStruct, name => name == "name").length.should.equal(1);
-    MemberNames!(s, name => name == "name").length.should.equal(1);
-    MemberNames!(TestStruct, name => name == "doesNotExist").length.should.equal(0);
-    MemberNames!(s, name => name == "doesNotExist").length.should.equal(0);
-
-    MemberNames!(TestClass, name => name == "id").length.should.equal(1);
-    MemberNames!(c, name => name == "id").length.should.equal(1);
-    MemberNames!(TestClass, name => name == "name").length.should.equal(1);
-    MemberNames!(c, name => name == "name").length.should.equal(1);
-    MemberNames!(TestClass, name => name == "doesNotExist").length.should.equal(0);
-    MemberNames!(c, name => name == "doesNotExist").length.should.equal(0);
-}
-
-/++
-+ Returns an AliasSeq combining Fields!aggregate and Methods!aggregate
++ Returns the same as __traits(allMembers, aggregate) mapped with the `Quirks` template
 + 
 + Example:
 + ---
@@ -230,49 +150,23 @@ template MemberNames(alias aggregate, alias predicate) if ((isAggregate!aggregat
 +/
 @safe
 template Members(alias aggregate) if (isAggregate!aggregate || isModule!aggregate) {
-    alias Members = Fields!aggregate.join!(Methods!aggregate);
+    alias getQuirksFromMemberName(string name) = Quirks!(__traits(getMember, TypeOf!aggregate, name));
+
+    alias Members = MemberNames!aggregate
+        .map!(getQuirksFromMemberName)
+        .filter!(member => is(member.type));
 } unittest {
     import quirks.internal.test;
 
-    struct S {
-        long id;
-        string name() {
-            return "name";
-        }
-    }
+    TestStruct s;
+    auto c = new TestClass;
 
-    class C {
-        long id;
-        string name() {
-            return "name";
-        }
-    }
+    Members!TestStruct.length.should.equal(8);
+    Members!s.length.should.equal(8);
+    Members!TestClass.length.should.equal(8);
+    Members!c.length.should.equal(8);
 
-    S s;
-    auto c = new C;
-
-    Members!S.length.should.equal(2);
-}
-
-/++
-+ Returns an AliasSeq combining Fields!aggregate and Methods!aggregate, filtered with the given alias
-+ 
-+ Example:
-+ ---
-+ struct S {
-+     long id;
-+     int age;
-+     string name() {
-+         return "name";
-+     }
-+ }
-+ 
-+ Members!(TestStruct, member => member.name.canFind("a")).length; // is 2
-+ ---
-+/
-@safe
-template Members(alias aggregate, alias predicate) if ((isAggregate!aggregate || isModule!aggregate) && is(typeof(unaryFun!predicate))) {
-    alias Members = Members!(TypeOf!aggregate).filter!predicate;
+    Members!(quirks.internal.test).length.should.equal(8);
 }
 
 /++
@@ -335,71 +229,18 @@ template Methods(alias aggregate) if (isAggregate!aggregate || isModule!aggregat
     } else {
         alias Methods = AliasTuple!();
     }
-}
-
-/++
-+ Returns a tuple of each method in the form of the `Quirks` template, filtered with the given predicate
-+ 
-+ Example:
-+ ---
-+ struct S {
-+     long id;
-+     int age;
-+     string name() {
-+         return "name";
-+     }
-+ }
-+ 
-+ alias fields = Methods!S;
-+ 
-+ static foreach (method; fields) {
-+     pragma(msg, method.returnType);
-+     pragma(msg, method.name);
-+ }
-+ ---
-+/
-@safe
-template Methods(alias aggregate, alias predicate) if ((isAggregate!aggregate || isModule!aggregate) && is(typeof(unaryFun!predicate))) {
-    alias Methods = Methods!aggregate.filter!predicate;
 } unittest {
     import quirks.internal.test;
 
     TestStruct s;
     auto c = new TestClass;
 
-    Methods!(TestStruct, method => is(method.returnType == string)).length.should.equal(1);
-    Methods!(s, method => is(method.returnType == string)).length.should.equal(1);
-    Methods!(TestStruct, method => is(method.returnType == long)).length.should.equal(0);
-    Methods!(s, method => is(method.returnType == long)).length.should.equal(0);
-    Methods!(TestStruct, method => isNumeric!(method.returnType)).length.should.equal(0);
-    Methods!(s, method => isNumeric!(method.returnType)).length.should.equal(0);
-    Methods!(TestStruct, method => isSomeString!(method.returnType)).length.should.equal(1);
-    Methods!(s, method => isSomeString!(method.returnType)).length.should.equal(1);
-    Methods!(TestStruct, method => method.name == "id").length.should.equal(0);
-    Methods!(s, method => method.name == "id").length.should.equal(0);
-    Methods!(TestStruct, method => method.name == "name").length.should.equal(1);
-    Methods!(s, method => method.name == "name").length.should.equal(1);
-    Methods!(TestStruct, method => method.name == "update").length.should.equal(2);
-    Methods!(s, method => method.name == "update").length.should.equal(2);
-    Methods!(TestStruct, method => method.name == "doesNotExist").length.should.equal(0);
-    Methods!(s, method => method.name == "doesNotExist").length.should.equal(0);
+    Methods!TestStruct.length.should.equal(4);
+    Methods!s.length.should.equal(4);
+    Methods!TestClass.length.should.equal(4);
+    Methods!c.length.should.equal(4);
 
-    Methods!(TestClass, method => is(method.returnType == string)).length.should.equal(1);
-    Methods!(c, method => is(method.returnType == string)).length.should.equal(1);
-    Methods!(TestClass, method => is(method.returnType == long)).length.should.equal(0);
-    Methods!(c, method => is(method.returnType == long)).length.should.equal(0);
-    Methods!(TestClass, method => isNumeric!(method.returnType)).length.should.equal(0);
-    Methods!(c, method => isNumeric!(method.returnType)).length.should.equal(0);
-    Methods!(TestClass, method => isSomeString!(method.returnType)).length.should.equal(1);
-    Methods!(c, method => isSomeString!(method.returnType)).length.should.equal(1);
-    Methods!(TestClass, method => method.name == "id").length.should.equal(0);
-    Methods!(c, method => method.name == "id").length.should.equal(0);
-    Methods!(TestClass, method => method.name == "name").length.should.equal(1);
-    Methods!(c, method => method.name == "name").length.should.equal(1);
-    Methods!(TestClass, method => method.name == "update").length.should.equal(2);
-    Methods!(c, method => method.name == "update").length.should.equal(2);
-    Methods!(TestClass, method => method.name == "doesNotExist").length.should.equal(0);
-    Methods!(c, method => method.name == "doesNotExist").length.should.equal(0);
+    Methods!(quirks.internal.test).length.should.equal(4);
 }
 
 /++
@@ -462,7 +303,7 @@ pure nothrow auto hasField(alias aggregate, string fieldName)() if (isAggregate!
 +/
 @safe
 pure nothrow auto hasField(alias aggregate, alias predicate)() if ((isAggregate!aggregate || isModule!aggregate) && is(typeof(unaryFun!predicate))) {
-    return Fields!(aggregate, predicate).length > 0;
+    return Fields!(aggregate).filter!predicate.length > 0;
 } unittest {
     import quirks.internal.test;
 
@@ -562,7 +403,7 @@ pure nothrow auto hasMember(alias aggregate, string memberName)() if (isAggregat
 +/
 @safe
 pure nothrow auto hasMember(alias aggregate, alias predicate)() if ((isAggregate!aggregate || isModule!aggregate) && is(typeof(unaryFun!predicate))) {
-    return Members!(aggregate, predicate).length > 0;
+    return Members!(aggregate).filter!predicate.length > 0;
 } unittest {
     import quirks.internal.test;
 
@@ -619,7 +460,7 @@ pure nothrow auto hasMember(alias aggregate, alias predicate)() if ((isAggregate
 +/
 @safe
 pure nothrow auto hasMethod(alias aggregate, string methodName)() if (isAggregate!aggregate || isModule!aggregate) {
-    return Methods!(aggregate, method => method.name == methodName).length > 0;
+    return Methods!aggregate.filter!(method => method.name == methodName).length > 0;
 } unittest {
     import quirks.internal.test;
 
@@ -660,7 +501,7 @@ pure nothrow auto hasMethod(alias aggregate, string methodName)() if (isAggregat
 +/
 @safe
 pure nothrow auto hasMethod(alias aggregate, alias predicate)() if (isAggregate!aggregate || isModule!aggregate) {
-    return Methods!(aggregate, predicate).length > 0;
+    return Methods!aggregate.filter!predicate.length > 0;
 } unittest {
     import quirks.internal.test;
 
