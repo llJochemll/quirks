@@ -4,7 +4,7 @@ static import quirks.aggregate;
 static import quirks.expression;
 static import quirks.type;
 static import std.traits;
-import quirks.aggregate : Fields, MemberNames, Members, Methods;
+import quirks.aggregate : Aggregates, Fields, MemberNames, Members, Methods;
 import quirks.expression : isStatic;
 import quirks.functional : Parameters, FunctionAttributes;
 import quirks.tuple : AliasTuple;
@@ -74,8 +74,9 @@ import std.meta;
 + Quirks!S.methods[1].parameters[0].type; // bool
 + ---
 +/
-template Quirks(alias thing) {
+template Quirks(alias thing_) {
     alias quirksAliasTuple = AliasSeq!(
+        "aggregates", q{Aggregates!thing},
         "attributes", q{AliasTuple!(__traits(getAttributes, thing))},
         "fields", q{Fields!thing},
         "functionAttributes", q{FunctionAttributes!thing},
@@ -104,8 +105,6 @@ template Quirks(alias thing) {
         q{hasMethod(alias predicate)}, q{quirks.aggregate.hasMethod!(thing, predicate)},
         q{hasUDA(alias uda)}, q{std.traits.hasUDA!(thing, uda)},
         q{isInstanceOf(alias templ)}, q{quirks.type.isInstanceOf(templ, thing)},
-        q{membersFilter(alias predicate)}, q{Members!(thing, predicate)},
-        q{methodsFilter(alias predicate)}, q{Methods!(thing, predicate)},
     );
 
     alias quirksEnumTuple = AliasSeq!(
@@ -117,6 +116,7 @@ template Quirks(alias thing) {
     );
 
     struct QuirksStruct {
+        alias thing = thing_;
         alias type = TypeOf!thing;
 
         static if (quirks.type.isModule!type) {
