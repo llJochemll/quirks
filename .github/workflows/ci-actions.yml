@@ -24,6 +24,9 @@ jobs:
       uses: WebFreak001/setup-dmd@v1
       with:
         dmd-version: ${{ matrix.dmd_version }}
+
+    - name: Build
+      run: dub build
         
     - name: Test
       run: dub test
