@@ -1,0 +1,12 @@
+
+tasks:
+  - name: DMD
+    init: curl -fsS https://dlang.org/install.sh | bash -s dmd
+
+
+vscode:
+  extensions:
+    - eamodio.gitlens
+    - pflannery.vscode-versionlens
+    - webfreak.code-d
+    
